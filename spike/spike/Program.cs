@@ -40,6 +40,23 @@ namespace spike
                 Color = ConsoleColor.Green
             });
 
+            var prevH = Console.WindowHeight;
+            var prevW = Console.WindowWidth;
+            var busy = false;
+            var t = new System.Threading.Timer(
+                _ =>
+                {
+                    if (busy) return;
+                    if (prevH != Console.WindowHeight || prevW != Console.WindowWidth)
+                    {
+                        busy = true;
+                        prevH = Console.WindowHeight;
+                        prevW = Console.WindowWidth;
+                        Renderer.Render(background);
+                        busy = false;
+                    }
+                }, null, 100, 100);
+            
             SetFocus();
             while (true)
             {
@@ -68,7 +85,7 @@ namespace spike
     {
         class Point
         {
-            public char Symbol = '.';
+            public char Symbol = ' ';
             public ConsoleColor Color = ConsoleColor.Black;
         }
 
@@ -78,6 +95,9 @@ namespace spike
             
             public Canvas(int height, int width) {
                 _canvas = new Point[height,width];
+                for(var y=0; y<this.Height; y++)
+                for (var x = 0; x < this.Width; x++)
+                    _canvas[y, x] = new Point();
             }
 
             public Point this[int y, int x] {
@@ -109,8 +129,11 @@ namespace spike
                     var p = canvas[y, x];
                     if (p == null) continue;
                     Console.BackgroundColor = p.Color;
-                    Console.SetCursorPosition(x,y);
-                    Console.Write(p.Symbol);
+                    if (y < Console.WindowHeight && x < Console.WindowWidth)
+                    {
+                        Console.SetCursorPosition(x, y);
+                        Console.Write(p.Symbol);
+                    }
                 }
             Console.BackgroundColor = t;
         }
