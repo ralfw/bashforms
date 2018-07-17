@@ -8,6 +8,8 @@ namespace spike
         
         public TextLine(int left, int top, int width) : base(left, top, width, 1) {
             _text = "";
+            _focusBackgroundColor = ConsoleColor.Blue;
+            _focusForegroundColor = ConsoleColor.White;
         }
 
         public string Text {

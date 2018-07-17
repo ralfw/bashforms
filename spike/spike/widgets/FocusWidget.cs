@@ -5,8 +5,8 @@ namespace spike
     public abstract class FocusWidget : Widget
     {
         private bool _hasFocus;
-        private ConsoleColor _focusBackgroundColor;
-        private ConsoleColor _focusForegroundColor;
+        protected ConsoleColor _focusBackgroundColor;
+        protected ConsoleColor _focusForegroundColor;
 
         public FocusWidget(int left, int top, int width, int height) : base(left, top, width, height) {
             this.TabIndex = -1;

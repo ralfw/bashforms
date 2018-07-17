@@ -15,12 +15,12 @@ namespace spike
         
         private readonly Point[,] _canvas;
             
-        public Canvas() : this(Console.WindowWidth, Console.WindowHeight) {}
-        public Canvas(int width, int height) {
+        public Canvas() : this(Console.WindowWidth, Console.WindowHeight, Console.BackgroundColor, Console.ForegroundColor) {}
+        public Canvas(int width, int height, ConsoleColor backgroundCoor, ConsoleColor foregroundColor) {
             _canvas = new Point[height,width];
             for(var y=0; y<this.Height; y++)
             for (var x = 0; x < this.Width; x++)
-                _canvas[y, x] = new Point();
+                _canvas[y, x] = new Point {BackgroundColor = backgroundCoor, ForegroundColor = foregroundColor};
         }
 
         
@@ -39,12 +39,11 @@ namespace spike
         }
 
 
-        public IEnumerable<Point> Points {
-            get {
-                for(var x = 0; x < this.Width; x++)
-                for (var y = 0; y < this.Height; y++)
-                    yield return this[x, y];
-            }
+        public IEnumerable<Point> Points => PointsInArea(0, 0, this.Width, this.Height);
+        public IEnumerable<Point> PointsInArea(int left, int top, int width, int height) {
+            for(var x = left; x < width; x++)
+            for (var y = top; y < height; y++)
+                yield return this[x, y];
         }
 
 
@@ -53,7 +52,7 @@ namespace spike
                 if (left+i < this.Width)
                     this[left+i, top].Symbol = text[i];
         }
-
+        
         
         public void Merge(int left, int top, Canvas source) {
             for(var x = 0; x < source.Width; x++)
