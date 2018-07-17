@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using bashforms.engine;
 using bashforms.widgets.windows;
 
@@ -17,6 +18,7 @@ namespace bashforms
         
         public void Push(widgets.windows.Window win) {
             _windowStack.Push(win);
+            win.InitializeFocus();
         }
         public widgets.windows.Window Pop() {
             return _windowStack.Pop();
@@ -28,9 +30,8 @@ namespace bashforms
             Run();
         }
         public void Run() {
-            _windowStack.Peek().InitializeFocus();
             while (_windowStack.Count > 0) {
-                _renderer.Render(new[]{_windowStack.Peek()});
+                _renderer.Render(_windowStack.Reverse().ToArray());
                 var key = Console.ReadKey(true);
                 _windowStack.Peek().HandleKey(key);
             }

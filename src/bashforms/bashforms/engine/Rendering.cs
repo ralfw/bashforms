@@ -30,11 +30,11 @@ namespace bashforms.engine
 
         private Canvas Render(Canvas canvas, widgets.windows.Window window) {
             var winCanvas = _renderers[window.GetType()].Draw(window);
-            canvas.Merge(0, 0, winCanvas);
+            canvas.Merge(window.Position.left, window.Position.top, winCanvas);
 
             foreach (var widget in window.Children) {
                 var widgetCanvas = _renderers[widget.GetType()].Draw(widget);
-                canvas.Merge(widget.Position.left, widget.Position.top, widgetCanvas);
+                canvas.Merge(window.Position.left + widget.Position.left, window.Position.top + widget.Position.top, widgetCanvas);
             }
 
             return canvas;

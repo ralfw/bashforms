@@ -61,7 +61,7 @@ namespace bashforms.widgets.windows
             var focusCandidates = _children.OfType<FocusControl>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToList();
             var focus = focusCandidates.FirstOrDefault(fc => fc.HasFocus);
             
-            if (focus == null) { // no current focus -> move to first focus widget
+            if (focus == null) {
                 var focusCandidate = focusCandidates.FirstOrDefault();
                 if (focusCandidate != null) focusCandidate.HasFocus = true;
             }
