@@ -1,55 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using bashforms.widgets.controls;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace spike
+namespace bashforms.widgets.windows
 {
-    public class Window
+    public class Window : Widget
     {
-        private readonly int _left;
-        private readonly int _top;
-        private readonly int _width;
-        private readonly int _height;
-        private ConsoleColor _backgroundColor;
-        private ConsoleColor _foregroundColor;
-        
-        private readonly List<Widget> _children;
+        private readonly List<Control> _children;
 
         public Action<Window, EventArgs> OnChanged = (w, a) => { }; 
 
         
-        public Window(int left, int top, int width, int height) {
-            _left = left;
-            _top = top;
-            _width = width;
-            _height = height;
-            _children = new List<Widget>();
-            _backgroundColor = Console.BackgroundColor;
-            _foregroundColor = Console.ForegroundColor;
+        public Window(int left, int top, int width, int height) : base(left,top,width,height) {
+            _children = new List<Control>();
         }
         
-        public (int left, int top) Position => (_left, _top);
-        public (int width, int height) Size => (_width, _height);
         
-        public string Name { get; set; }
-
-        public ConsoleColor BackgroundColor {
-            get => _backgroundColor;
-            set { _backgroundColor = value; OnChanged(this,new EventArgs()); }
-        }
-
-        public ConsoleColor ForegroundColor { 
-            get => _foregroundColor;
-            set { _foregroundColor = value; OnChanged(this,new EventArgs()); }
-        }
-
-        
-        public void AddChild(Widget child) {
+        public void AddChild(Control child) {
             _children.Add(child);
             OnChanged(this, new EventArgs());
         }
 
-        public Widget[] Children => _children.ToArray();
+        public Control[] Children => _children.ToArray();
 
         public void InitializeFocus() {
             var focusCandidates = _children.OfType<FocusWidget>().ToList();
@@ -60,7 +34,7 @@ namespace spike
         }
 
         
-        public void HandleKey(ConsoleKeyInfo key) {
+        public override void HandleKey(ConsoleKeyInfo key) {
             Check_tab(
                 Move_focus,
                 Let_focus_handle_key);

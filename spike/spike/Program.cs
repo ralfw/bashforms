@@ -1,4 +1,7 @@
 ﻿using System;
+using bashforms;
+using bashforms.widgets.controls;
+using bashforms.widgets.windows;
 
 namespace spike
 {

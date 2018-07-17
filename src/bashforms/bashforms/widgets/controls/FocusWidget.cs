@@ -1,8 +1,9 @@
 ﻿using System;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace spike
+namespace bashforms.widgets.controls
 {
-    public abstract class FocusWidget : Widget
+    public abstract class FocusWidget : Control
     {
         private bool _hasFocus;
         protected ConsoleColor _focusBackgroundColor;

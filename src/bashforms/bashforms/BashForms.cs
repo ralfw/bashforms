@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using bashforms.engine;
+using bashforms.widgets.windows;
 
-namespace spike
+namespace bashforms
 {
-    class BashForms
+    public class BashForms
     {
         private readonly Stack<Window> _windowStack = new Stack<Window>();
         private readonly Rendering _renderer;

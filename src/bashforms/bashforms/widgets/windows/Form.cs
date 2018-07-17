@@ -1,4 +1,6 @@
-﻿namespace spike
+﻿using bashforms.data.eventargs;
+
+namespace bashforms.widgets.windows
 {
     public class Form : Window
     {

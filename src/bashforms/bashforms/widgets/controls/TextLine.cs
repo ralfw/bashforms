@@ -1,6 +1,7 @@
 ﻿using System;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace spike
+namespace bashforms.widgets.controls
 {
     public class TextLine : FocusWidget
     {

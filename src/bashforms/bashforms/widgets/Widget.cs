@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace spike
+namespace bashforms.widgets
 {
     public abstract class Widget
     {
-        private readonly int _left;
-        private readonly int _top;
-        private readonly int _width;
-        private readonly int _height;
-        private ConsoleColor _backgroundColor;
-        private ConsoleColor _foregroundColor;
+        protected readonly int _left;
+        protected readonly int _top;
+        protected readonly int _width;
+        protected readonly int _height;
+        protected ConsoleColor _backgroundColor;
+        protected ConsoleColor _foregroundColor;
 
         public Action<Widget, EventArgs> OnChanged = (w, a) => { };
 

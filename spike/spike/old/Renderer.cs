@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace spike
+﻿namespace spike.old
 {
     /*
     class Renderer

@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.Reflection;
-
-namespace spike
+﻿namespace spike.old
 {
     /*
     internal class Program_old

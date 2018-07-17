@@ -1,8 +1,9 @@
 ﻿using System;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace spike
+namespace bashforms.widgets.controls
 {
-    public class Label : Widget
+    public class Label : Control
     {
         private string _text;
         
