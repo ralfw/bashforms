@@ -58,7 +58,7 @@ namespace bashforms.widgets.windows
         
         void Move_focus(bool moveForward)
         {
-            var focusCandidates = _children.OfType<FocusControl>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToArray();
+            var focusCandidates = _children.OfType<FocusControl>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToList();
             var focus = focusCandidates.FirstOrDefault(fc => fc.HasFocus);
             
             if (focus == null) { // no current focus -> move to first focus widget
@@ -67,25 +67,14 @@ namespace bashforms.widgets.windows
             }
             else {
                 focus.HasFocus = false;
-                
-                if (moveForward) {
-                    var nextCandidate = focusCandidates.FirstOrDefault(fc => fc.TabIndex > focus.TabIndex);
-                    if (nextCandidate == null) { // no next after current -> move focus to first focus widget
-                        nextCandidate = focusCandidates.FirstOrDefault();
-                        if (nextCandidate != null) nextCandidate.HasFocus = true;
-                    }
-                    else
-                        nextCandidate.HasFocus = true;
-                }
-                else {
-                    var prevCandidate = focusCandidates.LastOrDefault(fc => fc.TabIndex < focus.TabIndex);
-                    if (prevCandidate == null) { // no previous before current -> move to last focus widget
-                        prevCandidate = focusCandidates.LastOrDefault();
-                        if (prevCandidate != null) prevCandidate.HasFocus = true;
-                    }
-                    else
-                        prevCandidate.HasFocus = true;   
-                }
+
+                var focusIndex = focusCandidates.FindIndex(fc => fc == focus);
+                if (moveForward)
+                    focusIndex = (focusIndex + 1) % focusCandidates.Count;
+                else
+                    focusIndex = (focusIndex > 0) ? focusIndex - 1 : focusCandidates.Count - 1;
+
+                focusCandidates[focusIndex].HasFocus = true;
             }
         }
         

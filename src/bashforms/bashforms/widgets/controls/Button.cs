@@ -10,7 +10,7 @@ namespace bashforms.widgets.controls
         
         
         public Button(int left, int top, int width, string text) : base(left, top, width, 1) {
-            _text = "";
+            _text = text;
             _focusBackgroundColor = ConsoleColor.DarkMagenta;
             _focusForegroundColor = ConsoleColor.White;
         }
