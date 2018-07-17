@@ -7,7 +7,7 @@ namespace bashforms
 {
     public class BashForms
     {
-        private readonly Stack<Window> _windowStack = new Stack<Window>();
+        private readonly Stack<widgets.windows.Window> _windowStack = new Stack<widgets.windows.Window>();
         private readonly Rendering _renderer;
 
         public BashForms() {
@@ -15,15 +15,15 @@ namespace bashforms
         }
         
         
-        public void Push(Window win) {
+        public void Push(widgets.windows.Window win) {
             _windowStack.Push(win);
         }
-        public Window Pop() {
+        public widgets.windows.Window Pop() {
             return _windowStack.Pop();
         }
         
         
-        public void Run(Window win) {
+        public void Run(widgets.windows.Window win) {
             Push(win);
             Run();
         }

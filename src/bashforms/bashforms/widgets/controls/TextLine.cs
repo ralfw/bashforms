@@ -3,7 +3,7 @@ using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
 {
-    public class TextLine : FocusWidget
+    public class TextLine : FocusControl
     {
         private string _text;
         

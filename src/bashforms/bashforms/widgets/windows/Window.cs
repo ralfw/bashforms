@@ -26,7 +26,7 @@ namespace bashforms.widgets.windows
         public Control[] Children => _children.ToArray();
 
         public void InitializeFocus() {
-            var focusCandidates = _children.OfType<FocusWidget>().ToList();
+            var focusCandidates = _children.OfType<FocusControl>().ToList();
             focusCandidates.ForEach(c => c.HasFocus = false);
             
             var focusCandidate = focusCandidates.Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).FirstOrDefault();
@@ -50,7 +50,7 @@ namespace bashforms.widgets.windows
             }
 
             void Let_focus_handle_key() {
-                var focus = _children.OfType<FocusWidget>().FirstOrDefault(c => c.HasFocus);
+                var focus = _children.OfType<FocusControl>().FirstOrDefault(c => c.HasFocus);
                 focus?.HandleKey(key);
             }
         }
@@ -58,7 +58,7 @@ namespace bashforms.widgets.windows
         
         void Move_focus(bool moveForward)
         {
-            var focusCandidates = _children.OfType<FocusWidget>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToArray();
+            var focusCandidates = _children.OfType<FocusControl>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToArray();
             var focus = focusCandidates.FirstOrDefault(fc => fc.HasFocus);
             
             if (focus == null) { // no current focus -> move to first focus widget
