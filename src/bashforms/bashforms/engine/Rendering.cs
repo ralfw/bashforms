@@ -17,19 +17,18 @@ namespace bashforms.engine
                 {typeof(widgets.windows.Window), new Window()},
                 {typeof(widgets.windows.Form), new Form()},
                 {typeof(widgets.controls.Label), new Label()},
-                {typeof(widgets.controls.TextLine), new TextLine()}
+                {typeof(widgets.controls.TextLine), new TextLine()},
+                {typeof(widgets.controls.Button), new Button()}
             };
         }
 
 
-        public void Render(IEnumerable<widgets.windows.Window> windows)
-        {
+        public void Render(widgets.windows.Window[] windows) {
             var canvas = windows.Aggregate(new Canvas(), Render);
-            Display.Show(canvas);
+            Display.Show(canvas, windows.Last().CursorPosition);
         }
 
-        private Canvas Render(Canvas canvas, widgets.windows.Window window)
-        {
+        private Canvas Render(Canvas canvas, widgets.windows.Window window) {
             var winCanvas = _renderers[window.GetType()].Draw(window);
             canvas.Merge(0, 0, winCanvas);
 

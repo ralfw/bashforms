@@ -5,7 +5,7 @@ namespace bashforms.engine
 {
     class Display
     {
-        public static void Show(Canvas canvas) {
+        public static void Show(Canvas canvas, (int x, int y) cursorPosition) {
             Console.CursorVisible = false;
             
             var tBackground = Console.BackgroundColor;
@@ -26,7 +26,11 @@ namespace bashforms.engine
 
             Console.BackgroundColor = tBackground;
             Console.ForegroundColor = tForeground;
-            Console.CursorVisible = true;
+
+            if (cursorPosition.x >= 0) {
+                Console.CursorVisible = true;
+                Console.SetCursorPosition(cursorPosition.x, cursorPosition.y);
+            }
         }
     }
 }

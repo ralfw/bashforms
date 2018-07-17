@@ -88,5 +88,15 @@ namespace bashforms.widgets.windows
                 }
             }
         }
+        
+        
+        public (int x, int y) CursorPosition {
+            get {
+                var focus = _children.OfType<CursorControl>().FirstOrDefault(fc => fc.HasFocus);
+                if (focus == null) return (-1, -1);
+                
+                return (focus.Position.left + focus.CursorPosition.x, focus.Position.top + focus.CursorPosition.y);
+            }
+        }
     }
 }

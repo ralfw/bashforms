@@ -42,6 +42,7 @@
     <Compile Include="data\Canvas.cs" />
     <Compile Include="data\eventargs\EventArgs.cs" />
     <Compile Include="engine\Display.cs" />
+    <Compile Include="engine\drawing\Button.cs" />
     <Compile Include="engine\drawing\Form.cs" />
     <Compile Include="engine\drawing\IDrawing.cs" />
     <Compile Include="engine\drawing\Label.cs" />
@@ -49,7 +50,9 @@
     <Compile Include="engine\drawing\Window.cs" />
     <Compile Include="engine\Rendering.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="widgets\controls\Button.cs" />
     <Compile Include="widgets\controls\Control.cs" />
+    <Compile Include="widgets\controls\CursorControl.cs" />
     <Compile Include="widgets\controls\FocusControl.cs" />
     <Compile Include="widgets\controls\Label.cs" />
     <Compile Include="widgets\controls\TextLine.cs" />
