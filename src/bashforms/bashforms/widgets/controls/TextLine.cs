@@ -8,6 +8,7 @@ namespace bashforms.widgets.controls
     {
         protected int _insertionPoint;
         protected string _text;
+        protected int _maxTextLength;
         protected string _label;
         protected ConsoleColor _labelForegroundColor;
         
@@ -16,6 +17,7 @@ namespace bashforms.widgets.controls
             _text = "";
             _label = "";
             _insertionPoint = 0;
+            _maxTextLength = width;
             _focusBackgroundColor = ConsoleColor.Blue;
             _focusForegroundColor = ConsoleColor.White;
             _labelForegroundColor = ConsoleColor.DarkGray;
@@ -27,6 +29,19 @@ namespace bashforms.widgets.controls
             set { 
                 _text = value;
                 _insertionPoint = _text.Length;
+                OnChanged(this, new EventArgs());
+            }
+        }
+        
+        
+        public int MaxTextLength {
+            get => _maxTextLength;
+            set { 
+                _maxTextLength = value;
+                if (_text.Length > _maxTextLength) {
+                    _text = _text.Substring(0, _maxTextLength);
+                    _insertionPoint = Math.Min(_insertionPoint, _text.Length);
+                }
                 OnChanged(this, new EventArgs());
             }
         }
@@ -48,7 +63,7 @@ namespace bashforms.widgets.controls
         
         public override bool HandleKey(ConsoleKeyInfo key) {
             if (key.KeyChar >= ' ') {
-                if (_text.Length == _width) return true;
+                if (_text.Length == _maxTextLength) return true;
                 
                 _text = _text.Insert(_insertionPoint, key.KeyChar.ToString());
                 _insertionPoint++;
@@ -79,6 +94,6 @@ namespace bashforms.widgets.controls
         }
 
         
-        public override (int x, int y) CursorPosition => (_insertionPoint, 0);
+        public override (int x, int y) CursorPosition => (_insertionPoint < _width ? _insertionPoint : _width-1, 0);
     }
 }

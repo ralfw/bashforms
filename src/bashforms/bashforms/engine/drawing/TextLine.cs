@@ -13,6 +13,7 @@ namespace bashforms.engine.drawing
                                     textLine.BackgroundColor, 
                                     showLabel ? textLine.LabelForegroundColor : textLine.ForegroundColor);
 
+            //??? darstellung bei alloscrolling abhängig von insertion point
             var text = textLine.Text.PadRight(textLine.Size.width, '_');
             if (showLabel) text = textLine.Label.PadRight(textLine.Size.width, '_');
             canvas.Write(0,0,text);
