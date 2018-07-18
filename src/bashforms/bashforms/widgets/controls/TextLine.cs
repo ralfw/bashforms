@@ -48,6 +48,8 @@ namespace bashforms.widgets.controls
         
         public override bool HandleKey(ConsoleKeyInfo key) {
             if (key.KeyChar >= ' ') {
+                if (_text.Length == _width) return true;
+                
                 _text = _text.Insert(_insertionPoint, key.KeyChar.ToString());
                 _insertionPoint++;
                 return true;
