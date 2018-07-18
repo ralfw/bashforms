@@ -43,12 +43,6 @@
     <Compile Include="data\Canvas.cs" />
     <Compile Include="data\eventargs\EventArgs.cs" />
     <Compile Include="engine\BashFormsEngine.cs" />
-    <Compile Include="engine\drawing\Button.cs" />
-    <Compile Include="engine\drawing\Form.cs" />
-    <Compile Include="engine\drawing\IDrawing.cs" />
-    <Compile Include="engine\drawing\Label.cs" />
-    <Compile Include="engine\drawing\TextLine.cs" />
-    <Compile Include="engine\drawing\Window.cs" />
     <Compile Include="engine\Rendering.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,9 +52,11 @@
     <Compile Include="widgets\controls\FocusControl.cs" />
     <Compile Include="widgets\controls\Label.cs" />
     <Compile Include="widgets\controls\TextLine.cs" />
+    <Compile Include="widgets\controls\TextLine_draw.cs" />
     <Compile Include="widgets\Widget.cs" />
     <Compile Include="widgets\windows\Dialog.cs" />
     <Compile Include="widgets\windows\Form.cs" />
+    <Compile Include="widgets\windows\Form_draw.cs" />
     <Compile Include="widgets\windows\Window.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

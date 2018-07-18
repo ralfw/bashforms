@@ -4,7 +4,7 @@ using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
 {
-    public class TextLine : CursorControl
+    public partial class TextLine : CursorControl
     {
         protected int _insertionPoint;
         protected string _text;

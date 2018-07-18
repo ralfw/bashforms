@@ -1,4 +1,5 @@
 ﻿using System;
+using bashforms.data;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
@@ -20,5 +21,14 @@ namespace bashforms.widgets.controls
         }
 
         public override bool HandleKey(ConsoleKeyInfo key) { return false; }
+        
+        
+        public override Canvas Draw() {
+            var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
+            
+            canvas.Write(0,0,_text);
+
+            return canvas;
+        }
     }
 }

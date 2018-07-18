@@ -1,8 +1,8 @@
-﻿using bashforms.data.eventargs;
+﻿using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.windows
 {
-    public class Form : Window
+    public partial class Form : Window
     {
         protected string _title;
         private bool _hasBorder;

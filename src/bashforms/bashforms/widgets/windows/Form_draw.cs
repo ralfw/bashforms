@@ -1,18 +1,18 @@
 ﻿using System;
 using bashforms.data;
 
-namespace bashforms.engine.drawing
+namespace bashforms.widgets.windows
 {
-    class Form : Window
+    partial class Form
     {
-        public override Canvas Draw(object obj) {
-            var canvas = base.Draw(obj);
+        public override Canvas Draw() {
+            var canvas = base.Draw();
             
-            var form = (widgets.windows.Form) obj;
             RenderFrame();
             RenderTitle();
             return canvas;
 
+            
             void RenderFrame() {
                 for (var y = 0; y < canvas.Height; y++) {
                     canvas[0, y].Symbol = '│';
@@ -31,7 +31,7 @@ namespace bashforms.engine.drawing
             }
 
             void RenderTitle() {
-                var title = form.Title.Substring(0, Math.Min(form.Title.Length, canvas.Width - 4));
+                var title = _title.Substring(0, Math.Min(_title.Length, canvas.Width - 4));
                 title = $"[{title}]";
                 var xTitel = (canvas.Width - title.Length) / 2;
                 canvas.Write(xTitel,0, title);

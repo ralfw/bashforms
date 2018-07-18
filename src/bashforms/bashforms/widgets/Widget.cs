@@ -1,4 +1,5 @@
 ﻿using System;
+using bashforms.data;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets
@@ -42,5 +43,7 @@ namespace bashforms.widgets
         
         
         public abstract bool HandleKey(ConsoleKeyInfo key);
+
+        public abstract Canvas Draw();
     }
 }

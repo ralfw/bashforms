@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using bashforms.data;
 using bashforms.widgets.controls;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
@@ -87,6 +88,12 @@ namespace bashforms.widgets.windows
                 
                 return (focus.Position.left + focus.CursorPosition.x, focus.Position.top + focus.CursorPosition.y);
             }
+        }
+        
+        
+        public override Canvas Draw() {
+            var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
+            return canvas;
         }
     }
 }

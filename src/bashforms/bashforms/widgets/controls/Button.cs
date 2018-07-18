@@ -1,4 +1,5 @@
 ﻿using System;
+using bashforms.data;
 
 namespace bashforms.widgets.controls
 {
@@ -31,6 +32,24 @@ namespace bashforms.widgets.controls
                 return true;
             }
             return false;
+        }
+        
+        
+        public override Canvas Draw() {
+            var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
+
+            var xLabel = (_width - _text.Length) / 2;
+            canvas.Write(xLabel,0, _text);
+            canvas.Write(0,0,"[");
+            canvas.Write(_width-1,0,"]");
+            
+            if (this.HasFocus)
+                foreach (var p in canvas.Points) {
+                    p.BackgroundColor = _focusBackgroundColor;
+                    p.ForegroundColor = _focusForegroundColor;
+                }
+
+            return canvas;
         }
     }
 }

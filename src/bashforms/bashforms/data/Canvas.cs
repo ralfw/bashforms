@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace bashforms.data
 {
-    class Canvas
+    public class Canvas
     {
         public class Point {
             public char Symbol = ' ';
