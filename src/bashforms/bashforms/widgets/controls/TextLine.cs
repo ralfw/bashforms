@@ -5,14 +5,19 @@ namespace bashforms.widgets.controls
 {
     public class TextLine : CursorControl
     {
-        private int _insertionPoint;
-        private string _text;
+        protected int _insertionPoint;
+        protected string _text;
+        protected string _label;
+        protected ConsoleColor _labelForegroundColor;
+        
         
         public TextLine(int left, int top, int width) : base(left, top, width, 1) {
             _text = "";
+            _label = "";
             _insertionPoint = 0;
             _focusBackgroundColor = ConsoleColor.Blue;
             _focusForegroundColor = ConsoleColor.White;
+            _labelForegroundColor = ConsoleColor.DarkGray;
         }
 
         
@@ -23,6 +28,20 @@ namespace bashforms.widgets.controls
                 _insertionPoint = _text.Length;
                 OnChanged(this, new EventArgs());
             }
+        }
+
+        
+        public string Label {
+            get => _label;
+            set {
+                _label = value;
+                OnChanged(this, new EventArgs());
+            }
+        }
+        
+        public ConsoleColor LabelForegroundColor {
+            get => _labelForegroundColor;
+            set { _labelForegroundColor = value; OnChanged(this,new EventArgs()); }
         }
 
         
