@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
@@ -47,7 +48,8 @@ namespace bashforms.widgets.controls
         
         public override bool HandleKey(ConsoleKeyInfo key) {
             if (key.KeyChar >= ' ') {
-                this.Text += key.KeyChar;
+                _text = _text.Insert(_insertionPoint, key.KeyChar.ToString());
+                _insertionPoint++;
                 return true;
             }
             
