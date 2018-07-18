@@ -14,7 +14,8 @@ namespace bashforms_tests
             frm.AddChild(new Label(2,4,10){Text = "Alter"});
             frm.AddChild(new TextLine(14,4,4));
             frm.AddChild(new Button(2, 6, 10, "Show...") {OnPressed = (w, a) => {
-                MessageBox.ShowInfo("Hello!");
+                var answer = MessageBox.ShowQuestion("Everything all right?");
+                MessageBox.ShowInfo($"The answer: {answer}");
             }});
             
             BashForms.Open(frm);

@@ -6,6 +6,6 @@
             this.Result = default(TResult);
         }
         
-        public TResult Result { get; protected set; }
+        public TResult Result { get; set; }
     }
 }
