@@ -1,4 +1,5 @@
-﻿using bashforms.data;
+﻿using System;
+using bashforms.data;
 
 namespace bashforms.widgets.controls
 {
@@ -11,9 +12,10 @@ namespace bashforms.widgets.controls
                 _backgroundColor, 
                 showLabel ? _labelForegroundColor : _foregroundColor);
 
-            //??? darstellung bei alloscrolling abhängig von insertion point
-            var text = _text.PadRight(_width, '_');
+            var text = _text.Substring(_displayFromIndex, Math.Min(_width, _text.Length - _displayFromIndex));
+            text = text.PadRight(_width, '_');
             if (showLabel) text = _label.PadRight(_width, '_');
+            
             canvas.Write(0,0,text);
         
             if (this.HasFocus)
