@@ -3,7 +3,7 @@ using bashforms;
 using bashforms.widgets.controls;
 using bashforms.widgets.windows;
 
-namespace spike
+namespace bashforms_tests
 {
     public class Program
     {
