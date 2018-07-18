@@ -1,7 +1,7 @@
 ﻿using System;
 using bashforms.data;
 
-namespace bashforms.engine
+namespace bashforms.adapters
 {
     class Display
     {

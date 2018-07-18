@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using bashforms.adapters;
 using bashforms.data;
 using bashforms.engine.drawing;
 
@@ -8,17 +9,19 @@ namespace bashforms.engine
 {
     class Rendering
     {
-        private readonly Dictionary<Type, IDrawing> _renderers;
+        private readonly Dictionary<string, IDrawing> _renderers;
 
 
         public Rendering()
         {
-            _renderers = new Dictionary<Type, IDrawing> {
-                {typeof(widgets.windows.Window), new Window()},
-                {typeof(widgets.windows.Form), new Form()},
-                {typeof(widgets.controls.Label), new Label()},
-                {typeof(widgets.controls.TextLine), new TextLine()},
-                {typeof(widgets.controls.Button), new Button()}
+            _renderers = new Dictionary<string, IDrawing> {
+                {typeof(widgets.windows.Window).Name, new Window()},
+                {typeof(widgets.windows.Form).Name, new Form()},
+                {"Dialog`1", new Form()},
+                
+                {typeof(widgets.controls.Label).Name, new Label()},
+                {typeof(widgets.controls.TextLine).Name, new TextLine()},
+                {typeof(widgets.controls.Button).Name, new Button()}
             };
         }
 
@@ -29,11 +32,11 @@ namespace bashforms.engine
         }
 
         private Canvas Render(Canvas canvas, widgets.windows.Window window) {
-            var winCanvas = _renderers[window.GetType()].Draw(window);
+            var winCanvas = _renderers[window.GetType().Name].Draw(window);
             canvas.Merge(window.Position.left, window.Position.top, winCanvas);
 
             foreach (var widget in window.Children) {
-                var widgetCanvas = _renderers[widget.GetType()].Draw(widget);
+                var widgetCanvas = _renderers[widget.GetType().Name].Draw(widget);
                 canvas.Merge(window.Position.left + widget.Position.left, window.Position.top + widget.Position.top, widgetCanvas);
             }
 

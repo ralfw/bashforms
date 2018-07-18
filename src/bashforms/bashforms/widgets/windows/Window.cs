@@ -8,7 +8,7 @@ namespace bashforms.widgets.windows
 {
     public class Window : Widget
     {
-        private readonly List<Control> _children;
+        protected List<Control> _children;
 
         public Action<Window, EventArgs> OnChanged = (w, a) => { }; 
 

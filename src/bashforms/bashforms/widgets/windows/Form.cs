@@ -4,7 +4,7 @@ namespace bashforms.widgets.windows
 {
     public class Form : Window
     {
-        private string _title;
+        protected string _title;
         private bool _hasBorder;
         
         public Form(int left, int top, int width, int height) : base(left,top,width,height) {

@@ -5,10 +5,10 @@ namespace bashforms.widgets
 {
     public abstract class Widget
     {
-        protected readonly int _left;
-        protected readonly int _top;
-        protected readonly int _width;
-        protected readonly int _height;
+        protected int _left;
+        protected int _top;
+        protected int _width;
+        protected int _height;
         protected ConsoleColor _backgroundColor;
         protected ConsoleColor _foregroundColor;
 
