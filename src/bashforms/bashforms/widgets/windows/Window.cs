@@ -25,7 +25,10 @@ namespace bashforms.widgets.windows
         }
 
         public Control[] Children => _children.ToArray();
+        
+        public Control this[string name] => _children.FirstOrDefault(c => c.Name == name);
 
+        
         public void InitializeFocus() {
             var focusCandidates = _children.OfType<FocusControl>().ToList();
             focusCandidates.ForEach(c => c.HasFocus = false);
