@@ -25,8 +25,12 @@ namespace bashforms.widgets.controls
         }
 
         
-        public override void HandleKey(ConsoleKeyInfo key) {
-            OnPressed(this, new EventArgs());
+        public override bool HandleKey(ConsoleKeyInfo key) {
+            if (key.Key == ConsoleKey.Enter || key.Key == ConsoleKey.Spacebar) {
+                OnPressed(this, new EventArgs());
+                return true;
+            }
+            return false;
         }
     }
 }

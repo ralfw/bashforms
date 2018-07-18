@@ -33,10 +33,17 @@ namespace bashforms.engine
         public void RunModal() => Run(_windowStack.Count);
 
         private void Run(int minimalWindowsStackDepth) {
+            _renderer.Render(_windowStack.Reverse().ToArray());
+            
             while (_windowStack.Count >= minimalWindowsStackDepth) {
-                _renderer.Render(_windowStack.Reverse().ToArray());
                 var key = Console.ReadKey(true);
-                _windowStack.Peek().HandleKey(key);
+                if (_windowStack.Peek().HandleKey(key) || HandleKey(key))
+                    _renderer.Render(_windowStack.Reverse().ToArray());
+            }
+
+            
+            bool HandleKey(ConsoleKeyInfo key) {
+                return key.Key == ConsoleKey.R && (key.Modifiers & ConsoleModifiers.Control) > 0;
             }
         }
     }

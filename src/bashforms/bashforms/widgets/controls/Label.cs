@@ -19,6 +19,6 @@ namespace bashforms.widgets.controls
             }
         }
 
-        public override void HandleKey(ConsoleKeyInfo key){ }
+        public override bool HandleKey(ConsoleKeyInfo key) { return false; }
     }
 }

@@ -26,29 +26,33 @@ namespace bashforms.widgets.controls
         }
 
         
-        public override void HandleKey(ConsoleKeyInfo key) {
-            if (key.KeyChar >= ' ')
+        public override bool HandleKey(ConsoleKeyInfo key) {
+            if (key.KeyChar >= ' ') {
                 this.Text += key.KeyChar;
-            else
-                switch (key.Key) {
-                    case ConsoleKey.Backspace:
-                        if (_insertionPoint > 0) {
-                            _text = _text.Remove(_insertionPoint - 1, 1);
-                            _insertionPoint--;
-                        }
-                        break;
-                    case ConsoleKey.Delete:
-                        if (_insertionPoint < _text.Length) {
-                            _text = _text.Remove(_insertionPoint, 1);
-                        }
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (_insertionPoint > 0) _insertionPoint--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (_insertionPoint < _text.Length) _insertionPoint++;
-                        break;
-                }
+                return true;
+            }
+            
+            switch (key.Key) {
+                case ConsoleKey.Backspace:
+                    if (_insertionPoint > 0) {
+                        _text = _text.Remove(_insertionPoint - 1, 1);
+                        _insertionPoint--;
+                    }
+                    return true;
+                case ConsoleKey.Delete:
+                    if (_insertionPoint < _text.Length) {
+                        _text = _text.Remove(_insertionPoint, 1);
+                    }
+                    return true;
+                case ConsoleKey.LeftArrow:
+                    if (_insertionPoint > 0) _insertionPoint--;
+                    return true;
+                case ConsoleKey.RightArrow:
+                    if (_insertionPoint < _text.Length) _insertionPoint++;
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         

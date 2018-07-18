@@ -41,6 +41,6 @@ namespace bashforms.widgets
         }
         
         
-        public abstract void HandleKey(ConsoleKeyInfo key);
+        public abstract bool HandleKey(ConsoleKeyInfo key);
     }
 }

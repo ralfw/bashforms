@@ -34,24 +34,25 @@ namespace bashforms.widgets.windows
         }
 
         
-        public override void HandleKey(ConsoleKeyInfo key) {
-            Check_tab(
+        public override bool HandleKey(ConsoleKeyInfo key) {
+            return Check_tab(
                 Move_focus,
                 Let_focus_handle_key);
 
 
-            void Check_tab(Action<bool> onTab, Action onNotTab) {
+            bool Check_tab(Action<bool> onTab, Func<bool> onNotTab) {
                 if (key.Key == ConsoleKey.Tab) {
                     var isBackTAB = (key.Modifiers & ConsoleModifiers.Shift) > 0;
                     onTab(!isBackTAB);
+                    return true;
                 }
-                else
-                    onNotTab();
+                return onNotTab();
             }
 
-            void Let_focus_handle_key() {
+            bool Let_focus_handle_key() {
                 var focus = _children.OfType<FocusControl>().FirstOrDefault(c => c.HasFocus);
-                focus?.HandleKey(key);
+                if (focus == null) return false;
+                return focus.HandleKey(key);
             }
         }
         
