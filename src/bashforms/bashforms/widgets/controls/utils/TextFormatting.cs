@@ -16,27 +16,21 @@ namespace bashforms.widgets.controls.utils
         }
 
         
-        static string[] SplitLongWords(IEnumerable<string> words, int rowLength)
-        {
-            var splittedWords = new List<string>();
-            foreach (var word in words)
-            {
-                if (word.Length <= rowLength) {
-                    splittedWords.Add(word);
-                }
-                else {
-                    var timesToSplit = word.Length / rowLength;
-                    if (word.Length % rowLength > 0) {
-                        timesToSplit++;
-                    }
+        public static string[] SplitLongWords(IEnumerable<string> words, int maxWordLength) {
+            return words.SelectMany(w => Split(new List<string>(), w))
+                        .ToArray();
 
-                    for (int i = 0; i < timesToSplit; i++) {
-                        var length = i == timesToSplit - 1 ? word.Length % rowLength : rowLength;
-                        splittedWords.Add(word.Substring(i * rowLength, length));
-                    }
+
+            IEnumerable<string> Split(List<string> fragments, string word_) {
+                if (word_.Length <= maxWordLength) {
+                    fragments.Add(word_);
+                    return fragments;
                 }
+
+                var fragment = word_.Substring(0, maxWordLength);
+                fragments.Add(fragment);
+                return Split(fragments, word_.Substring(maxWordLength));
             }
-            return splittedWords.ToArray();
         }
         
         

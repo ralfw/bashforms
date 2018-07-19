@@ -5,7 +5,7 @@ namespace bashforms.widgets.controls.utils
     static class TextParsing
     {
         public static string[] ToWords(this string text) {
-            return text.Split(new char[] {' ', '\t', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+            return text.Split(new char[] {' ', '\t', '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
         }
 
         
