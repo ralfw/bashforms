@@ -9,14 +9,25 @@ namespace bashforms_tests
     {
         public static void Main(string[] args) {
             var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Main Form"};
-            frm.AddChild(new Label(2,2,10){Text = "Name"});
-            frm.AddChild(new TextLine(14,2,5){MaxTextLength = 15, Name = "Name" });
-            frm.AddChild(new Checkbox(22,2,10,"Nerd") { Checked = true });
-            frm.AddChild(new TextLine(14,4,5){Label = "Age", MaxTextLength = 3});
-            frm.AddChild(new Button(2, 6, 10, "Show...") {OnPressed = (w, a) => {
-                var answer = MessageBox.ShowQuestion($"You name: {((TextLine)frm["Name"]).Text}?");
-                MessageBox.ShowInfo($"The answer: {answer}");
-            }});
+            frm.AddChild(new TextArea(1,1,20,20)
+            {
+                Text = 
+                    @"12345678901234567890
+She should have died hereafter;
+There would have been a time for such a word.
+
+— To-morrow, and to-morrow, and to-morrow,
+Creeps in this petty pace from day to day,
+To the last syllable of recorded time;
+And all our yesterdays have lighted fools
+The way to dusty death.
+
+Out, out, brief candle! Life's but a walking shadow, a poor player
+That struts and frets his hour upon the stage
+And then is heard no more. It is a tale
+Told by an idiot, full of sound and fury
+Signifying nothing."
+            });
             
             BashForms.Open(frm);
         }

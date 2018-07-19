@@ -48,8 +48,10 @@ namespace bashforms.data
 
         public void Write(int left, int top, string text) {
             for (var i = 0; i < text.Length; i++)
-                if (left+i < this.Width)
-                    this[left+i, top].Symbol = text[i];
+                if (left + i < this.Width) {
+                    var p = this[left + i, top];
+                    if (p != null) p.Symbol = text[i];
+                }
         }
         
         
