@@ -33,6 +33,7 @@ namespace bashforms.widgets.controls
             set { 
                 _text = value;
                 _insertionPoint = _text.Length;
+                Scroll();
                 OnUpdated(this, new EventArgs());
             }
         }
@@ -45,6 +46,7 @@ namespace bashforms.widgets.controls
                 if (_text.Length > _maxTextLength) {
                     _text = _text.Substring(0, _maxTextLength);
                     _insertionPoint = Math.Min(_insertionPoint, _text.Length);
+                    Scroll();
                 }
                 OnUpdated(this, new EventArgs());
             }

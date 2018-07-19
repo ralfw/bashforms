@@ -9,12 +9,6 @@ namespace bashforms.widgets.controls
                 Handle_arrows(key) ||
                 Handle_deletions(key)) { Scroll(); return true; }
             return false;
-
-
-            void Scroll() {
-                _displayFromIndex = _insertionPoint - _width + 1;
-                if (_displayFromIndex < 0) _displayFromIndex = 0;
-            }
         }
 
 
@@ -63,6 +57,12 @@ namespace bashforms.widgets.controls
                 default:
                     return false;
             }
+        }
+        
+        
+        void Scroll() {
+            _displayFromIndex = _insertionPoint - _width + 1;
+            if (_displayFromIndex < 0) _displayFromIndex = 0;
         }
     }
 }
