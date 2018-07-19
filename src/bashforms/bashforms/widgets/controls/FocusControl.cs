@@ -22,11 +22,11 @@ namespace bashforms.widgets.controls
         
         public ConsoleColor FocusBackgroundColor {
             get => _focusBackgroundColor;
-            set { _focusBackgroundColor = value; OnChanged(this,new EventArgs()); }
+            set { _focusBackgroundColor = value; OnUpdated(this,new EventArgs()); }
         }
         public ConsoleColor FocusForegroundColor { 
             get => _focusForegroundColor;
-            set { _focusForegroundColor = value; OnChanged(this,new EventArgs()); }
+            set { _focusForegroundColor = value; OnUpdated(this,new EventArgs()); }
         }
 
         

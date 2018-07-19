@@ -8,7 +8,7 @@ namespace bashforms.widgets.controls
         private string _text;
         private bool _checked;
 
-        public Action<Widget, EventArgs> OnPressed;
+        public Action<Widget, EventArgs> OnEdited = (w, a) => { };
         
         
         public Checkbox(int left, int top, int width, string text) : base(left, top, width, 1) {
@@ -23,7 +23,7 @@ namespace bashforms.widgets.controls
             get => _text;
             set {
                 _text = value;
-                OnChanged(this, new data.eventargs.EventArgs());
+                OnUpdated(this, new data.eventargs.EventArgs());
             }
         }
         
@@ -31,7 +31,7 @@ namespace bashforms.widgets.controls
             get => _checked;
             set {
                 _checked = value;
-                OnChanged(this, new data.eventargs.EventArgs());
+                OnUpdated(this, new data.eventargs.EventArgs());
             }
         }
 
@@ -39,6 +39,7 @@ namespace bashforms.widgets.controls
         public override bool HandleKey(ConsoleKeyInfo key) {
             if (key.Key == ConsoleKey.Enter || key.Key == ConsoleKey.Spacebar) {
                 _checked = !_checked;
+                OnEdited(this,new EventArgs());
                 return true;
             }
             return false;

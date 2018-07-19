@@ -7,7 +7,7 @@ namespace bashforms.widgets.controls
     {
         private string _text;
 
-        public Action<Widget, EventArgs> OnPressed;
+        public Action<Widget, EventArgs> OnPressed = (w, a) => { };
         
         
         public Button(int left, int top, int width, string text) : base(left, top, width, 1) {
@@ -21,7 +21,7 @@ namespace bashforms.widgets.controls
             get => _text;
             set {
                 _text = value;
-                OnChanged(this, new data.eventargs.EventArgs());
+                OnUpdated(this, new data.eventargs.EventArgs());
             }
         }
 

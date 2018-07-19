@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.Remoting.Messaging;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
@@ -13,6 +11,9 @@ namespace bashforms.widgets.controls
         protected int _maxTextLength;
         protected string _label;
         protected ConsoleColor _labelForegroundColor;
+
+
+        public Action<Widget, EventArgs> OnEdited = (s, a) => { };
         
         
         public TextLine(int left, int top, int width) : base(left, top, width, 1) {
@@ -32,7 +33,7 @@ namespace bashforms.widgets.controls
             set { 
                 _text = value;
                 _insertionPoint = _text.Length;
-                OnChanged(this, new EventArgs());
+                OnUpdated(this, new EventArgs());
             }
         }
         
@@ -45,7 +46,7 @@ namespace bashforms.widgets.controls
                     _text = _text.Substring(0, _maxTextLength);
                     _insertionPoint = Math.Min(_insertionPoint, _text.Length);
                 }
-                OnChanged(this, new EventArgs());
+                OnUpdated(this, new EventArgs());
             }
         }
 
@@ -54,14 +55,14 @@ namespace bashforms.widgets.controls
             get => _label;
             set {
                 _label = value;
-                OnChanged(this, new EventArgs());
+                OnUpdated(this, new EventArgs());
             }
         }
         
         
         public ConsoleColor LabelForegroundColor {
             get => _labelForegroundColor;
-            set { _labelForegroundColor = value; OnChanged(this,new EventArgs()); }
+            set { _labelForegroundColor = value; OnUpdated(this,new EventArgs()); }
         }
 
         

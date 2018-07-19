@@ -13,7 +13,7 @@ namespace bashforms.widgets
         protected ConsoleColor _backgroundColor;
         protected ConsoleColor _foregroundColor;
 
-        public Action<Widget, EventArgs> OnChanged = (w, a) => { };
+        public Action<Widget, EventArgs> OnUpdated = (w, a) => { };
 
 
         public Widget(int left, int top, int width, int height) {
@@ -33,12 +33,12 @@ namespace bashforms.widgets
         
         public ConsoleColor BackgroundColor {
             get => _backgroundColor;
-            set { _backgroundColor = value; OnChanged(this,new EventArgs()); }
+            set { _backgroundColor = value; OnUpdated(this,new EventArgs()); }
         }
 
         public ConsoleColor ForegroundColor { 
             get => _foregroundColor;
-            set { _foregroundColor = value; OnChanged(this,new EventArgs()); }
+            set { _foregroundColor = value; OnUpdated(this,new EventArgs()); }
         }
         
         

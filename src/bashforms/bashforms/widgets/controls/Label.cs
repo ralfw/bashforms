@@ -16,7 +16,7 @@ namespace bashforms.widgets.controls
             get => _text;
             set {
                 _text = value;
-                OnChanged(this, new EventArgs());
+                OnUpdated(this, new EventArgs());
             }
         }
 

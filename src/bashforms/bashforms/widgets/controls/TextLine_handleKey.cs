@@ -1,4 +1,5 @@
 ﻿using System;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
 {
@@ -23,6 +24,7 @@ namespace bashforms.widgets.controls
             
             _text = _text.Insert(_insertionPoint, key.KeyChar.ToString());
             _insertionPoint++;
+            OnEdited(this,new EventArgs());
             return true;
         }
 
@@ -49,11 +51,13 @@ namespace bashforms.widgets.controls
                     if (_insertionPoint > 0) {
                         _text = _text.Remove(_insertionPoint - 1, 1);
                         _insertionPoint--;
+                        OnEdited(this,new EventArgs());
                     }
                     return true;
                 case ConsoleKey.Delete:
                     if (_insertionPoint < _text.Length) {
                         _text = _text.Remove(_insertionPoint, 1);
+                        OnEdited(this,new EventArgs());
                     }
                     return true;
                 default:
