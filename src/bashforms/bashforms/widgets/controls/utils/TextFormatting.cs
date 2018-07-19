@@ -34,20 +34,21 @@ namespace bashforms.widgets.controls.utils
         }
         
         
-        static IEnumerable<IEnumerable<string>> ComposeRows(IEnumerable<string> fragments, int zeilenlänge) {
+        public static IEnumerable<IEnumerable<string>> ComposeRows(IEnumerable<string> fragments, int zeilenlänge) {
             var currRow = new List<string>();
             foreach (var fragment in fragments) {
-                if (currRow.Sum(x => x.Length) + fragment.Length + (currRow.Count - 1) <= zeilenlänge) {
+                var lengthOfAllWords = currRow.Sum(x => x.Length);
+                var spacesBetweenWords = currRow.Count > 0 ? currRow.Count : 0;
+                var candidateLineLen = lengthOfAllWords + spacesBetweenWords + fragment.Length;
+
+                if (candidateLineLen <= zeilenlänge)
                     currRow.Add(fragment);
-                }
                 else {
                     yield return currRow;
                     currRow = new List<string> { fragment };
                 }
             }
-            if (currRow.Count > 0) {
-                yield return currRow;
-            }
+            if (currRow.Count > 0) yield return currRow;
         }
     }
 }
