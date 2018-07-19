@@ -34,7 +34,7 @@ namespace bashforms.widgets.controls.utils
         }
         
         
-        public static IEnumerable<IEnumerable<string>> ComposeRows(IEnumerable<string> fragments, int zeilenlänge) {
+        private static IEnumerable<IEnumerable<string>> ComposeRows(IEnumerable<string> fragments, int zeilenlänge) {
             var currRow = new List<string>();
             foreach (var fragment in fragments) {
                 var lengthOfAllWords = currRow.Sum(x => x.Length);
