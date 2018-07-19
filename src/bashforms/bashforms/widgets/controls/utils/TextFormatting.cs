@@ -16,7 +16,7 @@ namespace bashforms.widgets.controls.utils
         }
 
         
-        public static string[] SplitLongWords(IEnumerable<string> words, int maxWordLength) {
+        static string[] SplitLongWords(IEnumerable<string> words, int maxWordLength) {
             return words.SelectMany(w => Split(new List<string>(), w))
                         .ToArray();
 
