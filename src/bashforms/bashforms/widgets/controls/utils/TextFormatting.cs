@@ -5,7 +5,7 @@ namespace bashforms.widgets.controls.utils
 {
     static class TextFormatting
     {
-        public static string Wrap(this string text, int maxLineLen) {
+        public static string WrapWords(this string text, int maxLineLen) {
             var fragments = SplitLongWords(text.ToWords(), maxLineLen);
             var rowFragments = ComposeRows(fragments, maxLineLen);
             var rows = TextJustification.AlignLeft(rowFragments);
