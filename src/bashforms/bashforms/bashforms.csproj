@@ -50,6 +50,7 @@
     <Compile Include="widgets\controls\Checkbox.cs" />
     <Compile Include="widgets\controls\Control.cs" />
     <Compile Include="widgets\controls\CursorControl.cs" />
+    <Compile Include="widgets\controls\editors\LineEditor.cs" />
     <Compile Include="widgets\controls\FocusControl.cs" />
     <Compile Include="widgets\controls\Label.cs" />
     <Compile Include="widgets\controls\TextArea.cs" />
@@ -58,9 +59,10 @@
     <Compile Include="widgets\controls\TextLine.cs" />
     <Compile Include="widgets\controls\TextLine_draw.cs" />
     <Compile Include="widgets\controls\TextLine_handleKey.cs" />
-    <Compile Include="widgets\controls\utils\TextFormatting.cs" />
-    <Compile Include="widgets\controls\utils\TextJustification.cs" />
-    <Compile Include="widgets\controls\utils\TextParsing.cs" />
+    <Compile Include="widgets\controls\formatting\LineFormatting.cs" />
+    <Compile Include="widgets\controls\formatting\TextFormatting.cs" />
+    <Compile Include="widgets\controls\formatting\TextJustification.cs" />
+    <Compile Include="widgets\controls\formatting\TextParsing.cs" />
     <Compile Include="widgets\Widget.cs" />
     <Compile Include="widgets\windows\Dialog.cs" />
     <Compile Include="widgets\windows\Form.cs" />

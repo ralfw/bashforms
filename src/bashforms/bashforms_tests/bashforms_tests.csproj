@@ -41,8 +41,10 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LineEditor_tests.cs" />
+    <Compile Include="LineFormatting_tests.cs" />
     <Compile Include="TextEditor_tests.cs" />
-    <Compile Include="TextFormatting_tests.cs" />
+    <Compile Include="TextParsing_tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bashforms\bashforms.csproj">

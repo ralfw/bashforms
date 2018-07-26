@@ -28,7 +28,7 @@ namespace bashforms.widgets.controls
                 if (showLabel)
                     return new[] {_label};
 
-                var paragraphs = _text.ToParagraphs().Select(p => p.WrapWords(_width));
+                var paragraphs = _text.ToParagraphs().Select(p => p.Wrap(_width));
                 var text = string.Join("\n\n", paragraphs);
                 return text.Split('\n');
             }

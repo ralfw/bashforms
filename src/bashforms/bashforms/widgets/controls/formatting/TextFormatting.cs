@@ -5,14 +5,10 @@ namespace bashforms.widgets.controls.utils
 {
     static class TextFormatting
     {
-        public static string WrapWords(this string text, int maxLineLen) {
-            var fragments = SplitLongWords(text.ToWords(), maxLineLen);
-            var rowFragments = ComposeRows(fragments, maxLineLen);
-            var rows = TextJustification.AlignLeft(rowFragments);
-            return JoinRows(rows);
-
-            
-            string JoinRows(IEnumerable<string> rows_) => string.Join("\n", rows_);
+        public static string[] Wrap(this string text, int maxLineLength) {
+            var fragments = SplitLongWords(text.ToWords(), maxLineLength);
+            var rowFragments = ComposeRows(fragments, maxLineLength);
+            return TextJustification.AlignLeft(rowFragments).ToArray();
         }
 
         
