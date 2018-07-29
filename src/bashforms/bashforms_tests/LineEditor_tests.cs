@@ -37,7 +37,7 @@ namespace bashforms_tests
         }
         
         [Test]
-        public void Linebreak_inserted() {
+        public void Insertion_with_linebreaks() {
             var sut = new LineEditor("ab cd efg", 5);
             
             var result = "";

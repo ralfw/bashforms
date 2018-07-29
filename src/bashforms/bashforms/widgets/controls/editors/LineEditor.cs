@@ -32,7 +32,7 @@ namespace bashforms_tests
             
             return _line.Length;
         }
-
+                
         public int Delete(int index) {
             if (index < 0 || index >= _line.Length) throw new IndexOutOfRangeException("Index for deletion outside of text!");
 
