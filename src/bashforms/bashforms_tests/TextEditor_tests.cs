@@ -35,7 +35,7 @@ namespace bashforms_tests
 
 
         [Test]
-        public void Deletions() {
+        public void Delete_in_line() {
             var sut = new TextEditor("abc\ndef", 5);
 
             var position = sut.Delete(1, 1);
@@ -61,6 +61,24 @@ namespace bashforms_tests
             Assert.AreEqual((1,3), position);
             Assert.AreEqual("abc\ndef", sut.Text);
             Assert.AreEqual(2, sut.Lines.Length);
+        }
+        
+        [Test]
+        public void Backspace_in_line() {
+            var sut = new TextEditor("abc\ndef", 5);
+
+            var position = sut.Backspace(1, 1);
+            Assert.AreEqual((1,0), position);
+            Assert.AreEqual("abc\nef", sut.Text);
+        }
+        
+        [Test]
+        public void Merge_current_line_with_previous_if_backspacing_at_start() {
+            var sut = new TextEditor("abc\ndef", 5);
+
+            var position = sut.Backspace(1, 0);
+            Assert.AreEqual((0,3), position);
+            Assert.AreEqual("abcdef", sut.Text);
         }
     }
 
@@ -114,6 +132,21 @@ namespace bashforms_tests
             _lines[row].Insert(_lines[row].Line.Length, _lines[row + 1].Line, null);
             _lines.RemoveAt(row+1);
             return (row, index);
+        }
+
+        
+        public (int row, int index) Backspace(int row, int index) {
+            if (index > 0) {
+                index = _lines[row].Backspace(index);
+                return (row, index);
+            }
+
+            if (row < 1) return (row, index);
+
+            index = _lines[row - 1].Line.Length;
+            _lines[row-1].Insert(_lines[row-1].Line.Length, _lines[row].Line, null);
+            _lines.RemoveAt(row);
+            return (row-1, index);
         }
     }
 }
