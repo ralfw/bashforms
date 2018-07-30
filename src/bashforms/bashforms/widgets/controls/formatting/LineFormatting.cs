@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace bashforms_tests
+namespace bashforms.widgets.controls.formatting
 {
     static class LineFormatting
     {

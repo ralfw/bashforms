@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Linq;
+using bashforms.widgets.controls.editors;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
 {
     public partial class TextArea : CursorControl
     {
-        protected int _insertionPoint;
-        protected int _displayFromIndex;
-        protected string _text;
+        protected (int softRow, int softCol) _insertionPoint;
+        protected int _displayFromSoftRow;
+        protected TextEditor _text;
         protected int _maxTextLength;
         protected string _label;
         protected ConsoleColor _labelForegroundColor;
@@ -17,11 +19,11 @@ namespace bashforms.widgets.controls
         
         
         public TextArea(int left, int top, int width, int height) : base(left, top, width, height) {
-            _text = "";
+            _text = new TextEditor("", width);
             _label = "";
-            _insertionPoint = 0;
-            _displayFromIndex = 0;
-            _maxTextLength = width;
+            _insertionPoint = (0,0);
+            _displayFromSoftRow = 0;
+            _maxTextLength = 1024 * 1024;
             _focusBackgroundColor = ConsoleColor.Blue;
             _focusForegroundColor = ConsoleColor.White;
             _labelForegroundColor = ConsoleColor.DarkGray;
@@ -29,22 +31,25 @@ namespace bashforms.widgets.controls
 
         
         public string Text {
-            get => _text.Replace("\n", Environment.NewLine);
-            set { 
-                _text = value.Replace("\r", "");
-                _insertionPoint = _text.Length;
+            get => _text.Text.Replace("\n", Environment.NewLine);
+            set {
+                _text = new TextEditor(value.Replace("\r", ""), _width);
+                _insertionPoint = (0, 0);
                 OnUpdated(this, new EventArgs());
             }
         }
+
+        
+        public int Length => _text.SoftLines.Sum(sl => sl.Length);
         
         
         public int MaxTextLength {
             get => _maxTextLength;
             set { 
                 _maxTextLength = value;
-                if (_text.Length > _maxTextLength) {
-                    _text = _text.Substring(0, _maxTextLength);
-                    _insertionPoint = Math.Min(_insertionPoint, _text.Length);
+                if (this.Length > _maxTextLength) {
+                    _text = new TextEditor(_text.Text.Substring(0, _maxTextLength), _width);
+                    _insertionPoint = (0, 0);
                 }
                 OnUpdated(this, new EventArgs());
             }
@@ -66,6 +71,6 @@ namespace bashforms.widgets.controls
         }
 
         
-        public override (int x, int y) CursorPosition => (0, 0);
+        public override (int x, int y) CursorPosition => (_insertionPoint.softCol, _insertionPoint.softRow);
     }
 }

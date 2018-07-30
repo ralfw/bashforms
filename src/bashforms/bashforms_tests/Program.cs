@@ -28,6 +28,7 @@ And then is heard no more. It is a tale
 Told by an idiot, full of sound and fury
 Signifying nothing."
             });
+            frm.AddChild(new TextArea(25, 1, 10, 5){Label = "Short Text"});
             
             BashForms.Open(frm);
         }

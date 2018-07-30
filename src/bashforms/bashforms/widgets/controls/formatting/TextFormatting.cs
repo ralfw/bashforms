@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace bashforms.widgets.controls.utils
+namespace bashforms.widgets.controls.formatting
 {
     static class TextFormatting
     {

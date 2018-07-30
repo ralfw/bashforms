@@ -1,6 +1,7 @@
 using System;
+using bashforms.widgets.controls.formatting;
 
-namespace bashforms_tests
+namespace bashforms.widgets.controls.editors
 {
     class LineEditor
     {

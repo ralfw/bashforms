@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using bashforms.widgets.controls.formatting;
 using NUnit.Framework;
 
 namespace bashforms_tests

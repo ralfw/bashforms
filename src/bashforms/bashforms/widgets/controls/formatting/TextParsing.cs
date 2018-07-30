@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace bashforms.widgets.controls.utils
+namespace bashforms.widgets.controls.formatting
 {
     static class TextParsing
     {

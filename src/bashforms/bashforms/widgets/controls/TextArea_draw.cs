@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using bashforms.data;
-using bashforms.widgets.controls.utils;
+using bashforms.widgets.controls.formatting;
 
 namespace bashforms.widgets.controls
 {
     partial class TextArea
     {
         public override Canvas Draw() {
-            var showLabel = _text.Length == 0 && _label.Length > 0;
+            var showLabel = _text.Text.Length == 0 && _label.Length > 0;
 
-            var lines = Project_text();
+            var lines = showLabel ? new[] {_label} : _text.SoftLines;
             
             var canvas = Initialize_canvas();
             for(var i=0; i<lines.Length; i++)
@@ -22,15 +22,6 @@ namespace bashforms.widgets.controls
                 var fgColor = showLabel ? _labelForegroundColor
                     : (this.HasFocus ? _focusForegroundColor : _foregroundColor);
                 return new Canvas(_width, _height, bgColor, fgColor);
-            }
-
-            string[] Project_text() {
-                if (showLabel)
-                    return new[] {_label};
-
-                var paragraphs = _text.ToParagraphs().Select(p => p.Wrap(_width));
-                var text = string.Join("\n\n", paragraphs);
-                return text.Split('\n');
             }
         }
     }

@@ -1,4 +1,4 @@
-using bashforms.widgets.controls.utils;
+using bashforms.widgets.controls.formatting;
 using NUnit.Framework;
 
 namespace bashforms_tests
