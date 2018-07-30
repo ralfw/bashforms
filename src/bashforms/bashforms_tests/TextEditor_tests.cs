@@ -81,7 +81,6 @@ namespace bashforms_tests
             Assert.AreEqual("abcdef", sut.Text);
         }
 
-
         [Test]
         public void Calculate_cursor_position() {
             /*
@@ -103,6 +102,30 @@ namespace bashforms_tests
             
             position = sut.GetSoftPosition(2, 3);
             Assert.AreEqual((4,3), position);
+        }
+
+        [Test]
+        public void Calculate_index()
+        {
+            /*
+             *   01234
+             * 0 ab_cd
+             * 1 efg
+             * ---
+             * 2 hijkl
+             * 3 mn op
+             * ---
+             * 4 qrst
+            */
+            var sut = new TextEditor("ab cd efg\nhijklmn op \nqrst", 5);
+            var index = sut.GetIndex(0, 1);
+            Assert.AreEqual((0,1), index);
+            
+            index = sut.GetIndex(1, 1);
+            Assert.AreEqual((0,7), index);
+            
+            index = sut.GetIndex(4, 3);
+            Assert.AreEqual((2,3), index);
         }
     }
 
@@ -182,6 +205,20 @@ namespace bashforms_tests
                 numberOfPrecedingSoftRows += _lines[r].SoftLines.Length;
 
             return (numberOfPrecedingSoftRows + position.softRow, position.softCol);
+        }
+
+        
+        public (int row, int index) GetIndex(int softRow, int softCol) {
+            var row = 0;
+            var totalSoftRows = 0;
+            foreach (var line in _lines) {
+                var newTotalSoftRows = totalSoftRows + line.SoftLines.Length;
+                if (newTotalSoftRows > softRow) break;
+                totalSoftRows = newTotalSoftRows;
+                row++;
+            }
+            var index = _lines[row].GetIndex(softRow - totalSoftRows, softCol);
+            return (row, index);
         }
     }
 }
