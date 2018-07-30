@@ -83,8 +83,26 @@ namespace bashforms_tests
 
 
         [Test]
-        public void Calculate_cursor_position()
-        {
+        public void Calculate_cursor_position() {
+            /*
+             *   01234
+             * 0 ab_cd
+             * 1 efg
+             * ---
+             * 2 hijkl
+             * 3 mn op
+             * ---
+             * 4 qrst
+            */
+            var sut = new TextEditor("ab cd efg\nhijklmn op \nqrst", 5);
+            var position = sut.GetSoftPosition(0, 1);
+            Assert.AreEqual((0,1), position);
+            
+            position = sut.GetSoftPosition(0, 7);
+            Assert.AreEqual((1,1), position);
+            
+            position = sut.GetSoftPosition(2, 3);
+            Assert.AreEqual((4,3), position);
         }
     }
 
@@ -153,6 +171,17 @@ namespace bashforms_tests
             _lines[row-1].Insert(_lines[row-1].Line.Length, _lines[row].Line, null);
             _lines.RemoveAt(row);
             return (row-1, index);
+        }
+
+        
+        public (int softRow, int softCol) GetSoftPosition(int row, int index) {
+            var position = _lines[row].GetSoftPosition(index);
+
+            var numberOfPrecedingSoftRows = 0;
+            for (var r = 0; r < row; r++)
+                numberOfPrecedingSoftRows += _lines[r].SoftLines.Length;
+
+            return (numberOfPrecedingSoftRows + position.softRow, position.softCol);
         }
     }
 }
