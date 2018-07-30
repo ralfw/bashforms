@@ -80,6 +80,12 @@ namespace bashforms_tests
             Assert.AreEqual((0,3), position);
             Assert.AreEqual("abcdef", sut.Text);
         }
+
+
+        [Test]
+        public void Calculate_cursor_position()
+        {
+        }
     }
 
 

@@ -97,5 +97,37 @@ namespace bashforms_tests
             Assert.AreEqual("ab cd efg hjklmn op qrs", sut.Line);
             Assert.AreEqual(new[]{"ab cd ", "efg ", "hjklm", "n op ", "qrs"}, sut.SoftLines);
         }
+        
+        
+        [Test]
+        public void Calculate_cursor_position()
+        {
+            /*
+             *   01234
+             * 0 ab_cd
+             * 1 efg
+             * 2 hijkl
+             * 3 mn op
+             * 4 qrst
+             */
+            var sut = new LineEditor("ab cd efg hijklmn op qrst", 5);
+            var position = sut.GetSoftPosition(0); // before "a"
+            Assert.AreEqual((0,0), position);
+            
+            position = sut.GetSoftPosition(4); // before "d"
+            Assert.AreEqual((0,4), position);
+            
+            position = sut.GetSoftPosition(5); // after "d"
+            Assert.AreEqual((0,5), position);
+            
+            position = sut.GetSoftPosition(6); // before "e"
+            Assert.AreEqual((1,0), position);
+            
+            position = sut.GetSoftPosition(18); // before "o"
+            Assert.AreEqual((3,3), position);
+            
+            position = sut.GetSoftPosition(99); // far after "t"
+            Assert.AreEqual((4,4), position);
+        }
     }
 }
