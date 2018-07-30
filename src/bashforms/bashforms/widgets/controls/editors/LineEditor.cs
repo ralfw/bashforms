@@ -63,17 +63,25 @@ namespace bashforms_tests
             return index;
         }
 
+        
         public (int softRow, int softCol) GetSoftPosition(int index) {
-            Console.WriteLine();
             var softRow = 0;
             var eolIndex = 0;
             foreach (var sl in this.SoftLines) {
-                Console.WriteLine($"{eolIndex}: <{sl}>{sl.Length}");
                 if (eolIndex + sl.Length > index) return (softRow, index - eolIndex);
                 softRow++; eolIndex += sl.Length;
             }
-            Console.WriteLine("not within text");
             return (softRow-1, this.SoftLines[this.SoftLines.Length - 1].Length);
+        }
+
+        
+        public int GetIndex(int softRow, int softCol) {
+            var index = 0;
+            for (var r = 0; r < Math.Min(softRow, this.SoftLines.Length); r++)
+                index += this.SoftLines[r].Length;
+            index += softCol;
+            if (index > _line.Length) index = _line.Length;
+            return index;
         }
     }
 }

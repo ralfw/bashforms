@@ -100,7 +100,7 @@ namespace bashforms_tests
         
         
         [Test]
-        public void Calculate_cursor_position()
+        public void Calculate_cursor_position_from_index()
         {
             /*
              *   01234
@@ -128,6 +128,34 @@ namespace bashforms_tests
             
             position = sut.GetSoftPosition(99); // far after "t"
             Assert.AreEqual((4,4), position);
+        }
+
+
+        [Test]
+        public void Calculate_index_from_position() {
+            /*
+             *   01234
+             * 0 ab_cd
+             * 1 efg
+             * 2 hijkl
+             * 3 mn op
+             * 4 qrst
+             */
+            var sut = new LineEditor("ab cd efg hijklmn op qrst", 5);
+            var index = sut.GetIndex(0, 0); // before "a"
+            Assert.AreEqual(0, index);
+            
+            index = sut.GetIndex(0, 4); // before "d"
+            Assert.AreEqual(4, index);
+                        
+            index = sut.GetIndex(1,0); // before "e"
+            Assert.AreEqual(6, index);
+                                    
+            index = sut.GetIndex(3,3); // before "o"
+            Assert.AreEqual(18, index);
+            
+            index = sut.GetIndex(5,10); // far after "t"
+            Assert.AreEqual(sut.Line.Length, index);
         }
     }
 }
