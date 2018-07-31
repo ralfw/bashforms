@@ -8,6 +8,7 @@ namespace bashforms.widgets.controls
         public override bool HandleKey(ConsoleKeyInfo key)
         {
             if (Handle_insertion(key) || 
+                Handle_newline(key) ||
                 Handle_deletions(key) ||
                 Handle_arrows(key)) return true;
             return false;
@@ -19,6 +20,16 @@ namespace bashforms.widgets.controls
             if (this.Length == _maxTextLength) return true;
 
             _insertionPoint = _text.Insert(_insertionPoint.row, _insertionPoint.index, key.KeyChar.ToString());
+
+            OnEdited(this,new EventArgs());
+            return true;
+        }
+
+
+        bool Handle_newline(ConsoleKeyInfo key) {
+            if (key.Key != ConsoleKey.Enter) return false;
+            
+            _insertionPoint = _text.Insert(_insertionPoint.row, _insertionPoint.index, "\n");
 
             OnEdited(this,new EventArgs());
             return true;
