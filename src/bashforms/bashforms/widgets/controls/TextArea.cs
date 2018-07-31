@@ -74,7 +74,7 @@ namespace bashforms.widgets.controls
         public override (int x, int y) CursorPosition {
             get {
                 var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
-                return (position.softCol, position.softRow);
+                return (position.softCol, position.softRow - _displayFromSoftRow);
             }
         }
     }

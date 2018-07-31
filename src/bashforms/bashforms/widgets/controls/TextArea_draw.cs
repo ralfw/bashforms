@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using bashforms.data;
 using bashforms.widgets.controls.formatting;
 
@@ -8,12 +9,15 @@ namespace bashforms.widgets.controls
     {
         public override Canvas Draw() {
             var showLabel = _text.Text.Length == 0 && _label.Length > 0;
-
-            var lines = showLabel ? new[] {_label} : _text.SoftLines;
-            
             var canvas = Initialize_canvas();
-            for(var i=0; i<lines.Length; i++)
-                canvas.Write(0,i, lines[i]);
+            
+            if (showLabel)
+                canvas.Write(0,0, _label);
+            else {
+                var n = Math.Min(_height, _text.SoftLines.Length - _displayFromSoftRow);
+                for(var i=0; i<n; i++)
+                    canvas.Write(0,i, _text.SoftLines[_displayFromSoftRow + i]);
+            }
             return canvas;
 
 

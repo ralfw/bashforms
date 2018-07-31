@@ -5,16 +5,19 @@ using EventArgs = bashforms.data.eventargs.EventArgs;
 namespace bashforms.widgets.controls
 {
     partial class TextArea {
-        public override bool HandleKey(ConsoleKeyInfo key)
-        {
-            if (Handle_insertion(key) || 
+        public override bool HandleKey(ConsoleKeyInfo key) {
+            if (Handle_insertion(key) ||
                 Handle_newline(key) ||
                 Handle_deletions(key) ||
-                Handle_arrows(key)) return true;
+                Handle_arrows(key))
+            {
+                Scroll();
+                return true;
+            }
             return false;
         }
-        
-        
+
+
         bool Handle_insertion(ConsoleKeyInfo key) {
             if (key.KeyChar < ' ') return false;
             if (this.Length == _maxTextLength) return true;
@@ -103,6 +106,16 @@ namespace bashforms.widgets.controls
                 default:
                     return false;
             }
+        }
+        
+        
+        void Scroll() {
+            var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
+            if (position.softRow < _displayFromSoftRow)
+                _displayFromSoftRow = position.softRow;
+
+            if (position.softRow > _displayFromSoftRow + _height - 1)
+                _displayFromSoftRow = position.softRow - _height + 1;
         }
     }
 }
