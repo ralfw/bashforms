@@ -7,7 +7,7 @@ namespace bashforms.widgets.controls
 {
     public partial class TextArea : CursorControl
     {
-        protected (int softRow, int softCol) _insertionPoint;
+        protected (int row, int index) _insertionPoint;
         protected int _displayFromSoftRow;
         protected TextEditor _text;
         protected int _maxTextLength;
@@ -70,7 +70,12 @@ namespace bashforms.widgets.controls
             set { _labelForegroundColor = value; OnUpdated(this,new EventArgs()); }
         }
 
-        
-        public override (int x, int y) CursorPosition => (_insertionPoint.softCol, _insertionPoint.softRow);
+
+        public override (int x, int y) CursorPosition {
+            get {
+                var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
+                return (position.softCol, position.softRow);
+            }
+        }
     }
 }
