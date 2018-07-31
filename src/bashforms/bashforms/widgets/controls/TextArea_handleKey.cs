@@ -51,22 +51,44 @@ namespace bashforms.widgets.controls
         
         bool Handle_arrows(ConsoleKeyInfo key) {
             switch (key.Key) {
-                case ConsoleKey.LeftArrow:
+                case ConsoleKey.LeftArrow: {
                     var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
                     position.softCol--;
                     if (position.softCol < 0) {
                         position.softRow--;
                         if (position.softRow < 0) return true;
-                        position.softCol = _text.SoftLines[position.softRow].Length;
+                        position.softCol = _text.SoftLines[position.softRow].Length-1;
                     }
                     _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
-                case ConsoleKey.RightArrow:
+                }
+                case ConsoleKey.RightArrow: {
+                    var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
+                    position.softCol++;
+                    if (position.softCol > _text.SoftLines[position.softRow].Length) {
+                        position.softRow++;
+                        if (position.softRow >= _text.SoftLines.Length) return true;
+                        position.softCol = 0;
+                    }
+                    _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
-                case ConsoleKey.UpArrow:
+                }
+                case ConsoleKey.UpArrow: {
+                    var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
+                    position.softRow--;
+                    if (position.softRow < 0) return true;
+                    position.softCol = Math.Min(position.softCol, _text.SoftLines[position.softRow].Length - 1);
+                    _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
-                case ConsoleKey.DownArrow:
+                }
+                case ConsoleKey.DownArrow: {
+                    var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
+                    position.softRow++;
+                    if (position.softRow >= _text.SoftLines.Length) return true;
+                    position.softCol = Math.Min(position.softCol, _text.SoftLines[position.softRow].Length - 1);
+                    _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
+                }
                 default:
                     return false;
             }
