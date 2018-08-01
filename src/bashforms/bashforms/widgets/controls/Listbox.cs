@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
@@ -21,11 +22,21 @@ namespace bashforms.widgets.controls
             public object Attachment { get; set; }
         }
 
+        public enum SelectionModes {
+            NoSelections,
+            SingleSelection,
+            MultipleSelections
+        }
+
 
         protected List<Item> _items;
         protected List<int> _selectedItemIndexes;
         protected int _firstItemToDisplayIndex;
         protected int _currentItemIndex;
+        protected SelectionModes _selectionMode;
+        
+        
+        public Action<Widget, EventArgs> OnPressed = (w, a) => { };
 
         
         public Listbox(int left, int top, int width, int height, IEnumerable<string> itemTexts) : this(left, top, width, height) {
@@ -84,11 +95,41 @@ namespace bashforms.widgets.controls
             if (_currentItemIndex < 0 && _items.Count > 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
         }
+
+
+        public SelectionModes SelectionMode {
+            get => _selectionMode;
+            set {
+                _selectionMode = value; 
+                _selectedItemIndexes.Clear();
+                this.OnUpdated(this, new EventArgs());
+            }
+        }
         
-        
+        public int[] SelectedItemIndexes => _selectedItemIndexes.ToArray();
+
+        public void ClearSelections() {
+            _selectedItemIndexes.Clear();
+            this.OnUpdated(this, new EventArgs());
+        }
+
+        public void ClearSelection(int index) {
+            _selectedItemIndexes.Remove(index);
+            this.OnUpdated(this, new EventArgs());
+        }
+
+
+        public int CurrentItemIndex => _currentItemIndex;
+
+
         public override bool HandleKey(ConsoleKeyInfo key) {
             switch (key.Key)
             {
+                case ConsoleKey.Spacebar:
+                case ConsoleKey.Enter:
+                    SelectCurrentItem();
+                    this.OnPressed(this, new EventArgs());
+                    return true;
                 case ConsoleKey.UpArrow:
                     if (_items.Count == 0) return true;
                     
@@ -109,6 +150,29 @@ namespace bashforms.widgets.controls
             }
             return false;
         }
+
+        
+        private void SelectCurrentItem() {
+            if (_currentItemIndex < 0) return;
+
+            if (_selectedItemIndexes.Contains(_currentItemIndex)) {
+                _selectedItemIndexes.Remove(_currentItemIndex);
+                return;
+            }
+
+            switch (_selectionMode) {
+                case SelectionModes.SingleSelection:
+                    _selectedItemIndexes.Clear();
+                    _selectedItemIndexes.Add(_currentItemIndex);
+                    break;
+                case SelectionModes.MultipleSelections:
+                    _selectedItemIndexes.Remove(_currentItemIndex); // avoid duplicates
+                    _selectedItemIndexes.Add(_currentItemIndex);
+                    break;
+                case SelectionModes.NoSelections:
+                    break;
+            }
+        }
         
         
         public override Canvas Draw() {
@@ -123,7 +187,7 @@ namespace bashforms.widgets.controls
                 canvas.Write(0,row, _items[i].Text);
                 
                 if (_selectedItemIndexes.Contains(i))
-                    canvas.Colorize(0,row,_width,1, ConsoleColor.DarkRed, ConsoleColor.White);
+                    canvas.Colorize(0,row,_width,1, ConsoleColor.DarkYellow, ConsoleColor.White);
                 
                 if (this.HasFocus && i == _currentItemIndex)
                     canvas.Colorize(0,row,_width,1, ConsoleColor.Gray, ConsoleColor.Black);
