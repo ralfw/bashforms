@@ -71,7 +71,7 @@ namespace bashforms.widgets.controls
                     if (position.softCol < 0) {
                         position.softRow--;
                         if (position.softRow < 0) return true;
-                        position.softCol = _text.SoftLines[position.softRow].Length-1;
+                        position.softCol = Math.Max(0,_text.SoftLines[position.softRow].Length-1);
                     }
                     _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
@@ -91,7 +91,7 @@ namespace bashforms.widgets.controls
                     var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
                     position.softRow--;
                     if (position.softRow < 0) return true;
-                    position.softCol = Math.Min(position.softCol, _text.SoftLines[position.softRow].Length - 1);
+                    position.softCol = Math.Min(position.softCol, Math.Max(0,_text.SoftLines[position.softRow].Length - 1));
                     _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
                 }
@@ -99,7 +99,7 @@ namespace bashforms.widgets.controls
                     var position = _text.GetSoftPosition(_insertionPoint.row, _insertionPoint.index);
                     position.softRow++;
                     if (position.softRow >= _text.SoftLines.Length) return true;
-                    position.softCol = Math.Min(position.softCol, _text.SoftLines[position.softRow].Length - 1);
+                    position.softCol = Math.Min(position.softCol, Math.Max(0,_text.SoftLines[position.softRow].Length - 1));
                     _insertionPoint = _text.GetIndex(position.softRow, position.softCol);
                     return true;
                 }

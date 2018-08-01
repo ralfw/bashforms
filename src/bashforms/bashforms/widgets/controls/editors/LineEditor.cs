@@ -52,7 +52,7 @@ namespace bashforms.widgets.controls.editors
 
             _line = _line.Remove(index, 1);
             _breakingChanged = true;
-            return (index < _line.Length) ? index : index - 1;
+            return Math.Max(0, (index < _line.Length) ? index : index - 1);
         }
         
         public int Backspace(int index) {
