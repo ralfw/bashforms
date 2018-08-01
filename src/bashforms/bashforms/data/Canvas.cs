@@ -58,8 +58,8 @@ namespace bashforms.data
         public void Colorize(ConsoleColor backgroundColor, ConsoleColor foregroundColor)
             => Colorize(0, 0, this.Width, this.Height, backgroundColor, foregroundColor);
         public void Colorize(int left, int top, int width, int height, ConsoleColor backgroundColor, ConsoleColor foregroundColor) {
-            for(var x = 0; x < width; x++)
-            for (var y = 0; y < height; y++) {
+            for(var x = left; x < left+width; x++)
+            for (var y = top; y < top+height; y++) {
                 var p = this[x, y];
                 p.BackgroundColor = backgroundColor;
                 p.ForegroundColor = foregroundColor;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using bashforms.data;
 using bashforms.data.eventargs;
@@ -21,16 +22,19 @@ namespace bashforms.widgets.controls
         }
 
 
-        protected readonly List<Item> _items;
+        protected List<Item> _items;
+        protected List<int> _selectedItemIndexes;
+        protected int _firstItemToDisplayIndex;
+        protected int _currentItemIndex;
 
         
         public Listbox(int left, int top, int width, int height, IEnumerable<string> itemTexts) : this(left, top, width, height) {
             var items = itemTexts.Select(t => new Item(t));
             this.AddRange(items);
+            if (_items.Count > 0) _currentItemIndex = 0;
         }
         public Listbox(int left, int top, int width, int height) : base(left, top, width, height) {
-            _items = new List<Item>();
-            
+            Clear();
             _focusBackgroundColor = ConsoleColor.DarkMagenta;
             _focusForegroundColor = ConsoleColor.White;
         }
@@ -40,13 +44,19 @@ namespace bashforms.widgets.controls
 
 
         public void Clear() {
-            _items.Clear();
+            _items = new List<Item>();
+            _selectedItemIndexes = new List<int>();
+
+            _firstItemToDisplayIndex = 0;
+            _currentItemIndex = -1;
+            
             this.OnUpdated(this, new EventArgs());
         }
 
         public Item Add(string itemText) {
             var item = new Item(itemText);
             _items.Add(item);
+            if (_currentItemIndex < 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
             return item;
         }
@@ -54,6 +64,7 @@ namespace bashforms.widgets.controls
         public void Add(Item item) {
             if (_items.Contains(item)) throw new InvalidOperationException("All items in Listbox must be unique!");
             _items.Add(item);
+            if (_currentItemIndex < 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
         }
 
@@ -62,29 +73,62 @@ namespace bashforms.widgets.controls
                 if (_items.Contains(item)) throw new InvalidOperationException("All items in Listbox must be unique!");
                 _items.Add(item);
             }
+            if (_currentItemIndex < 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
         }
 
         public void RemoveAt(int index) {
             _items.RemoveAt(index);
+            _selectedItemIndexes.Remove(index);
+            if (index <= _currentItemIndex) _currentItemIndex--;
+            if (_currentItemIndex < 0 && _items.Count > 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
         }
         
         
         public override bool HandleKey(ConsoleKeyInfo key) {
+            switch (key.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    if (_items.Count == 0) return true;
+                    
+                    _currentItemIndex--;
+                    if (_currentItemIndex < 0) _currentItemIndex = 0;
+
+                    if (_currentItemIndex < _firstItemToDisplayIndex) _firstItemToDisplayIndex = _currentItemIndex;
+                    return true;
+                
+                case ConsoleKey.DownArrow:
+                    if (_items.Count == 0) return true;
+
+                    _currentItemIndex++;
+                    if (_currentItemIndex >= _items.Count) _currentItemIndex = _items.Count - 1;
+
+                    if (_currentItemIndex > _firstItemToDisplayIndex + _height - 1) _firstItemToDisplayIndex++;
+                    return true;
+            }
             return false;
         }
         
         
         public override Canvas Draw() {
             var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
-            
-            for(var i=0; i<Math.Min(_height,_items.Count-1); i++)
-                canvas.Write(0,i,_items[i].Text);
-
             if (this.HasFocus)
                 canvas.Colorize(_focusBackgroundColor, _focusForegroundColor);
 
+            for (var row = 0; row < _height; row++) {
+                var i = _firstItemToDisplayIndex + row;
+                if (i >= _items.Count) break;
+                
+                canvas.Write(0,row, _items[i].Text);
+                
+                if (_selectedItemIndexes.Contains(i))
+                    canvas.Colorize(0,row,_width,1, ConsoleColor.DarkRed, ConsoleColor.White);
+                
+                if (this.HasFocus && i == _currentItemIndex)
+                    canvas.Colorize(0,row,_width,1, ConsoleColor.Gray, ConsoleColor.Black);
+            }
+            
             return canvas;
         }
     }
