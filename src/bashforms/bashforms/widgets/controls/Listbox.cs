@@ -4,13 +4,12 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
-using bashforms.data;
 using bashforms.data.eventargs;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
 {
-    public class Listbox : FocusControl
+    public partial class Listbox : FocusControl
     {
         public class Item {
             public Item(string text) {
@@ -34,6 +33,7 @@ namespace bashforms.widgets.controls
         protected int _firstItemToDisplayIndex;
         protected int _currentItemIndex;
         protected SelectionModes _selectionMode;
+        protected int[] _columns;
         
         
         public Action<Widget, EventArgs> OnPressed = (w, a) => { };
@@ -118,82 +118,17 @@ namespace bashforms.widgets.controls
             this.OnUpdated(this, new EventArgs());
         }
 
-
+        
         public int CurrentItemIndex => _currentItemIndex;
 
 
-        public override bool HandleKey(ConsoleKeyInfo key) {
-            switch (key.Key)
-            {
-                case ConsoleKey.Spacebar:
-                case ConsoleKey.Enter:
-                    SelectCurrentItem();
-                    this.OnPressed(this, new EventArgs());
-                    return true;
-                case ConsoleKey.UpArrow:
-                    if (_items.Count == 0) return true;
-                    
-                    _currentItemIndex--;
-                    if (_currentItemIndex < 0) _currentItemIndex = 0;
-
-                    if (_currentItemIndex < _firstItemToDisplayIndex) _firstItemToDisplayIndex = _currentItemIndex;
-                    return true;
-                
-                case ConsoleKey.DownArrow:
-                    if (_items.Count == 0) return true;
-
-                    _currentItemIndex++;
-                    if (_currentItemIndex >= _items.Count) _currentItemIndex = _items.Count - 1;
-
-                    if (_currentItemIndex > _firstItemToDisplayIndex + _height - 1) _firstItemToDisplayIndex++;
-                    return true;
-            }
-            return false;
-        }
-
-        
-        private void SelectCurrentItem() {
-            if (_currentItemIndex < 0) return;
-
-            if (_selectedItemIndexes.Contains(_currentItemIndex)) {
-                _selectedItemIndexes.Remove(_currentItemIndex);
-                return;
-            }
-
-            switch (_selectionMode) {
-                case SelectionModes.SingleSelection:
-                    _selectedItemIndexes.Clear();
-                    _selectedItemIndexes.Add(_currentItemIndex);
-                    break;
-                case SelectionModes.MultipleSelections:
-                    _selectedItemIndexes.Remove(_currentItemIndex); // avoid duplicates
-                    _selectedItemIndexes.Add(_currentItemIndex);
-                    break;
-                case SelectionModes.NoSelections:
-                    break;
+        public int[] Columns {
+            get => _columns;
+            set {
+                _columns = value;
+                this.OnUpdated(this, new EventArgs());
             }
         }
         
-        
-        public override Canvas Draw() {
-            var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
-            if (this.HasFocus)
-                canvas.Colorize(_focusBackgroundColor, _focusForegroundColor);
-
-            for (var row = 0; row < _height; row++) {
-                var i = _firstItemToDisplayIndex + row;
-                if (i >= _items.Count) break;
-                
-                canvas.Write(0,row, _items[i].Text);
-                
-                if (_selectedItemIndexes.Contains(i))
-                    canvas.Colorize(0,row,_width,1, ConsoleColor.DarkYellow, ConsoleColor.White);
-                
-                if (this.HasFocus && i == _currentItemIndex)
-                    canvas.Colorize(0,row,_width,1, ConsoleColor.Gray, ConsoleColor.Black);
-            }
-            
-            return canvas;
-        }
     }
 }

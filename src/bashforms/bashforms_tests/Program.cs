@@ -8,28 +8,51 @@ namespace bashforms_tests
     public class Program
     {
         public static void Main(string[] args) {
-            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
-            frm.AddChild(new TextLine(2,2,40){Label = "title", Name = "txtTitle"});
-            frm.AddChild(new TextArea(2,4,40,10) {Label = "description", Name = "txtDescription"});
-            frm.AddChild(new TextLine(2,15,8){Label = "due date", Name = "txtDueDate"});
+            var frmEdit = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo Item"};
+            frmEdit.AddChild(new TextLine(2,2,40){Label = "title", Name = "txtTitle"});
+            frmEdit.AddChild(new TextArea(2,4,40,10) {Label = "description", Name = "txtDescription"});
+            frmEdit.AddChild(new TextLine(2,15,8){Label = "due date", Name = "txtDueDate"});
 
-            frm.AddChild(new Label(44,2,"importance:"));
-            frm.AddChild(new Listbox(44,3,10,3, new[]{"Top!", "Very high", "High", "Moderate", "Low", "Very low"})
+            frmEdit.AddChild(new Label(44,2,"importance:"));
+            frmEdit.AddChild(new Listbox(44,3,10,3, new[]{"Top!", "Very high", "High", "Moderate", "Low", "Very low"})
             {
                 SelectionMode = Listbox.SelectionModes.SingleSelection
             });
             
-            frm.AddChild(new Button(2,17,10,"Save") { OnPressed = (w, e) =>
+            frmEdit.AddChild(new Button(2,17,10,"Save") { OnPressed = (w, e) =>
             {
-                MessageBox.ShowInfo($"Saving: {frm.Child<TextLine>("txtTitle").Text}");
+                MessageBox.ShowInfo($"Saving: {frmEdit.Child<TextLine>("txtTitle").Text}");
             }});
-            frm.AddChild(new Button(14,17,10, "Cancel"){OnPressed = (w, e) =>
+            frmEdit.AddChild(new Button(14,17,10, "Cancel"){OnPressed = (w, e) =>
             {
                 if (MessageBox.ShowQuestion($"Depth: {BashForms.Current.Depth} - Close?"))
                     BashForms.Close();
             }});
             
-            BashForms.Open(frm);
+            
+            var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
+            var lbItems = new Listbox(2, 1, frmOverview.Size.width - 4, frmOverview.Size.height - 4) {
+                FocusBackgroundColor = ConsoleColor.Black
+            };
+            lbItems.Columns = new[] {6, lbItems.Size.width-2};
+
+            lbItems.Add("123\tsome description").Attachment = "12";
+            lbItems.Add("abcdefxyz\tanother description which is somewhat longer to extend across the line").Attachment = "ab";
+            lbItems.Add("hello, world!\tyet another description").Attachment = "hw";
+
+            lbItems.OnPressed = (w, e) => {
+                MessageBox.ShowInfo($"Selected item: {lbItems.Items[lbItems.CurrentItemIndex].Attachment}");
+            };
+            
+            frmOverview.AddChild(lbItems);
+            frmOverview.AddChild(new Button(2, frmOverview.Size.height-2, 7, "Add") {
+                OnPressed = (w, e) => {
+                    MessageBox.ShowInfo($"Selected item: {lbItems.CurrentItemIndex}");
+                }
+            });
+            
+            
+            BashForms.Open(frmOverview);
         }
     }
 }
