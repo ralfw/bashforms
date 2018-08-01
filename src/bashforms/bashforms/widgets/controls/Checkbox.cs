@@ -54,10 +54,7 @@ namespace bashforms.widgets.controls
             canvas.Write(0,0,text);
             
             if (this.HasFocus)
-                foreach (var p in canvas.Points) {
-                    p.BackgroundColor = _focusBackgroundColor;
-                    p.ForegroundColor = _focusForegroundColor;
-                }
+                canvas.Colorize(_focusBackgroundColor, _focusForegroundColor);
 
             return canvas;
         }

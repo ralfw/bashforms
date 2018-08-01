@@ -7,7 +7,10 @@ namespace bashforms.widgets.controls
     public class Label : Control
     {
         private string _text;
-        
+
+        public Label(int left, int top, string text) : this(left, top, text.Length) {
+            _text = text;
+        }
         public Label(int left, int top, int width) : base(left, top, width, 1) {
             _text = "";
         }

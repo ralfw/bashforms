@@ -42,6 +42,8 @@ namespace bashforms.widgets
         }
         
         
+        public object Attachment { get; set; }
+        
         public abstract bool HandleKey(ConsoleKeyInfo key);
 
         public abstract Canvas Draw();

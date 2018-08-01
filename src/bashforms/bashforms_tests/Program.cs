@@ -12,6 +12,10 @@ namespace bashforms_tests
             frm.AddChild(new TextLine(2,2,40){Label = "title", Name = "txtTitle"});
             frm.AddChild(new TextArea(2,4,40,10) {Label = "description", Name = "txtDescription"});
             frm.AddChild(new TextLine(2,15,8){Label = "due date", Name = "txtDueDate"});
+
+            frm.AddChild(new Label(44,2,"importance:"));
+            frm.AddChild(new Listbox(44,3,10,3, new[]{"Top!", "Very high", "High", "Moderate", "Low", "Very low"}));
+            
             frm.AddChild(new Button(2,17,10,"Save") { OnPressed = (w, e) =>
             {
                 MessageBox.ShowInfo($"Saving: {frm.Child<TextLine>("txtTitle").Text}");

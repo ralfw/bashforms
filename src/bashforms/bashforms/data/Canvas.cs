@@ -15,11 +15,12 @@ namespace bashforms.data
         private readonly Point[,] _canvas;
             
         public Canvas() : this(Console.WindowWidth, Console.WindowHeight, Console.BackgroundColor, Console.ForegroundColor) {}
-        public Canvas(int width, int height, ConsoleColor backgroundCoor, ConsoleColor foregroundColor) {
+        public Canvas(int width, int height, ConsoleColor backgroundColor, ConsoleColor foregroundColor) {
             _canvas = new Point[height,width];
-            for(var y=0; y<this.Height; y++)
-            for (var x = 0; x < this.Width; x++)
-                _canvas[y, x] = new Point {BackgroundColor = backgroundCoor, ForegroundColor = foregroundColor};
+            for(var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
+                _canvas[y, x] = new Point();
+            Colorize(backgroundColor,foregroundColor);
         }
 
         
@@ -53,6 +54,17 @@ namespace bashforms.data
                     if (p != null) p.Symbol = text[i];
                 }
         }
+
+        public void Colorize(ConsoleColor backgroundColor, ConsoleColor foregroundColor)
+            => Colorize(0, 0, this.Width, this.Height, backgroundColor, foregroundColor);
+        public void Colorize(int left, int top, int width, int height, ConsoleColor backgroundColor, ConsoleColor foregroundColor) {
+            for(var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++) {
+                var p = this[x, y];
+                p.BackgroundColor = backgroundColor;
+                p.ForegroundColor = foregroundColor;
+            }
+        }
         
         
         public void Merge(int left, int top, Canvas source) {
@@ -64,5 +76,6 @@ namespace bashforms.data
         
         public int Width => _canvas.GetLength(1);
         public int Height => _canvas.GetLength(0);
+
     }
 }
