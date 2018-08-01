@@ -23,6 +23,9 @@ namespace bashforms.engine
         public void Pop() {
             _windowStack.Pop();
         }
+
+
+        public int Depth => _windowStack.Count;
         
         
         public void Run(Window win) { Push(win); Run(); }

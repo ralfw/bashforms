@@ -25,8 +25,12 @@ namespace bashforms
             return dialog.Result;
         }
 
+        
         public static void Close() {
             __engine.Pop();
         }
+
+
+        public static BashFormsEngine Current => __engine;
     }
 }
