@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using bashforms.data;
 using bashforms.widgets.controls;
 using EventArgs = bashforms.data.eventargs.EventArgs;
@@ -27,6 +28,8 @@ namespace bashforms.widgets.windows
         public Control[] Children => _children.ToArray();
         
         public Control this[string name] => _children.FirstOrDefault(c => c.Name == name);
+
+        public T Child<T> (string name) where T : Control  => (T)this[name];
 
         
         public void InitializeFocus() {

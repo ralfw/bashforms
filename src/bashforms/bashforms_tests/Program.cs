@@ -14,7 +14,7 @@ namespace bashforms_tests
             frm.AddChild(new TextLine(2,15,8){Label = "due date", Name = "txtDueDate"});
             frm.AddChild(new Button(2,17,10,"Save") { OnPressed = (w, e) =>
             {
-                MessageBox.ShowInfo($"Saving: {((TextLine)frm["txtTitle"]).Text}");
+                MessageBox.ShowInfo($"Saving: {frm.Child<TextLine>("txtTitle").Text}");
             }});
             frm.AddChild(new Button(14,17,10, "Cancel"){OnPressed = (w, e) =>
             {
