@@ -17,6 +17,7 @@ namespace bashforms.widgets.windows
         
         public Window(int left, int top, int width, int height) : base(left,top,width,height) {
             _children = new List<Control>();
+            MenuKey = new ConsoleKeyInfo('m', ConsoleKey.M, true, true, false);
         }
         
         
@@ -26,10 +27,12 @@ namespace bashforms.widgets.windows
         }
 
         public Control[] Children => _children.ToArray();
+        public T Child<T> (string name) where T : Control  => (T)this[name];
         
         public Control this[string name] => _children.FirstOrDefault(c => c.Name == name);
 
-        public T Child<T> (string name) where T : Control  => (T)this[name];
+        public Control Menu { get; set; }
+        public ConsoleKeyInfo MenuKey { get; set; }
 
         
         public void InitializeFocus() {
@@ -99,6 +102,12 @@ namespace bashforms.widgets.windows
         
         public override Canvas Draw() {
             var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
+            
+            foreach (var widget in this.Children) {
+                var widgetCanvas = widget.Draw();
+                canvas.Merge(widget.Position.left, widget.Position.top, widgetCanvas);
+            }
+            
             return canvas;
         }
     }
