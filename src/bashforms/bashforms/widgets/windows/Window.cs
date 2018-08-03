@@ -12,7 +12,8 @@ namespace bashforms.widgets.windows
     public class Window : Widget
     {
         protected List<Control> _children;
-
+        protected Menu _menu;
+        
         public Action<Window, EventArgs> OnChanged = (w, a) => { }; 
 
         
@@ -32,7 +33,18 @@ namespace bashforms.widgets.windows
         
         public Control this[string name] => _children.FirstOrDefault(c => c.Name == name);
 
-        public CursorControl Menu { get; set; }
+        
+        public Menu Menu {
+            get {
+                if (_menu == null) _menu = new Menu(_width-2);                    
+                return _menu;
+            }
+            set {
+                _menu = value;
+                this.OnChanged(this, new EventArgs());
+            }
+        }
+
         public ConsoleKeyInfo MenuKey { get; set; }
 
         

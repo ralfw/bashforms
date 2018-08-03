@@ -31,7 +31,16 @@ namespace bashforms_tests
             
             
             var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
-            frmOverview.Menu = new TextLine(2,1,10){Label = "the menue"};
+            frmOverview.Menu.AddItem("File").Menu.AddItems(new[]{
+                new Menu.Item("Open", 'o', "mnuOpen"), 
+                new Menu.Item("Close", 'c', "mnuClose")
+            });
+            frmOverview.Menu.AddItem(new Menu.Item("Edit", 'e', "mnuEdit"));
+            frmOverview.Menu.OnSelected += (item, e) =>
+            {
+                MessageBox.ShowInfo($"Menu item selected: {item.Name}");
+            };
+            
             var lbItems = new Listbox(2, 2, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
                 FocusBackgroundColor = ConsoleColor.Black
             };
