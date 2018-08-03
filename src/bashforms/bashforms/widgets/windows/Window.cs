@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using bashforms.data;
 using bashforms.widgets.controls;
 using EventArgs = bashforms.data.eventargs.EventArgs;
@@ -17,7 +18,7 @@ namespace bashforms.widgets.windows
         
         public Window(int left, int top, int width, int height) : base(left,top,width,height) {
             _children = new List<Control>();
-            MenuKey = new ConsoleKeyInfo('m', ConsoleKey.M, true, true, false);
+            MenuKey = new ConsoleKeyInfo(' ', ConsoleKey.F2, false, false, false);
         }
         
         
@@ -31,7 +32,7 @@ namespace bashforms.widgets.windows
         
         public Control this[string name] => _children.FirstOrDefault(c => c.Name == name);
 
-        public Control Menu { get; set; }
+        public CursorControl Menu { get; set; }
         public ConsoleKeyInfo MenuKey { get; set; }
 
         
@@ -47,7 +48,7 @@ namespace bashforms.widgets.windows
         public override bool HandleKey(ConsoleKeyInfo key) {
             return Check_tab(
                 Move_focus,
-                Let_focus_handle_key);
+                () => Toggle_menu() || Let_focus_handle_key());
 
 
             bool Check_tab(Action<bool> onTab, Func<bool> onNotTab) {
@@ -59,16 +60,25 @@ namespace bashforms.widgets.windows
                 return onNotTab();
             }
 
+            bool Toggle_menu() {
+                if (key.Key == this.MenuKey.Key && key.Modifiers == this.MenuKey.Modifiers) {
+                    if (this.Menu != null)
+                        this.Menu.HasFocus = !this.Menu.HasFocus;
+                    return true;
+                }
+                return false;
+            }
+            
             bool Let_focus_handle_key() {
-                var focus = _children.OfType<FocusControl>().FirstOrDefault(c => c.HasFocus);
-                if (focus == null) return false;
-                return focus.HandleKey(key);
+                var focus = Find_focus();
+                return focus != null && focus.HandleKey(key);
             }
         }
         
         
-        void Move_focus(bool moveForward)
-        {
+        void Move_focus(bool moveForward) {
+            if (this.Menu?.HasFocus == true) return;
+            
             var focusCandidates = _children.OfType<FocusControl>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToList();
             var focus = focusCandidates.FirstOrDefault(fc => fc.HasFocus);
             
@@ -92,23 +102,38 @@ namespace bashforms.widgets.windows
         
         public (int x, int y) CursorPosition {
             get {
-                var focus = _children.OfType<CursorControl>().FirstOrDefault(fc => fc.HasFocus);
-                if (focus == null) return (-1, -1);
-                
-                return (focus.Position.left + focus.CursorPosition.x, focus.Position.top + focus.CursorPosition.y);
+                var focus = Find_focus();
+                if (!(focus is CursorControl)) return (-1, -1);
+                return (focus.Position.left + ((CursorControl)focus).CursorPosition.x, 
+                        focus.Position.top + ((CursorControl)focus).CursorPosition.y);
             }
         }
         
         
         public override Canvas Draw() {
             var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
+            var focus = Find_focus();
             
             foreach (var widget in this.Children) {
-                var widgetCanvas = widget.Draw();
-                canvas.Merge(widget.Position.left, widget.Position.top, widgetCanvas);
+                if (widget != focus) Draw_widget(widget);
             }
+            // draw focus last so it always comes out on top of all other widgets
+            if (focus != null) Draw_widget(focus);
+            // oh, no, draw menu last and on top of all others; maybe the real focus is there
+            if (this.Menu != null && focus != this.Menu) Draw_widget(this.Menu);
             
             return canvas;
+
+
+            void Draw_widget(Widget w) {
+                var widgetCanvas = w.Draw();
+                canvas.Merge(w.Position.left, w.Position.top, widgetCanvas);
+            }
         }
+
+
+        FocusControl Find_focus() => this.Menu?.HasFocus == true 
+                        ? this.Menu 
+                        : _children.OfType<FocusControl>().FirstOrDefault(c => c.HasFocus);
     }
 }

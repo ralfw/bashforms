@@ -31,7 +31,8 @@ namespace bashforms_tests
             
             
             var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
-            var lbItems = new Listbox(2, 1, frmOverview.Size.width - 4, frmOverview.Size.height - 4) {
+            frmOverview.Menu = new TextLine(2,1,10){Label = "the menue"};
+            var lbItems = new Listbox(2, 2, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
                 FocusBackgroundColor = ConsoleColor.Black
             };
             lbItems.Columns = new[] {6, lbItems.Size.width-2};

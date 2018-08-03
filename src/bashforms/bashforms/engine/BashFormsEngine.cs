@@ -43,7 +43,7 @@ namespace bashforms.engine
 
             
             bool HandleKey(ConsoleKeyInfo key) {
-                return (key.Modifiers & ConsoleModifiers.Control) > 0 && key.Key == ConsoleKey.R;
+                return key.Key == ConsoleKey.F5;
             }
         }
     }
