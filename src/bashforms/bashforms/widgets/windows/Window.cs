@@ -36,7 +36,7 @@ namespace bashforms.widgets.windows
         
         public MenuBar MenuBar {
             get {
-                if (_menu == null) _menu = new MenuBar(_width-4);                    
+                if (_menu == null) _menu = new MenuBar(2,1,_width-4);                    
                 return _menu;
             }
             set {

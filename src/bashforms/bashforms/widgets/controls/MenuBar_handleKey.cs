@@ -8,16 +8,20 @@ namespace bashforms.widgets.controls
         {
             switch (key.Key) {
                 case ConsoleKey.DownArrow:
-                    _currentItemIndex++;
-                    if (_currentItemIndex >= _menu.Items.Length) _currentItemIndex = _menu.Items.Length - 1;
                     break;
                 case ConsoleKey.UpArrow:
-                    _currentItemIndex--;
-                    if (_currentItemIndex < 0) _currentItemIndex = 0;
                     break;
                 case ConsoleKey.LeftArrow:
+                    if (_currentItemIndexPath.Count == 1) {
+                        _currentItemIndexPath[0]--;
+                        if (_currentItemIndexPath[0] < 0) _currentItemIndexPath[0] = 0;
+                    }
                     break;
                 case ConsoleKey.RightArrow:
+                    if (_currentItemIndexPath.Count == 1) {
+                        _currentItemIndexPath[0]++;
+                        if (_currentItemIndexPath[0] >= _menu.Items.Length) _currentItemIndexPath[0] = _menu.Items.Length - 1;
+                    }
                     break;
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:

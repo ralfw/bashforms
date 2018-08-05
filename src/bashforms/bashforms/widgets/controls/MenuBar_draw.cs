@@ -8,7 +8,10 @@ namespace bashforms.widgets.controls
     {
         public override Canvas Draw()
         {
-            if (this.HasFocus != _hadFocus) _currentItemIndex = 0;
+            if (this.HasFocus != _hadFocus) {
+                _currentItemIndexPath.Clear();
+                _currentItemIndexPath.Add(0);
+            }
             _hadFocus = this.HasFocus;
 
             var bgColor = this.HasFocus ? _focusBackgroundColor : _backgroundColor;
@@ -19,7 +22,7 @@ namespace bashforms.widgets.controls
             var itemLeft = 0;
             for (var i = 0; i < formattedItems.Length; i++) {
                 canvas.Write(itemLeft, 0, formattedItems[i]);
-                if (i == _currentItemIndex && this.HasFocus)
+                if (i == _currentItemIndexPath[0] && this.HasFocus)
                     canvas.Colorize(itemLeft,0,formattedItems[i].Length,1,ConsoleColor.DarkMagenta,ConsoleColor.White);
                 itemLeft += formattedItems[i].Length;
             }

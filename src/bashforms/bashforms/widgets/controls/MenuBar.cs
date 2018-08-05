@@ -46,14 +46,16 @@ namespace bashforms.widgets.controls
 
 
         private readonly MenuItems _menu;
-        private int _currentItemIndex;
+        private readonly List<int> _currentItemIndexPath;
         private bool _hadFocus = false;
         
         public event Action<Item, EventArgs> OnSelected = (s, e) => { };
 
         
-        public MenuBar(int width) : base(2, 1, width, 1) {
+        public MenuBar(int left, int top, int width) : base(left, top, width, 1) {
             _menu = new MenuItems();
+            _currentItemIndexPath = new List<int>(new[]{0});
+            
             _focusBackgroundColor = ConsoleColor.Gray;
             _focusForegroundColor = ConsoleColor.Black;
         }
