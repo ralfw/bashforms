@@ -11,8 +11,8 @@ namespace bashforms.widgets.windows
 {
     public class Window : Widget
     {
-        protected List<Control> _children;
-        protected Menu _menu;
+        protected readonly List<Control> _children;
+        protected MenuBar _menu;
         
         public Action<Window, EventArgs> OnChanged = (w, a) => { }; 
 
@@ -34,9 +34,9 @@ namespace bashforms.widgets.windows
         public Control this[string name] => _children.FirstOrDefault(c => c.Name == name);
 
         
-        public Menu Menu {
+        public MenuBar MenuBar {
             get {
-                if (_menu == null) _menu = new Menu(_width-2);                    
+                if (_menu == null) _menu = new MenuBar(_width-4);                    
                 return _menu;
             }
             set {
@@ -74,8 +74,8 @@ namespace bashforms.widgets.windows
 
             bool Toggle_menu() {
                 if (key.Key == this.MenuKey.Key && key.Modifiers == this.MenuKey.Modifiers) {
-                    if (this.Menu != null)
-                        this.Menu.HasFocus = !this.Menu.HasFocus;
+                    if (_menu != null)
+                        _menu.HasFocus = !_menu.HasFocus;
                     return true;
                 }
                 return false;
@@ -89,7 +89,7 @@ namespace bashforms.widgets.windows
         
         
         void Move_focus(bool moveForward) {
-            if (this.Menu?.HasFocus == true) return;
+            if (_menu?.HasFocus == true) return;
             
             var focusCandidates = _children.OfType<FocusControl>().Where(c => c.CanHaveFocus).OrderBy(c => c.TabIndex).ToList();
             var focus = focusCandidates.FirstOrDefault(fc => fc.HasFocus);
@@ -132,7 +132,7 @@ namespace bashforms.widgets.windows
             // draw focus last so it always comes out on top of all other widgets
             if (focus != null) Draw_widget(focus);
             // oh, no, draw menu last and on top of all others; maybe the real focus is there
-            if (this.Menu != null && focus != this.Menu) Draw_widget(this.Menu);
+            if (_menu != null) Draw_widget(_menu);
             
             return canvas;
 
@@ -144,8 +144,8 @@ namespace bashforms.widgets.windows
         }
 
 
-        FocusControl Find_focus() => this.Menu?.HasFocus == true 
-                        ? this.Menu 
+        FocusControl Find_focus() => _menu?.HasFocus == true 
+                        ? _menu 
                         : _children.OfType<FocusControl>().FirstOrDefault(c => c.HasFocus);
     }
 }

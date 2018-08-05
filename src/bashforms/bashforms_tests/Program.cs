@@ -30,36 +30,41 @@ namespace bashforms_tests
             }});
             
             
+            
             var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
-            frmOverview.Menu.AddItem("File").Menu.AddItems(new[]{
-                new Menu.Item("Open", 'o', "mnuOpen"), 
-                new Menu.Item("Close", 'c', "mnuClose")
+            frmOverview.MenuBar.Menu.AddItem("File").Submenu.AddItems(new[]{
+                new MenuBar.Item("Open", 'o', "mnuOpen"), 
+                new MenuBar.Item("Close", 'c', "mnuClose")
             });
-            frmOverview.Menu.AddItem(new Menu.Item("Edit", 'e', "mnuEdit"));
-            frmOverview.Menu.OnSelected += (item, e) =>
+            frmOverview.MenuBar.Menu.AddItem(new MenuBar.Item("Edit", 'e', "mnuEdit"));
+            frmOverview.MenuBar.Menu.AddItem(new MenuBar.Item("Close application", 'x', "mnuClose"));
+            frmOverview.MenuBar.OnSelected += (item, e) =>
             {
                 MessageBox.ShowInfo($"Menu item selected: {item.Name}");
             };
             
-            var lbItems = new Listbox(2, 2, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
+            
+            var listBox = new Listbox(2, 2, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
                 FocusBackgroundColor = ConsoleColor.Black
             };
-            lbItems.Columns = new[] {6, lbItems.Size.width-2};
+            listBox.Columns = new[] {6, listBox.Size.width-2};
 
-            lbItems.Add("123\tsome description").Attachment = "12";
-            lbItems.Add("abcdefxyz\tanother description which is somewhat longer to extend across the line").Attachment = "ab";
-            lbItems.Add("hello, world!\tyet another description").Attachment = "hw";
+            listBox.Add("123\tsome description").Attachment = "12";
+            listBox.Add("abcdefxyz\tanother description which is somewhat longer to extend across the line").Attachment = "ab";
+            listBox.Add("hello, world!\tyet another description").Attachment = "hw";
 
-            lbItems.OnPressed = (w, e) => {
-                MessageBox.ShowInfo($"Selected item: {lbItems.Items[lbItems.CurrentItemIndex].Attachment}");
+            listBox.OnPressed = (w, e) => {
+                MessageBox.ShowInfo($"Selected item: {listBox.Items[listBox.CurrentItemIndex].Attachment}");
             };
             
-            frmOverview.AddChild(lbItems);
+            frmOverview.AddChild(listBox);
+            
             frmOverview.AddChild(new Button(2, frmOverview.Size.height-2, 7, "Add") {
                 OnPressed = (w, e) => {
-                    MessageBox.ShowInfo($"Selected item: {lbItems.CurrentItemIndex}");
+                    MessageBox.ShowInfo($"Selected item: {listBox.CurrentItemIndex}");
                 }
             });
+            
             
             
             BashForms.Open(frmOverview);

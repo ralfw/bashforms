@@ -57,7 +57,9 @@
     <Compile Include="widgets\controls\Listbox.cs" />
     <Compile Include="widgets\controls\Listbox_draw.cs" />
     <Compile Include="widgets\controls\Listbox_handleKey.cs" />
-    <Compile Include="widgets\controls\Menu.cs" />
+    <Compile Include="widgets\controls\MenuBar.cs" />
+    <Compile Include="widgets\controls\MenuBar_draw.cs" />
+    <Compile Include="widgets\controls\MenuBar_handleKey.cs" />
     <Compile Include="widgets\controls\TextArea.cs" />
     <Compile Include="widgets\controls\TextArea_draw.cs" />
     <Compile Include="widgets\controls\TextArea_handleKey.cs" />
