@@ -34,14 +34,21 @@ namespace bashforms_tests
             
             var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
             frmOverview.MenuBar.Menu.AddItem("File").Submenu.AddItems(new[]{
-                new MenuItem("Open", "mnuOpen"){Shortcut = 'o'}, 
+                new MenuItem("Open", "mnuOpen"){Shortcut = 'o'},
+                new MenuItem("Save"), 
                 new MenuItem("Close", "mnuClose")
             });
-            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Edit", "mnuEdit"));
+            frmOverview.MenuBar.Menu.Items[0].Submenu.Items[1].Submenu.AddItem("Save");
+            frmOverview.MenuBar.Menu.Items[0].Submenu.Items[1].Submenu.AddItem("Save as");
+            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Edit")).Submenu.AddItems(new[] {
+                new MenuItem("Cut", "mnuCut"),
+                new MenuItem("Copy", "mnuCopy"),
+                new MenuItem("Paste", "mnuPaste") 
+            });
             frmOverview.MenuBar.Menu.AddItem(new MenuItem("Close application", "mnuClose"){Shortcut='x'});
             frmOverview.MenuBar.OnSelected += (item, e) =>
             {
-                MessageBox.ShowInfo($"Menu item selected: {item.Name}");
+                MessageBox.ShowInfo($"Selected: {item.Name}");
             };
             
             

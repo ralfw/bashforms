@@ -25,7 +25,7 @@ namespace bashforms.widgets.controls.editors
                 MenuItem[] CollectPathItems_rec(Stack<MenuItem> pathItems, MenuItemList items, List<int> pathItemIndexes) {
                     if (pathItemIndexes.Count == 0) return pathItems.ToArray();
 
-                    var item = items.MenuItems[pathItemIndexes.Last()];
+                    var item = items.Items[pathItemIndexes.Last()];
                     pathItems.Push(item);
                     pathItemIndexes.RemoveAt(pathItemIndexes.Count-1);
 
@@ -37,8 +37,8 @@ namespace bashforms.widgets.controls.editors
         public MenuItem[] CurrentMenuItems {
             get
             {
-                if (PathMenuItems.Length == 0) return _rootMenuItems.MenuItems;
-                return PathMenuItems.Last().Submenu.MenuItems;
+                if (PathMenuItems.Length == 0) return _rootMenuItems.Items;
+                return PathMenuItems.Last().Submenu.Items;
             }
         }
 

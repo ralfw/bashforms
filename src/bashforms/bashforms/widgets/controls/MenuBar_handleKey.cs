@@ -17,15 +17,22 @@ namespace bashforms.widgets.controls
                     break;
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:
-                    // select current item and oben new breadcrumb
+                    var currentMenuItem = _menuItemStack.CurrentMenuItems[_currentMenuItemIndex];
+                    
+                    this.OnSelected(currentMenuItem, new EventArgs());
+                    if (currentMenuItem.Submenu.Items.Length > 0) {
+                        _menuItemStack.PushItem(_currentMenuItemIndex);
+                        _currentMenuItemIndex = 0;
+                    } 
                     break;
                 case ConsoleKey.Escape:
-                    // move up one menu
+                    if (_menuItemStack.PathMenuItems.Length > 0) {
+                        _currentMenuItemIndex = _menuItemStack.PopItem();
+                    }
                     break;
                 default:
                     return false;
             }
-
             return true;
         }
     }

@@ -10,36 +10,51 @@ namespace bashforms.widgets.controls
     {
         public override Canvas Draw()
         {
-            if (this.HasFocus != _hadFocus) { _menuItemStack.Clear(); }
-            _hadFocus = this.HasFocus;
+            Check_if_menu_got_focus();
 
-            var bgColor = this.HasFocus ? _focusBackgroundColor : _backgroundColor;
-            var fgColor = this.HasFocus ? _focusForegroundColor : _foregroundColor;
-            var canvas = new Canvas(_width, 1, bgColor, fgColor);
+            var colors = Select_colors();
+            var canvas = new Canvas(_width, 1, colors.bgColor, colors.fgColor);
 
-            var breadcrumbs = Breadcrumbs();
-            canvas.Write(0,0,breadcrumbs);
+            var breadcrumbsWidth = Draw_breadcrumbs();
+            Draw_current_menu_items(breadcrumbsWidth);
             
-            Draw_current_menu_items(breadcrumbs.Length);            
             return canvas;
 
-            
-            void Draw_current_menu_items(int leftCurrentItems) {
-                var formattedItems = _menuItemStack.CurrentMenuItems.Select(Format_item).ToArray();
-                for (var i = 0; i < formattedItems.Length; i++) {
-                    canvas.Write(leftCurrentItems, 0, formattedItems[i]);
-                    if (this.HasFocus && i == _currentMenuItemIndex)
-                        canvas.Colorize(leftCurrentItems,0,formattedItems[i].Length,1,ConsoleColor.DarkMagenta,ConsoleColor.White);
-                    leftCurrentItems += formattedItems[i].Length;
+
+            void Check_if_menu_got_focus() {
+                if (this.HasFocus != _hadFocus) { 
+                    _menuItemStack.Clear();
+                    _currentMenuItemIndex = 0;
                 }
+                _hadFocus = this.HasFocus;
+            }
+
+            
+            (ConsoleColor bgColor, ConsoleColor fgColor) Select_colors() {
+                return (this.HasFocus ? _focusBackgroundColor : _backgroundColor,
+                        this.HasFocus ? _focusForegroundColor : _foregroundColor);
             }
             
-            string Format_item(MenuItem item) => $"[{(item.Checked ? '√' : ' ')}{item.Text} ]";
-        }
-
-
-        string Breadcrumbs() {
-            return string.Join("/", _menuItemStack.PathMenuItems.Select(i => i.Text)) + ">";
+            
+            int Draw_breadcrumbs() {
+                var breadcrumbs = string.Join("/", _menuItemStack.PathMenuItems.Select(i => i.Text)) + ">";
+                canvas.Write(0,0,breadcrumbs);
+                return breadcrumbs.Length;
+            }
+            
+            
+            void Draw_current_menu_items(int left) {
+                var formattedItems = _menuItemStack.CurrentMenuItems.Select(Format_item).ToArray();
+                for (var i = 0; i < formattedItems.Length; i++) {
+                    canvas.Write(left, 0, formattedItems[i]);
+                    if (this.HasFocus && i == _currentMenuItemIndex)
+                        canvas.Colorize(left,0,formattedItems[i].Length,1,ConsoleColor.DarkMagenta,ConsoleColor.White);
+                    left += formattedItems[i].Length;
+                }
+                
+                
+                string Format_item(MenuItem item) => $"[{(item.Checked ? '√' : ' ')}{item.Text} ]";
+            }
         }
     }
 }

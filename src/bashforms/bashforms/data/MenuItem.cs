@@ -4,7 +4,7 @@ namespace bashforms.data
 {
     public class MenuItem
     {
-        public MenuItem(string text, string name) {
+        public MenuItem(string text, string name = "") {
             Text = text;
             Name = name;
             Shortcut = '\0';
@@ -29,7 +29,7 @@ namespace bashforms.data
         private readonly List<MenuItem> _items = new List<MenuItem>();
             
             
-        public MenuItem[] MenuItems => _items.ToArray();
+        public MenuItem[] Items => _items.ToArray();
 
         public MenuItem AddItem(string text) => AddItem(new MenuItem(text, ""));
 
