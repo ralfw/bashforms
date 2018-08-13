@@ -51,6 +51,7 @@
     <Compile Include="widgets\controls\Control.cs" />
     <Compile Include="widgets\controls\CursorControl.cs" />
     <Compile Include="widgets\controls\editors\LineEditor.cs" />
+    <Compile Include="widgets\controls\editors\MenuItemStack.cs" />
     <Compile Include="widgets\controls\editors\TextEditor.cs" />
     <Compile Include="widgets\controls\FocusControl.cs" />
     <Compile Include="widgets\controls\Label.cs" />

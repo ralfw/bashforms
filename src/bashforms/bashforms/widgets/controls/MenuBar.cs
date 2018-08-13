@@ -7,20 +7,21 @@ namespace bashforms.widgets.controls
     {
         public class Item
         {
-            public Item(string text, char shortcut, string name) {
+            public Item(string text, string name) {
                 Text = text;
-                Shortcut = shortcut;
                 Name = name;
+                Shortcut = '\0';
                 Enabled = true;
                 Checked = false;
                 Submenu = new MenuItems();
             }
         
             public string Text { get; }
-            public char Shortcut { get; }
+            public char Shortcut { get; set; }
             public string Name { get; }
             public bool Enabled { get; set; }
             public bool Checked { get; set; }
+            public object Tag { get; set; }
         
             public MenuItems Submenu { get; }
         }
@@ -30,9 +31,10 @@ namespace bashforms.widgets.controls
         {
             private readonly List<Item> _items = new List<Item>();
             
+            
             public Item[] Items => _items.ToArray();
 
-            public Item AddItem(string text) => AddItem(new Item(text, '\0', ""));
+            public Item AddItem(string text) => AddItem(new Item(text, ""));
 
             public Item AddItem(Item item) {
                 _items.Add(item);
@@ -46,7 +48,7 @@ namespace bashforms.widgets.controls
 
 
         private readonly MenuItems _menu;
-        private readonly List<int> _currentItemIndexPath;
+        private readonly Stack<int> _selectedItems;
         private bool _hadFocus = false;
         
         public event Action<Item, EventArgs> OnSelected = (s, e) => { };
@@ -54,7 +56,7 @@ namespace bashforms.widgets.controls
         
         public MenuBar(int left, int top, int width) : base(left, top, width, 1) {
             _menu = new MenuItems();
-            _currentItemIndexPath = new List<int>(new[]{0});
+            _selectedItems = new Stack<int>(new[]{0});
             
             _focusBackgroundColor = ConsoleColor.Gray;
             _focusForegroundColor = ConsoleColor.Black;

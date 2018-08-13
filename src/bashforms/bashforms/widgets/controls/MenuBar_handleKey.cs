@@ -7,24 +7,24 @@ namespace bashforms.widgets.controls
         public override bool HandleKey(ConsoleKeyInfo key)
         {
             switch (key.Key) {
-                case ConsoleKey.DownArrow:
-                    break;
-                case ConsoleKey.UpArrow:
-                    break;
-                case ConsoleKey.LeftArrow:
-                    if (_currentItemIndexPath.Count == 1) {
-                        _currentItemIndexPath[0]--;
-                        if (_currentItemIndexPath[0] < 0) _currentItemIndexPath[0] = 0;
+                case ConsoleKey.LeftArrow: {
+                        var index = _selectedItems.Pop() - 1;
+                        if (index < 0) index = 0;
+                        _selectedItems.Push(index);
                     }
                     break;
-                case ConsoleKey.RightArrow:
-                    if (_currentItemIndexPath.Count == 1) {
-                        _currentItemIndexPath[0]++;
-                        if (_currentItemIndexPath[0] >= _menu.Items.Length) _currentItemIndexPath[0] = _menu.Items.Length - 1;
+                case ConsoleKey.RightArrow: {
+                        var index = _selectedItems.Pop() + 1;
+                        if (index >= _menu.Items.Length) index = _menu.Items.Length - 1;
+                        _selectedItems.Push(index);
                     }
                     break;
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:
+                    // select current item and oben new breadcrumb
+                    break;
+                case ConsoleKey.Escape:
+                    // move up one menu
                     break;
                 default:
                     return false;
