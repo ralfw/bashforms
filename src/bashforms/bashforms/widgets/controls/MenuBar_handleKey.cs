@@ -15,6 +15,7 @@ namespace bashforms.widgets.controls
                     _currentMenuItemIndex++;
                     if (_currentMenuItemIndex >= _menuItemStack.CurrentMenuItems.Length) _currentMenuItemIndex = 0;
                     break;
+                
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:
                     var currentMenuItem = _menuItemStack.CurrentMenuItems[_currentMenuItemIndex];
@@ -25,6 +26,7 @@ namespace bashforms.widgets.controls
                         _currentMenuItemIndex = 0;
                     } 
                     break;
+                
                 case ConsoleKey.Escape:
                     if (_menuItemStack.PathMenuItems.Length > 0) {
                         _currentMenuItemIndex = _menuItemStack.PopItem();

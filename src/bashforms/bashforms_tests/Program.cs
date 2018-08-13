@@ -48,7 +48,7 @@ namespace bashforms_tests
             frmOverview.MenuBar.Menu.AddItem(new MenuItem("Close application", "mnuClose"){Shortcut='x'});
             frmOverview.MenuBar.OnSelected += (item, e) =>
             {
-                MessageBox.ShowInfo($"Selected: {item.Name}");
+                if (item.Name == "mnuCut") item.Checked = !item.Checked;
             };
             
             
