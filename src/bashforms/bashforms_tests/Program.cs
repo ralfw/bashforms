@@ -74,8 +74,15 @@ namespace bashforms_tests
             });
             
             
+            var frmExperiments = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Experiments"};
+            frmExperiments.AddChild(new Label(2,2,15)
+            {
+                CanBeMultiLine = true, 
+                Text = "She should have died hereafter, there would have been a time for such a word.",
+                BackgroundColor = ConsoleColor.DarkBlue
+            });
             
-            BashForms.Open(frmOverview);
+            BashForms.Open(frmExperiments);
         }
     }
 }
