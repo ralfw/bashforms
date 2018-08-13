@@ -7,38 +7,54 @@ namespace bashforms.widgets.controls
 {
     public class Label : Control
     {
-        private string _text;
+        private string[] _lines;
+        private bool _canBeMultiline;
 
         public Label(int left, int top, string text) : this(left, top, text.Length) {
-            _text = text;
-            CanBeMultiLine = false;
+            _lines = new[]{text};
+            _canBeMultiline = false;
         }
         public Label(int left, int top, int width) : base(left, top, width, 1) {
-            _text = "";
-            CanBeMultiLine = false;
+            _lines = new[] {""};
+            _canBeMultiline = false;
         }
 
         public string Text {
-            get => _text;
+            get => string.Join("\n", _lines);
             set {
-                _text = value;
+                _lines = _canBeMultiline ? value.Wrap(_width) : new[] {value};
+                _height = _lines.Length;
                 OnUpdated(this, new EventArgs());
             }
         }
-        
-        
-        public bool CanBeMultiLine { get; set; }
+
+
+        public bool CanBeMultiline {
+            get => _canBeMultiline;
+            set {
+                if (_canBeMultiline == value) return;
+
+                _canBeMultiline = value;
+                if (_canBeMultiline && _lines.Length == 1)
+                    _lines = _lines[0].Wrap(_width);
+                else if (!_canBeMultiline && _lines.Length > 1)
+                    _lines = new[] {this.Text};
+                _height = _lines.Length;
+                
+                OnUpdated(this, new EventArgs());
+            }
+
+        }
         
 
         public override bool HandleKey(ConsoleKeyInfo key) { return false; }
         
         
         public override Canvas Draw() {
-            var wrappedText = CanBeMultiLine ? _text.Wrap(_width) : new[] {_text};
-            var canvas = new Canvas(_width, wrappedText.Length, _backgroundColor, _foregroundColor);
+            var canvas = new Canvas(_width, _height, _backgroundColor, _foregroundColor);
 
-            for(var i=0; i<wrappedText.Length; i++)
-                canvas.Write(0,i,wrappedText[i]);
+            for(var i=0; i<_lines.Length; i++)
+                canvas.Write(0,i,_lines[i]);
             
             return canvas;
         }

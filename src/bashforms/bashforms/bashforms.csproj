@@ -45,7 +45,6 @@
     <Compile Include="data\MenuItem.cs" />
     <Compile Include="engine\BashFormsEngine.cs" />
     <Compile Include="engine\Rendering.cs" />
-    <Compile Include="MessageBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="widgets\controls\Button.cs" />
     <Compile Include="widgets\controls\Checkbox.cs" />
@@ -76,6 +75,7 @@
     <Compile Include="widgets\windows\Dialog.cs" />
     <Compile Include="widgets\windows\Form.cs" />
     <Compile Include="widgets\windows\Form_draw.cs" />
+    <Compile Include="widgets\windows\MessageBox.cs" />
     <Compile Include="widgets\windows\Window.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

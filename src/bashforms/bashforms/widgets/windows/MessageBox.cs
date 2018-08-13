@@ -1,8 +1,7 @@
 ﻿using System;
 using bashforms.widgets.controls;
-using bashforms.widgets.windows;
 
-namespace bashforms
+namespace bashforms.widgets.windows
 {
     public static class MessageBox {
         public static void ShowInfo(string message) {
