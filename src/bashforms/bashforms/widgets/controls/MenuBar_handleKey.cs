@@ -7,17 +7,13 @@ namespace bashforms.widgets.controls
         public override bool HandleKey(ConsoleKeyInfo key)
         {
             switch (key.Key) {
-                case ConsoleKey.LeftArrow: {
-                        var index = _selectedItems.Pop() - 1;
-                        if (index < 0) index = 0;
-                        _selectedItems.Push(index);
-                    }
+                case ConsoleKey.LeftArrow:
+                    _currentMenuItemIndex--;
+                    if (_currentMenuItemIndex < 0) _currentMenuItemIndex = _menuItemStack.CurrentMenuItems.Length - 1;
                     break;
-                case ConsoleKey.RightArrow: {
-                        var index = _selectedItems.Pop() + 1;
-                        if (index >= _menu.Items.Length) index = _menu.Items.Length - 1;
-                        _selectedItems.Push(index);
-                    }
+                case ConsoleKey.RightArrow:
+                    _currentMenuItemIndex++;
+                    if (_currentMenuItemIndex >= _menuItemStack.CurrentMenuItems.Length) _currentMenuItemIndex = 0;
                     break;
                 case ConsoleKey.Spacebar:
                 case ConsoleKey.Enter:

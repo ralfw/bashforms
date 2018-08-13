@@ -1,27 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
+using bashforms.data;
 
 namespace bashforms.widgets.controls.editors
 {
     class MenuItemStack
     {
-        private readonly MenuBar.MenuItems _rootItems;
+        private readonly MenuItemList _rootMenuItems;
         private readonly Stack<int> _pathItems;
 
-        public MenuItemStack(MenuBar.MenuItems rootItems) {
-            _rootItems = rootItems;
+        public MenuItemStack(MenuItemList rootMenuItems) {
+            _rootMenuItems = rootMenuItems;
             _pathItems = new Stack<int>();
         }
 
 
-        public MenuBar.Item[] PathItems {
-            get {
-                return CollectPathItems_rec(new Stack<MenuBar.Item>(), _rootItems, _pathItems.ToList()).Reverse().ToArray();
+        public MenuItemList RootMenu => _rootMenuItems;
+        
 
-                MenuBar.Item[] CollectPathItems_rec(Stack<MenuBar.Item> pathItems, MenuBar.MenuItems items, List<int> pathItemIndexes) {
+        public MenuItem[] PathMenuItems {
+            get {
+                return CollectPathItems_rec(new Stack<MenuItem>(), _rootMenuItems, _pathItems.ToList()).Reverse().ToArray();
+
+                MenuItem[] CollectPathItems_rec(Stack<MenuItem> pathItems, MenuItemList items, List<int> pathItemIndexes) {
                     if (pathItemIndexes.Count == 0) return pathItems.ToArray();
 
-                    var item = items.Items[pathItemIndexes.Last()];
+                    var item = items.MenuItems[pathItemIndexes.Last()];
                     pathItems.Push(item);
                     pathItemIndexes.RemoveAt(pathItemIndexes.Count-1);
 
@@ -30,20 +34,20 @@ namespace bashforms.widgets.controls.editors
             }
         }
 
-        public MenuBar.Item[] CurrentItems {
+        public MenuItem[] CurrentMenuItems {
             get
             {
-                if (PathItems.Length == 0) return _rootItems.Items;
-                return PathItems.Last().Submenu.Items;
+                if (PathMenuItems.Length == 0) return _rootMenuItems.MenuItems;
+                return PathMenuItems.Last().Submenu.MenuItems;
             }
         }
 
         public void Clear() => _pathItems.Clear();
 
 
-        public MenuBar.Item PushItem(int indexInCurrentItem) {
+        public MenuItem PushItem(int indexInCurrentItem) {
             _pathItems.Push(indexInCurrentItem);
-            return PathItems.First();
+            return PathMenuItems.First();
         }
 
         public int PopItem() => _pathItems.Pop();

@@ -1,5 +1,6 @@
 ﻿using System;
 using bashforms;
+using bashforms.data;
 using bashforms.widgets.controls;
 using bashforms.widgets.windows;
 
@@ -33,11 +34,11 @@ namespace bashforms_tests
             
             var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
             frmOverview.MenuBar.Menu.AddItem("File").Submenu.AddItems(new[]{
-                new MenuBar.Item("Open", "mnuOpen"){Shortcut = 'o'}, 
-                new MenuBar.Item("Close", "mnuClose")
+                new MenuItem("Open", "mnuOpen"){Shortcut = 'o'}, 
+                new MenuItem("Close", "mnuClose")
             });
-            frmOverview.MenuBar.Menu.AddItem(new MenuBar.Item("Edit", "mnuEdit"));
-            frmOverview.MenuBar.Menu.AddItem(new MenuBar.Item("Close application", "mnuClose"){Shortcut='x'});
+            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Edit", "mnuEdit"));
+            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Close application", "mnuClose"){Shortcut='x'});
             frmOverview.MenuBar.OnSelected += (item, e) =>
             {
                 MessageBox.ShowInfo($"Menu item selected: {item.Name}");
