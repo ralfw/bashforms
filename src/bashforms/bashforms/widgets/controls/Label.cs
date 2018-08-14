@@ -22,7 +22,7 @@ namespace bashforms.widgets.controls
         public string Text {
             get => string.Join("\n", _lines);
             set {
-                _lines = _canBeMultiline ? value.Wrap(_width) : new[] {value};
+                _lines = _canBeMultiline ? value.Wrap(_width, true) : new[] {value};
                 _height = _lines.Length;
                 OnUpdated(this, new EventArgs());
             }
@@ -36,7 +36,7 @@ namespace bashforms.widgets.controls
 
                 _canBeMultiline = value;
                 if (_canBeMultiline && _lines.Length == 1)
-                    _lines = _lines[0].Wrap(_width);
+                    _lines = _lines[0].Wrap(_width, true);
                 else if (!_canBeMultiline && _lines.Length > 1)
                     _lines = new[] {this.Text};
                 _height = _lines.Length;

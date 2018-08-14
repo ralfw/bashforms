@@ -81,6 +81,10 @@ namespace bashforms_tests
                 Text = "She should have died hereafter, there would have been a time for such a word.",
                 BackgroundColor = ConsoleColor.DarkBlue
             });
+            frmExperiments.AddChild(new Button(17, 2, 10, "info..."){OnPressed = (s, e) =>
+            {
+                MessageBox.ShowInfo("She should have died\nhereafter, there would have been\na time for such a word.");
+            }});
             
             BashForms.Open(frmExperiments);
         }
