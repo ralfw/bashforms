@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mime;
 using bashforms;
 using bashforms.data;
 using bashforms.widgets.controls;
@@ -17,6 +18,7 @@ namespace bashforms_tests
             var frmDemoSelection = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Choose a demo"};
             var mnusw = frmDemoSelection.MenuBar.Menu.AddItem("Single widgets");
             mnusw.Submenu.AddItem("Labels", "mnuLabels");
+            mnusw.Submenu.AddItem("Text editing", "mnuText");
             mnusw.Submenu.AddItem("Message boxes", "mnuMsgBox");
             var mnusc = frmDemoSelection.MenuBar.Menu.AddItem("Scenarios");
             mnusc.Submenu.AddItem("ToDo", "mnuToDo");
@@ -30,6 +32,10 @@ namespace bashforms_tests
                     
                     case "mnuLabels":
                         Test_labels();
+                        break;
+
+                    case "mnuText":
+                        Test_text_editing();
                         break;
                     
                     case "mnuMsgBox":
@@ -112,6 +118,21 @@ namespace bashforms_tests
                 BackgroundColor = ConsoleColor.DarkRed
             });
             frm.AddChild(new Button(2, 9, 10, "Close"){OnPressed = (s, e) => {
+                BashForms.Close();
+            }});
+            
+            BashForms.Open(frm);
+        }
+        
+        
+        static void Test_text_editing() {
+            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Text editing"};
+            
+            frm.AddChild(new TextLine(2,2,frm.Size.width - 4){Label = "Single text line"});
+            
+            frm.AddChild(new TextArea(2,4,16,5){Label = "Multi-line text"});
+            
+            frm.AddChild(new Button(2, 10, 10, "Close"){OnPressed = (s, e) => {
                 BashForms.Close();
             }});
             
