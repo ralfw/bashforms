@@ -33,7 +33,7 @@ namespace bashforms.widgets.windows
             
             void RenderTitle() {
                 var title = _title.Substring(0, Math.Min(_title.Length, canvas.Width - 4));
-                title = $"[{title}]";
+                title = title.Length > 0 ? $"[{title}]" : "";
                 var xTitel = (canvas.Width - title.Length) / 2;
                 canvas.Write(xTitel,0, title);
             }

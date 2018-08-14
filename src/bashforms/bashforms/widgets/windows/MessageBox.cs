@@ -1,53 +1,103 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using bashforms.widgets.controls;
 using bashforms.widgets.controls.formatting;
 
 namespace bashforms.widgets.windows
 {
     public static class MessageBox {
-        public static void ShowInfo(string message)
+        public enum Results {
+            None,
+            Ok,
+            Cancel,
+            Yes,
+            No,
+            Continue,
+            Ignore
+        }
+        
+        
+        public static void Show(string message, string title = "") {
+            Show(message, (Results.Ok, "OK"), title);
+        }
+        public static Results Show(
+            string message,
+            (Results result, string text) option,
+            string title="")
         {
-            var lblMessage = Create_message_label();
-            var dlgBox = Create_dialog(lblMessage);
-            BashForms.OpenModal(dlgBox);
+            return Show(message, option, (Results.None, ""), title);
+        }
+        public static Results Show(
+            string message,
+            (Results result, string text) option0,
+            (Results result, string text) option1,
+            string title="")
+        {
+            return Show(message, option0, option1, (Results.None, ""), title);
+        }
+        public static Results Show(
+                string message,
+                (Results result, string text) option0,
+                (Results result, string text) option1,
+                (Results result, string text) option2,
+                string title="")
+        {
+            var lblMessage = Create_message_label(message);
+            var dlgBox = Create_dialog(lblMessage, title);
+            Add_option_buttons(dlgBox, Aggregated_options());
+            return BashForms.OpenModal(dlgBox);
 
 
-            Label Create_message_label() {
-                var MAX_LINE_LEN = (int)(Console.WindowWidth * 0.8);
-            
-                var lines = message.ToLines();
-                var lenOfLongestLine = lines.Max(l => l.Length);
-
-                var lblWidth = lenOfLongestLine <= MAX_LINE_LEN ? lenOfLongestLine : MAX_LINE_LEN;
-                return new Label(2, 1, lblWidth) {Text = message, CanBeMultiline = true};
-            }
-
-            Dialog<bool> Create_dialog(Widget lbl) {
-                var boxWidth = lbl.Size.width + 2 * 2;
-                var boxHeight = lbl.Size.height + 2 + 2;
-
-                var boxLeft = (Console.WindowWidth - boxWidth) / 2;
-                var boxTop = (Console.WindowHeight - boxHeight) / 2;
-            
-                var dlg = new Dialog<bool>(boxLeft,boxTop,boxWidth,boxHeight) {Title = "Info"};
-                dlg.AddChild(lblMessage);
-
-                const string btnText = "OK";
-                var btnWidth = btnText.Length + 2;
-                var btnLeft = (dlg.Size.width - 4) / 2;
-                var btnTop = lbl.Position.top + lbl.Size.height + 1;
-                dlg.AddChild(new Button(btnLeft,btnTop,btnWidth,btnText) { OnPressed = (b,a) => { BashForms.Close(); }});
-                return dlg;
+            (Results result, string text)[] Aggregated_options() {
+                var options = new[] {option0, option1, option2}.Where(o => o.result != Results.None).ToArray();
+                if (options.Length == 0)
+                    options = new[] {(Results.Ok, "OK")};
+                return options;
             }
         }
         
-        public static bool ShowQuestion(string question) {
-            var box = new Dialog<bool>(3, 3, Console.WindowWidth / 3, 5) {Title = "Question"};
-            box.AddChild(new Label(2,1,box.Size.width-4){Text=question});
-            box.AddChild(new Button(2,3,5,"Yes") { OnPressed = (b,a) => { box.Result = true; BashForms.Close(); }});
-            box.AddChild(new Button(8,3,4,"No") { OnPressed = (b,a) => { box.Result = false; BashForms.Close(); }});
-            return BashForms.OpenModal(box);
+        
+        private static Label Create_message_label(string message) {
+            var MAX_LINE_LEN = (int)(Console.WindowWidth * 0.8);
+            
+            var lines = message.ToLines();
+            var lenOfLongestLine = lines.Max(l => l.Length);
+
+            var lblWidth = lenOfLongestLine <= MAX_LINE_LEN ? lenOfLongestLine : MAX_LINE_LEN;
+            return new Label(2, 1, lblWidth) {Text = message, CanBeMultiline = true};
+        }
+
+
+        private static Dialog<Results> Create_dialog(Label lbl, string title) {
+            var boxWidth = lbl.Size.width + 2 * 2;
+            var boxHeight = lbl.Size.height + 2 + 2;
+
+            var boxLeft = (Console.WindowWidth - boxWidth) / 2;
+            var boxTop = (Console.WindowHeight - boxHeight) / 2;
+            
+            var dlg = new Dialog<Results>(boxLeft,boxTop,boxWidth,boxHeight) {Title = title};
+            dlg.AddChild(lbl);
+            return dlg;
+        }
+
+
+        private static void Add_option_buttons(Dialog<Results> dlg, (Results result, string text)[] options) {
+            var totalOptionsWidth = options.Sum(o => o.text.Length + 2) + (options.Length - 1);
+            
+            var btnLeft = (dlg.Size.width - totalOptionsWidth) / 2;
+            var btnTop = dlg.Size.height - 2;
+
+            foreach (var opt in options) {
+                var btn = new Button(btnLeft, btnTop, opt.text.Length + 2, opt.text) {
+                    OnPressed = (b, a) => {
+                        dlg.Result = opt.result;
+                        BashForms.Close();
+                    }
+                };
+                dlg.AddChild(btn);
+                btnLeft += btn.Size.width + 1;
+            }
         }
     }
 }

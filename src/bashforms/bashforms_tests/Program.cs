@@ -22,11 +22,12 @@ namespace bashforms_tests
             
             frmEdit.AddChild(new Button(2,17,10,"Save") { OnPressed = (w, e) =>
             {
-                MessageBox.ShowInfo($"Saving: {frmEdit.Child<TextLine>("txtTitle").Text}");
+                MessageBox.Show($"Saving: {frmEdit.Child<TextLine>("txtTitle").Text}");
             }});
             frmEdit.AddChild(new Button(14,17,10, "Cancel"){OnPressed = (w, e) =>
             {
-                if (MessageBox.ShowQuestion($"Depth: {BashForms.Current.Depth} - Close?"))
+                if (MessageBox.Show($"Depth: {BashForms.Current.Depth} - Close?", 
+                                    (MessageBox.Results.Yes, "YES"), (MessageBox.Results.No, "no")) == MessageBox.Results.Yes)
                     BashForms.Close();
             }});
             
@@ -62,14 +63,14 @@ namespace bashforms_tests
             listBox.Add("hello, world!\tyet another description").Attachment = "hw";
 
             listBox.OnPressed = (w, e) => {
-                MessageBox.ShowInfo($"Selected item: {listBox.Items[listBox.CurrentItemIndex].Attachment}");
+                MessageBox.Show($"Selected item: {listBox.Items[listBox.CurrentItemIndex].Attachment}");
             };
             
             frmOverview.AddChild(listBox);
             
             frmOverview.AddChild(new Button(2, frmOverview.Size.height-2, 7, "Add") {
                 OnPressed = (w, e) => {
-                    MessageBox.ShowInfo($"Selected item: {listBox.CurrentItemIndex}");
+                    MessageBox.Show($"Selected item: {listBox.CurrentItemIndex}");
                 }
             });
             
@@ -77,14 +78,55 @@ namespace bashforms_tests
             var frmExperiments = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Experiments"};
             frmExperiments.AddChild(new Label(2,2,15)
             {
+                Name = "lbl",
                 CanBeMultiline = true, 
                 Text = "She should have died hereafter, there would have been a time for such a word.",
                 BackgroundColor = ConsoleColor.DarkBlue
             });
             frmExperiments.AddChild(new Button(17, 2, 10, "info..."){OnPressed = (s, e) =>
             {
-                MessageBox.ShowInfo("She should have died\nhereafter, there would have been\na time for such a word.");
+                MessageBox.Show("She should have died\nhereafter, there would have been\na time for such a word.", "Info");
             }});
+            
+            
+            frmExperiments.MenuBar.Menu.AddItem("Ok");
+            frmExperiments.MenuBar.Menu.AddItem("YesNo");
+            frmExperiments.MenuBar.Menu.AddItem("OkCancelIgnore");
+            frmExperiments.MenuBar.Menu.AddItem("None");
+
+            frmExperiments.MenuBar.OnSelected += (mnuItem, e) =>
+            {
+                switch (mnuItem.Text)
+                {
+                    case "Ok":
+                        var result = MessageBox.Show("Gimme an ok!", (MessageBox.Results.Ok, "Okay!"));
+                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
+                        break;
+                    case "YesNo":
+                        result = MessageBox.Show("Shall I?", 
+                                                 (MessageBox.Results.Yes, "YES"),
+                                                 (MessageBox.Results.No, "No,no!"), 
+                                                 "Question");
+                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
+                        break;
+                    case "OkCancelIgnore":
+                        result = MessageBox.Show("Shall I?", 
+                                                 (MessageBox.Results.Continue, "Continue"),
+                                                 (MessageBox.Results.Cancel, "Cancel"), 
+                                                 (MessageBox.Results.Ignore, "Never mind"), 
+                                                 "What's your choice?");
+                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
+                        break;
+                    case "None":
+                        result = MessageBox.Show("I am confused", 
+                                                (MessageBox.Results.None, "Continue"),
+                                                (MessageBox.Results.None, "Cancel"), 
+                                                (MessageBox.Results.None, "Never mind"), 
+                                                "No choice?");
+                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
+                        break;
+                }
+            };
             
             BashForms.Open(frmExperiments);
         }
