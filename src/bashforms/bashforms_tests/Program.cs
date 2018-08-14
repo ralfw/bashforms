@@ -3,12 +3,124 @@ using bashforms;
 using bashforms.data;
 using bashforms.widgets.controls;
 using bashforms.widgets.windows;
+using NUnit.Framework.Internal;
 
 namespace bashforms_tests
 {
     public class Program
     {
         public static void Main(string[] args) {
+            Choose_a_demo();
+        }
+
+        static void Choose_a_demo() {
+            var frmDemoSelection = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Choose a demo"};
+            var mnusw = frmDemoSelection.MenuBar.Menu.AddItem("Single widgets");
+            mnusw.Submenu.AddItem("Labels", "mnuLabels");
+            mnusw.Submenu.AddItem("Message boxes", "mnuMsgBox");
+            var mnusc = frmDemoSelection.MenuBar.Menu.AddItem("Scenarios");
+            mnusc.Submenu.AddItem("ToDo", "mnuToDo");
+            frmDemoSelection.MenuBar.Menu.AddItem("Exit", "mnuExit");
+
+            frmDemoSelection.MenuBar.OnSelected += (mnuItem, e) => {
+                switch (mnuItem.Name) {
+                    case "mnuExit":
+                        BashForms.Close();
+                        break;
+                    
+                    case "mnuLabels":
+                        Test_labels();
+                        break;
+                    
+                    case "mnuMsgBox":
+                        Test_messageboxes();
+                        break;
+                    
+                    case "mnuToDo":
+                        Test_todo_scenario();
+                        break;
+                }
+            };
+            
+            BashForms.Open(frmDemoSelection);
+        }
+        
+        
+        static void Test_messageboxes()
+        {
+            var frmExperiments = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Experiments"};
+            frmExperiments.AddChild(new Label(2,2,"Messagebox result:"));
+            frmExperiments.AddChild(new Label(2,3, 18){BackgroundColor = ConsoleColor.DarkRed, Name = "lblResult"});
+            
+            frmExperiments.MenuBar.Menu.AddItem("Ok");
+            frmExperiments.MenuBar.Menu.AddItem("YesNo");
+            frmExperiments.MenuBar.Menu.AddItem("OkCancelIgnore");
+            frmExperiments.MenuBar.Menu.AddItem("None");
+            frmExperiments.MenuBar.Menu.AddItem("Exit");
+
+            frmExperiments.MenuBar.OnSelected += (mnuItem, e) =>
+            {
+                switch (mnuItem.Text)
+                {
+                    case "Ok":
+                        var result = MessageBox.Show("Gimme an ok!", (MessageBox.Results.Ok, "Okay!"));
+                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        break;
+                    case "YesNo":
+                        result = MessageBox.Show("Shall I?", 
+                                                 (MessageBox.Results.Yes, "YES"),
+                                                 (MessageBox.Results.No, "No,no!"), 
+                                                 "Question");
+                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        break;
+                    case "OkCancelIgnore":
+                        result = MessageBox.Show("Shall I?", 
+                                                 (MessageBox.Results.Continue, "Continue"),
+                                                 (MessageBox.Results.Cancel, "Cancel"), 
+                                                 (MessageBox.Results.Ignore, "Never mind"), 
+                                                 "What's your choice?");
+                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        break;
+                    case "None":
+                        result = MessageBox.Show("I am confused", 
+                                                (MessageBox.Results.None, "Continue"),
+                                                (MessageBox.Results.None, "Cancel"), 
+                                                (MessageBox.Results.None, "Never mind"), 
+                                                "No choice?");
+                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        break;
+                    case "Exit":
+                        BashForms.Close();
+                        break;
+                }
+            };
+            
+            BashForms.Open(frmExperiments);
+        }
+
+
+        static void Test_labels()
+        {
+            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Labels"};
+            
+            frm.AddChild(new Label(2,2,"Macbeth:"));
+            
+            frm.AddChild(new Label(11,2,15) {
+                Name = "lbl",
+                CanBeMultiline = true, 
+                Text = "She should have died hereafter, there would have been a time for such a word.",
+                BackgroundColor = ConsoleColor.DarkRed
+            });
+            frm.AddChild(new Button(2, 9, 10, "Close"){OnPressed = (s, e) => {
+                BashForms.Close();
+            }});
+            
+            BashForms.Open(frm);
+        }
+        
+        
+        static void Test_todo_scenario()
+        {
             var frmEdit = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo Item"};
             frmEdit.AddChild(new TextLine(2,2,40){Label = "title", Name = "txtTitle"});
             frmEdit.AddChild(new TextArea(2,4,40,10) {Label = "description", Name = "txtDescription"});
@@ -31,29 +143,34 @@ namespace bashforms_tests
                     BashForms.Close();
             }});
             
-            
+
             
             var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
-            frmOverview.MenuBar.Menu.AddItem("File").Submenu.AddItems(new[]{
-                new MenuItem("Open", "mnuOpen"){Shortcut = 'o'},
-                new MenuItem("Save"), 
-                new MenuItem("Close", "mnuClose")
-            });
-            frmOverview.MenuBar.Menu.Items[0].Submenu.Items[1].Submenu.AddItem("Save");
-            frmOverview.MenuBar.Menu.Items[0].Submenu.Items[1].Submenu.AddItem("Save as");
             frmOverview.MenuBar.Menu.AddItem(new MenuItem("Edit")).Submenu.AddItems(new[] {
-                new MenuItem("Cut", "mnuCut"),
-                new MenuItem("Copy", "mnuCopy"),
-                new MenuItem("Paste", "mnuPaste") 
+                new MenuItem("Change", "mnuChange"){Shortcut = 'c'}, 
+                new MenuItem("Add", "mnuAdd") { Shortcut = '+'},
+                new MenuItem("Delete", "mnuDel"){Shortcut = '-'}
             });
-            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Close application", "mnuClose"){Shortcut='x'});
-            frmOverview.MenuBar.OnSelected += (item, e) =>
-            {
-                if (item.Name == "mnuCut") item.Checked = !item.Checked;
+            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Close", "mnuClose"){Shortcut='x'});
+            frmOverview.MenuBar.OnSelected += (item, e) => {
+                switch (item.Name) {
+                    case "mnuChange":
+                        MessageBox.Show("Change item...");
+                        break;
+                    case "mnuAdd":
+                        MessageBox.Show("Add new item...");
+                        break;
+                    case "mnuDel":
+                        if (MessageBox.AskForYes("Delete current item?"))
+                            MessageBox.Show("Item deleted!");
+                        break;
+                    case "mnuClose":
+                        BashForms.Close();
+                        break;
+                }
             };
             
-            
-            var listBox = new Listbox(2, 2, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
+            var listBox = new Listbox(2, 3, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
                 FocusBackgroundColor = ConsoleColor.Black
             };
             listBox.Columns = new[] {6, listBox.Size.width-2};
@@ -68,67 +185,8 @@ namespace bashforms_tests
             
             frmOverview.AddChild(listBox);
             
-            frmOverview.AddChild(new Button(2, frmOverview.Size.height-2, 7, "Add") {
-                OnPressed = (w, e) => {
-                    MessageBox.Show($"Selected item: {listBox.CurrentItemIndex}");
-                }
-            });
             
-            
-            var frmExperiments = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Experiments"};
-            frmExperiments.AddChild(new Label(2,2,15)
-            {
-                Name = "lbl",
-                CanBeMultiline = true, 
-                Text = "She should have died hereafter, there would have been a time for such a word.",
-                BackgroundColor = ConsoleColor.DarkBlue
-            });
-            frmExperiments.AddChild(new Button(17, 2, 10, "info..."){OnPressed = (s, e) =>
-            {
-                MessageBox.Show("She should have died\nhereafter, there would have been\na time for such a word.", "Info");
-            }});
-            
-            
-            frmExperiments.MenuBar.Menu.AddItem("Ok");
-            frmExperiments.MenuBar.Menu.AddItem("YesNo");
-            frmExperiments.MenuBar.Menu.AddItem("OkCancelIgnore");
-            frmExperiments.MenuBar.Menu.AddItem("None");
-
-            frmExperiments.MenuBar.OnSelected += (mnuItem, e) =>
-            {
-                switch (mnuItem.Text)
-                {
-                    case "Ok":
-                        var result = MessageBox.Show("Gimme an ok!", (MessageBox.Results.Ok, "Okay!"));
-                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
-                        break;
-                    case "YesNo":
-                        result = MessageBox.Show("Shall I?", 
-                                                 (MessageBox.Results.Yes, "YES"),
-                                                 (MessageBox.Results.No, "No,no!"), 
-                                                 "Question");
-                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
-                        break;
-                    case "OkCancelIgnore":
-                        result = MessageBox.Show("Shall I?", 
-                                                 (MessageBox.Results.Continue, "Continue"),
-                                                 (MessageBox.Results.Cancel, "Cancel"), 
-                                                 (MessageBox.Results.Ignore, "Never mind"), 
-                                                 "What's your choice?");
-                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
-                        break;
-                    case "None":
-                        result = MessageBox.Show("I am confused", 
-                                                (MessageBox.Results.None, "Continue"),
-                                                (MessageBox.Results.None, "Cancel"), 
-                                                (MessageBox.Results.None, "Never mind"), 
-                                                "No choice?");
-                        frmExperiments.Child<Label>("lbl").Text = result.ToString();
-                        break;
-                }
-            };
-            
-            BashForms.Open(frmExperiments);
+            BashForms.Open(frmOverview);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace bashforms.data
             
         public MenuItem[] Items => _items.ToArray();
 
-        public MenuItem AddItem(string text) => AddItem(new MenuItem(text, ""));
+        public MenuItem AddItem(string text, string name = "") => AddItem(new MenuItem(text, name));
 
         public MenuItem AddItem(MenuItem menuItem) {
             _items.Add(menuItem);
