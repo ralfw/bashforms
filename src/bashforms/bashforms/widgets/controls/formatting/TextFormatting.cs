@@ -1,12 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace bashforms.widgets.controls.formatting
 {
     static class TextFormatting
     {
-        public static string[] Wrap(this string text, int maxLineLength) {
-            var fragments = SplitLongWords(text.ToWords(), maxLineLength);
+        public static string[] Wrap(this string text, int maxLineLength, bool wrapLinesIndividually = false) {
+            var lines = new[] {text};
+            if (wrapLinesIndividually) lines = text.ToLines();
+            return lines.SelectMany(l => WrapLine(l, maxLineLength)).ToArray();
+        }
+
+
+        static string[] WrapLine(string line, int maxLineLength) {
+            var fragments = SplitLongWords(line.ToWords(), maxLineLength);
             var rowFragments = ComposeRows(fragments, maxLineLength);
             return TextJustification.AlignLeft(rowFragments).ToArray();
         }

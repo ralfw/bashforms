@@ -46,6 +46,7 @@
     <Compile Include="LineEditor_tests.cs" />
     <Compile Include="LineFormatting_tests.cs" />
     <Compile Include="TextEditor_tests.cs" />
+    <Compile Include="TextFormatting_tests.cs" />
     <Compile Include="TextParsing_tests.cs" />
   </ItemGroup>
   <ItemGroup>
