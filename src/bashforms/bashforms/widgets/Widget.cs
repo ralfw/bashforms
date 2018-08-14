@@ -28,6 +28,19 @@ namespace bashforms.widgets
        
         public (int left, int top) Position => (_left, _top);
         public (int width, int height) Size => (_width, _height);
+
+        
+        public virtual void MoveTo(int left, int top) {
+            _left = left;
+            _top = top;
+            this.OnUpdated(this, new EventArgs());
+        }
+
+        public virtual void Resize(int width, int height) {
+            _width = width;
+            _height = height;
+            this.OnUpdated(this, new EventArgs());
+        }
         
         public string Name { get; set; }
         

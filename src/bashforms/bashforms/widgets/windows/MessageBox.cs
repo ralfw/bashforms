@@ -57,6 +57,16 @@ namespace bashforms.widgets.windows
             }
         }
         
+        public static void ShowInfo(string message, string title = "") {
+            Show(message, (Results.Ok, "OK"), title == "" ? "Info" : title);
+        }
+        public static bool AskForYes(string message, string title = "") {
+            return Show(message, (Results.Yes, "Yes"), (Results.No, "No"), title) == Results.Yes;
+        }
+        public static bool AskForOk(string message, string title = "") {
+            return Show(message, (Results.Ok, "Ok"), (Results.Cancel, "Cancel"), title) == Results.Ok;
+        }
+        
         
         private static Label Create_message_label(string message) {
             var MAX_LINE_LEN = (int)(Console.WindowWidth * 0.8);
@@ -65,7 +75,7 @@ namespace bashforms.widgets.windows
             var lenOfLongestLine = lines.Max(l => l.Length);
 
             var lblWidth = lenOfLongestLine <= MAX_LINE_LEN ? lenOfLongestLine : MAX_LINE_LEN;
-            return new Label(2, 1, lblWidth) {Text = message, CanBeMultiline = true};
+            return new Label(2, 1, lblWidth) {Text = message, CanBeMultiline = true, Name = "lblMessage"};
         }
 
 
@@ -84,6 +94,14 @@ namespace bashforms.widgets.windows
 
         private static void Add_option_buttons(Dialog<Results> dlg, (Results result, string text)[] options) {
             var totalOptionsWidth = options.Sum(o => o.text.Length + 2) + (options.Length - 1);
+
+            if (totalOptionsWidth > dlg.Size.width - 2) {
+                var delta = totalOptionsWidth - dlg.Size.width + 4;
+                dlg.Resize(dlg.Size.width + delta, dlg.Size.height);
+
+                var lblMessage = dlg["lblMessage"];
+                lblMessage.MoveTo((dlg.Size.width - lblMessage.Size.width)/2, lblMessage.Position.top);
+            } 
             
             var btnLeft = (dlg.Size.width - totalOptionsWidth) / 2;
             var btnTop = dlg.Size.height - 2;
