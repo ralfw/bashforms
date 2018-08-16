@@ -19,6 +19,7 @@ namespace bashforms_tests
             var mnusw = frmDemoSelection.MenuBar.Menu.AddItem("Single widgets");
             mnusw.Submenu.AddItem("Labels", "mnuLabels");
             mnusw.Submenu.AddItem("Text editing", "mnuText");
+            mnusw.Submenu.AddItem("Options", "mnuOptions");
             mnusw.Submenu.AddItem("Message boxes", "mnuMsgBox");
             var mnusc = frmDemoSelection.MenuBar.Menu.AddItem("Scenarios");
             mnusc.Submenu.AddItem("ToDo", "mnuToDo");
@@ -36,6 +37,10 @@ namespace bashforms_tests
 
                     case "mnuText":
                         Test_text_editing();
+                        break;
+                    
+                    case "mnuOptions":
+                        Test_options();
                         break;
                     
                     case "mnuMsgBox":
@@ -139,6 +144,37 @@ namespace bashforms_tests
             BashForms.Open(frm);
         }
         
+        
+        static void Test_options()
+        {
+            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Options"};
+            
+            frm.AddChild(new Label(2,2,"Which animals are mammals?"));
+            frm.AddChild(new Option(4, 3, 20, "Dog"){Name="optDog"});
+            frm.AddChild(new Option(4, 4, 20, "Ant"){Name="optAnt"});
+            frm.AddChild(new Option(4, 5, 20, "Cat"){Name="optCat"});
+            frm.AddChild(new Option(4, 6, 20, "Dolphin"){Name="optDolphin"});
+            frm.AddChild(new Button(4,7, 10, "Check"){OnPressed = (s, _) => {
+                var correct = frm.Child<Option>("optDog").Selected && frm.Child<Option>("optCat").Selected &&
+                              frm.Child<Option>("optDolphin").Selected &&
+                              !frm.Child<Option>("optAnt").Selected;
+                MessageBox.ShowInfo(correct ? "Correct! You're the best!" : "Sorry, wrong. Try again", " Quiz Result");
+            }});
+            
+            frm.AddChild(new Label(2,9,"Who's your favorite hero?"));
+            var grp = new SingleOptionGroup();
+            grp.OnSelected += (s, _) => MessageBox.ShowInfo("Good choice: " + s.Text);
+            frm.AddChild(new Option(4, 10, 20, "Superman"){OptionGroup = grp});
+            frm.AddChild(new Option(4, 11, 20, "Donald Duck"){OptionGroup = grp});
+            frm.AddChild(new Option(4, 12, 20, "Batman"){OptionGroup = grp});
+            frm.AddChild(new Option(4, 13, 20, "Antman"){OptionGroup = grp});
+            
+            frm.AddChild(new Button(2, 14, 10, "Close"){OnPressed = (s, e) => {
+                BashForms.Close();
+            }});
+            
+            BashForms.Open(frm);
+        }
         
         static void Test_todo_scenario()
         {

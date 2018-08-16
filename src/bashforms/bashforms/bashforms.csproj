@@ -47,7 +47,7 @@
     <Compile Include="engine\Rendering.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="widgets\controls\Button.cs" />
-    <Compile Include="widgets\controls\Checkbox.cs" />
+    <Compile Include="widgets\controls\Option.cs" />
     <Compile Include="widgets\controls\Control.cs" />
     <Compile Include="widgets\controls\CursorControl.cs" />
     <Compile Include="widgets\controls\editors\LineEditor.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="widgets\controls\MenuBar.cs" />
     <Compile Include="widgets\controls\MenuBar_draw.cs" />
     <Compile Include="widgets\controls\MenuBar_handleKey.cs" />
+    <Compile Include="widgets\controls\OptionGroups.cs" />
     <Compile Include="widgets\controls\TextArea.cs" />
     <Compile Include="widgets\controls\TextArea_draw.cs" />
     <Compile Include="widgets\controls\TextArea_handleKey.cs" />
