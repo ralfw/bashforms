@@ -47,11 +47,13 @@ namespace bashforms.widgets.controls
                 var i = _firstItemToDisplayIndex + row;
                 if (i >= _items.Count) break;
                 
-                canvas.Write(0,row, formattedItems[i]);
-                
-                if (_selectedItemIndexes.Contains(i))
-                    canvas.Colorize(0,row,_width,1, ConsoleColor.DarkYellow, ConsoleColor.White);
-                
+                canvas.Write(_selectionMode == SelectionModes.NoSelections ? 0 : 1,row, formattedItems[i]);
+
+                if (_selectedItemIndexes.Contains(i)) {
+                    canvas.Write(0, row, "√");
+                    canvas.Colorize(0, row, _width, 1, ConsoleColor.DarkYellow, ConsoleColor.White);
+                }
+
                 if (this.HasFocus && i == _currentItemIndex)
                     canvas.Colorize(0,row,_width,1, ConsoleColor.Gray, ConsoleColor.Black);
             }

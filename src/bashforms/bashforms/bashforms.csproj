@@ -76,9 +76,10 @@
     <Compile Include="widgets\Widget.cs" />
     <Compile Include="widgets\windows\baseclasses\Window.cs" />
     <Compile Include="widgets\windows\Dialog.cs" />
+    <Compile Include="widgets\windows\dialogs\FilesystemDialog.cs" />
+    <Compile Include="widgets\windows\dialogs\MessageBox.cs" />
     <Compile Include="widgets\windows\Form.cs" />
     <Compile Include="widgets\windows\Form_draw.cs" />
-    <Compile Include="widgets\windows\MessageBox.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

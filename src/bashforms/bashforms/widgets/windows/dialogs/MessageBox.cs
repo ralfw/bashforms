@@ -6,6 +6,8 @@ using bashforms.widgets.controls.formatting;
 
 namespace bashforms.widgets.windows
 {
+
+
     public static class MessageBox {
         public enum Results {
             None,
