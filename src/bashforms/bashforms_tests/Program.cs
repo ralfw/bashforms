@@ -70,30 +70,30 @@ namespace bashforms_tests
         
         static void Test_messageboxes()
         {
-            var frmExperiments = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Experiments"};
-            frmExperiments.AddChild(new Label(2,2,"Messagebox result:"));
-            frmExperiments.AddChild(new Label(2,3, 18){BackgroundColor = ConsoleColor.DarkRed, Name = "lblResult"});
+            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Experiments"};
+            frm.AddChild(new Label(2,2,"Messagebox result:"));
+            frm.AddChild(new Label(2,3, 18){BackgroundColor = ConsoleColor.DarkRed, Name = "lblResult"});
             
-            frmExperiments.MenuBar.Menu.AddItem("Ok");
-            frmExperiments.MenuBar.Menu.AddItem("YesNo");
-            frmExperiments.MenuBar.Menu.AddItem("OkCancelIgnore");
-            frmExperiments.MenuBar.Menu.AddItem("None");
-            frmExperiments.MenuBar.Menu.AddItem("Exit");
+            frm.MenuBar.Menu.AddItem("Ok");
+            frm.MenuBar.Menu.AddItem("YesNo");
+            frm.MenuBar.Menu.AddItem("OkCancelIgnore");
+            frm.MenuBar.Menu.AddItem("None");
+            frm.MenuBar.Menu.AddItem("Exit");
 
-            frmExperiments.MenuBar.OnSelected += (mnuItem, e) =>
+            frm.MenuBar.OnSelected += (mnuItem, e) =>
             {
                 switch (mnuItem.Text)
                 {
                     case "Ok":
                         var result = MessageBox.Show("Gimme an ok!", (MessageBox.Results.Ok, "Okay!"));
-                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        frm.Child<Label>("lblResult").Text = result.ToString();
                         break;
                     case "YesNo":
                         result = MessageBox.Show("Shall I?", 
                                                  (MessageBox.Results.Yes, "YES"),
                                                  (MessageBox.Results.No, "No,no!"), 
                                                  "Question");
-                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        frm.Child<Label>("lblResult").Text = result.ToString();
                         break;
                     case "OkCancelIgnore":
                         result = MessageBox.Show("Shall I?", 
@@ -101,7 +101,7 @@ namespace bashforms_tests
                                                  (MessageBox.Results.Cancel, "Cancel"), 
                                                  (MessageBox.Results.Ignore, "Never mind"), 
                                                  "What's your choice?");
-                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        frm.Child<Label>("lblResult").Text = result.ToString();
                         break;
                     case "None":
                         result = MessageBox.Show("I am confused", 
@@ -109,7 +109,7 @@ namespace bashforms_tests
                                                 (MessageBox.Results.None, "Cancel"), 
                                                 (MessageBox.Results.None, "Never mind"), 
                                                 "No choice?");
-                        frmExperiments.Child<Label>("lblResult").Text = result.ToString();
+                        frm.Child<Label>("lblResult").Text = result.ToString();
                         break;
                     case "Exit":
                         BashForms.Close();
@@ -117,7 +117,11 @@ namespace bashforms_tests
                 }
             };
             
-            BashForms.Open(frmExperiments);
+            frm.AddChild(new Label(2,5,40,"Switch to the menu with F2 and choose a MessageBox demo.\n\nIn the message boxes use (shift-)TAB to switch between buttons.") {
+                ForegroundColor = ConsoleColor.DarkGray
+            });
+            
+            BashForms.Open(frm);
         }
 
 
@@ -125,15 +129,17 @@ namespace bashforms_tests
         {
             var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Labels"};
             
-            frm.AddChild(new Label(2,2,"Macbeth:"));
+            frm.AddChild(new Label(2,2, "A single line label next to a multi line label"){ForegroundColor = ConsoleColor.DarkGray});
             
-            frm.AddChild(new Label(11,2,15) {
+            frm.AddChild(new Label(2,4,"Macbeth:"));
+            
+            frm.AddChild(new Label(11,4,15) {
                 Name = "lbl",
                 CanBeMultiline = true, 
                 Text = "She should have died hereafter, there would have been a time for such a word.",
                 BackgroundColor = ConsoleColor.DarkRed
             });
-            frm.AddChild(new Button(2, 9, 10, "Close"){OnPressed = (s, e) => {
+            frm.AddChild(new Button(2, 11, 10, "Close"){OnPressed = (s, e) => {
                 BashForms.Close();
             }});
             
@@ -180,7 +186,11 @@ namespace bashforms_tests
             frm.AddChild(new Option(4, 12, 20, "Batman"){OptionGroup = grp});
             frm.AddChild(new Option(4, 13, 20, "Antman"){OptionGroup = grp});
             
-            frm.AddChild(new Button(2, 14, 10, "Close"){OnPressed = (s, e) => {
+            frm.AddChild(new Label(32, 2, 30, "Move between the options using (shift-)TAB!\nEach is a control of its own.\n\nPress ENTER or SPACE to toggle an option.") {
+                ForegroundColor = ConsoleColor.DarkGray
+            });
+            
+            frm.AddChild(new Button(2, 15, 10, "Close"){OnPressed = (s, e) => {
                 BashForms.Close();
             }});
             

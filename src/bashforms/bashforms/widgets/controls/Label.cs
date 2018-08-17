@@ -15,9 +15,9 @@ namespace bashforms.widgets.controls
             _lines = new[]{text};
             _canBeMultiline = false;
         }
-        public Label(int left, int top, int width) : base(left, top, width, 1) {
-            _lines = new[] {""};
-            _canBeMultiline = false;
+        public Label(int left, int top, int width, string text = "") : base(left, top, width, 1) {
+            _lines = new[] {text};
+            CanBeMultiline = true;
         }
 
         public string Text {
