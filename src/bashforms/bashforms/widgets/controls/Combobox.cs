@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using bashforms.data;
 using bashforms.data.eventargs;
 using bashforms.widgets.controls.baseclasses;
@@ -11,10 +12,11 @@ namespace bashforms.widgets.controls
     {
         private readonly TextLine _textline;
         private readonly Listbox _listbox;
+        private bool _limitTextToListItems;
         
         
         public Combobox(int left, int top, int width, int height, IEnumerable<string> itemTexts = null) : base(left, top, width, height) {
-            _textline = new TextLine(0,0,width-1);
+            _textline = new TextLine(0,0,width-2);
             _textline.OnUpdated += (s, e) => this.OnUpdated(this, new EventArgs());
             
             _listbox = new Listbox(0,1,width,height-1, itemTexts);
@@ -24,6 +26,7 @@ namespace bashforms.widgets.controls
                 _textline.HasFocus = true;
                 _listbox.HasFocus = false;
             };
+            _limitTextToListItems = false;
         }
 
         
@@ -61,6 +64,20 @@ namespace bashforms.widgets.controls
         public void Add(Listbox.Item item) => _listbox.Add(item);
         public void AddRange(IEnumerable<Listbox.Item> items) => _listbox.AddRange(items);
         public void RemoveAt(int index) => _listbox.RemoveAt(index);
+
+
+        public bool LimitTextToItems
+        {
+            get => _limitTextToListItems;
+            set {
+                _limitTextToListItems = value;
+                // clear text field if it does not match any list item
+                if (_limitTextToListItems && _listbox.Items.All(item => item.Text != _textline.Text)) {
+                    _textline.Text = _listbox.Items[0].Text;
+                    this.OnUpdated(this, new EventArgs());
+                }
+            }
+        }
         
         
         public override bool HandleKey(ConsoleKeyInfo key) {
@@ -78,6 +95,8 @@ namespace bashforms.widgets.controls
                 _listbox.HasFocus = true;
                 return true;
             }
+
+            if (_limitTextToListItems) return true; // no direct input allowed into text field
             return _textline.HandleKey(key);
         }
 
@@ -89,7 +108,9 @@ namespace bashforms.widgets.controls
             var canvas = new Canvas(_width, _listbox.HasFocus ? _height : 1, bgColor, fgColor);
             
             var txtCanvas = _textline.Draw();
-            canvas.Merge(0,0,txtCanvas);
+            canvas.Write(0,0,"<");
+            canvas.Merge(1,0,txtCanvas);
+            canvas.Write(txtCanvas.Width+1,0,">");
 
             if (_listbox.HasFocus) {
                 var lbCanvas = _listbox.Draw();
@@ -100,6 +121,6 @@ namespace bashforms.widgets.controls
         }
 
 
-        public override (int x, int y) CursorPosition => _textline.HasFocus ? _textline.CursorPosition : (-1, -1);
+        public override (int x, int y) CursorPosition => (_textline.CursorPosition.x+1,_textline.CursorPosition.y);
     }
 }

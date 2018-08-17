@@ -3,7 +3,7 @@ using bashforms.data;
 
 namespace bashforms.adapters
 {
-    class Display
+    static class Display
     {
         public static void Show(Canvas canvas, (int x, int y) cursorPosition) {
             Console.CursorVisible = false;

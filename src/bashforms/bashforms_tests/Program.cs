@@ -192,7 +192,8 @@ namespace bashforms_tests
         {
             var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Options"};
             
-            var lb = new Listbox(2,2,10,5,new[]{"Balin", "Dwalin", 
+            frm.AddChild(new Label(2,2,"Listbox"));
+            var lb = new Listbox(2,3,10,5,new[]{"Balin", "Dwalin", 
                                                 "Kili", "Fili", 
                                                 "Oin", "Gloin", 
                                                 "Ori", "Nori", "Dori",
@@ -202,18 +203,26 @@ namespace bashforms_tests
             lb.OnPressed += (s, e) => MessageBox.ShowInfo("Dwarf selected: " + lb.Items[lb.CurrentItemIndex].Text);
             frm.AddChild(lb);
             
-            var cb = new Combobox(2,8,21,5, new[]{"Paris", "London", "Oslo", "Berlin", "New York", "Tokyo", "Rio", "Prague"}) {
+            frm.AddChild(new Label(2,9,"Combobox"));
+            var cb = new Combobox(2,10,21,5, new[]{"Paris", "London", "Oslo", "Berlin", "New York", "Tokyo", "Rio", "Prague"}) {
                 Label = "Your favorite city"
             };
             frm.AddChild(cb);
             
-            frm.AddChild(new Label(24,8,20) {
+            frm.AddChild(new Label(24,10,20) {
                 Text = "Press down-arrow to open list of choices.\nPress ESC to close list of choices.",
                 CanBeMultiline = true,
                 ForegroundColor = ConsoleColor.DarkGray
             });
             
-            frm.AddChild(new Button(2, 10, 10, "Close"){OnPressed = (s, e) => {
+            frm.AddChild(new Label(2,9,"Combobox with text limited to list items"));
+            var cb2 = new Combobox(2,12,21,4, new[]{"XS", "S", "M", "L", "XL", "XXL"}) {
+                Label = "Select your t-shirt size",
+                LimitTextToItems = true
+            };
+            frm.AddChild(cb2);
+            
+            frm.AddChild(new Button(2, 14, 10, "Close"){OnPressed = (s, e) => {
                 BashForms.Close();
             }});
             
