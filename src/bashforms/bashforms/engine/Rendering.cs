@@ -2,6 +2,7 @@
 using bashforms.adapters;
 using bashforms.data;
 using bashforms.widgets.windows;
+using bashforms.widgets.windows.baseclasses;
 
 namespace bashforms.engine
 {

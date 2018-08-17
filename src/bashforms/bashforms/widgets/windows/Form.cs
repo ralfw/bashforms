@@ -1,4 +1,5 @@
-﻿using EventArgs = bashforms.data.eventargs.EventArgs;
+﻿using bashforms.widgets.windows.baseclasses;
+using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.windows
 {

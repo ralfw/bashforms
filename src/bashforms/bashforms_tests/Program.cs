@@ -15,17 +15,18 @@ namespace bashforms_tests
         }
 
         static void Choose_a_demo() {
-            var frmDemoSelection = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Choose a demo"};
-            var mnusw = frmDemoSelection.MenuBar.Menu.AddItem("Single widgets");
-            mnusw.Submenu.AddItem("Labels", "mnuLabels");
-            mnusw.Submenu.AddItem("Text editing", "mnuText");
+            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Choose a demo"};
+            var mnusw = frm.MenuBar.Menu.AddItem("Single widgets");
+            mnusw.Submenu.AddItem("Lbls", "mnuLabels");
+            mnusw.Submenu.AddItem("Texts", "mnuText");
             mnusw.Submenu.AddItem("Options", "mnuOptions");
-            mnusw.Submenu.AddItem("Message boxes", "mnuMsgBox");
-            var mnusc = frmDemoSelection.MenuBar.Menu.AddItem("Scenarios");
+            mnusw.Submenu.AddItem("Lists", "mnuLists");
+            mnusw.Submenu.AddItem("Messages", "mnuMsgBox");
+            var mnusc = frm.MenuBar.Menu.AddItem("Scenarios");
             mnusc.Submenu.AddItem("ToDo", "mnuToDo");
-            frmDemoSelection.MenuBar.Menu.AddItem("Exit", "mnuExit");
+            frm.MenuBar.Menu.AddItem("Exit", "mnuExit");
 
-            frmDemoSelection.MenuBar.OnSelected += (mnuItem, e) => {
+            frm.MenuBar.OnSelected += (mnuItem, e) => {
                 switch (mnuItem.Name) {
                     case "mnuExit":
                         BashForms.Close();
@@ -42,6 +43,10 @@ namespace bashforms_tests
                     case "mnuOptions":
                         Test_options();
                         break;
+
+                    case "mnuLists":
+                        Test_lists();
+                        break;
                     
                     case "mnuMsgBox":
                         Test_messageboxes();
@@ -53,7 +58,13 @@ namespace bashforms_tests
                 }
             };
             
-            BashForms.Open(frmDemoSelection);
+            frm.AddChild(new Label(2,3,40) {
+                Text = "* Press F2 to enter menu.\n* Use left/right arrow to move between menu item.\n* Use ENTER to select menu item/enter next menu level.\n* Use ESC to back up menu level.\n\n* Use (shift-)TAB to move between controls.",
+                CanBeMultiline = true,
+                ForegroundColor = ConsoleColor.DarkGray
+            });
+            
+            BashForms.Open(frm);
         }
         
         
@@ -175,6 +186,40 @@ namespace bashforms_tests
             
             BashForms.Open(frm);
         }
+        
+        
+        static void Test_lists()
+        {
+            var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Options"};
+            
+            var lb = new Listbox(2,2,10,5,new[]{"Balin", "Dwalin", 
+                                                "Kili", "Fili", 
+                                                "Oin", "Gloin", 
+                                                "Ori", "Nori", "Dori",
+                                                "Bifur", "Bofur", "Bombur",
+                                                "Thorin"
+            });
+            lb.OnPressed += (s, e) => MessageBox.ShowInfo("Dwarf selected: " + lb.Items[lb.CurrentItemIndex].Text);
+            frm.AddChild(lb);
+            
+            var cb = new Combobox(2,8,21,5, new[]{"Paris", "London", "Oslo", "Berlin", "New York", "Tokyo", "Rio", "Prague"}) {
+                Label = "Your favorite city"
+            };
+            frm.AddChild(cb);
+            
+            frm.AddChild(new Label(24,8,20) {
+                Text = "Press down-arrow to open list of choices.\nPress ESC to close list of choices.",
+                CanBeMultiline = true,
+                ForegroundColor = ConsoleColor.DarkGray
+            });
+            
+            frm.AddChild(new Button(2, 10, 10, "Close"){OnPressed = (s, e) => {
+                BashForms.Close();
+            }});
+            
+            BashForms.Open(frm);
+        }
+        
         
         static void Test_todo_scenario()
         {

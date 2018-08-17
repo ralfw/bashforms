@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using bashforms.engine;
 using bashforms.widgets.windows;
+using bashforms.widgets.windows.baseclasses;
 
 namespace bashforms
 {

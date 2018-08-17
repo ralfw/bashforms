@@ -1,5 +1,6 @@
 ﻿using System;
 using bashforms.data;
+using bashforms.widgets.controls.baseclasses;
 using bashforms.widgets.controls.formatting;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 

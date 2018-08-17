@@ -46,14 +46,15 @@
     <Compile Include="engine\BashFormsEngine.cs" />
     <Compile Include="engine\Rendering.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="widgets\controls\baseclasses\Control.cs" />
+    <Compile Include="widgets\controls\baseclasses\CursorControl.cs" />
+    <Compile Include="widgets\controls\baseclasses\FocusControl.cs" />
     <Compile Include="widgets\controls\Button.cs" />
+    <Compile Include="widgets\controls\Combobox.cs" />
     <Compile Include="widgets\controls\Option.cs" />
-    <Compile Include="widgets\controls\Control.cs" />
-    <Compile Include="widgets\controls\CursorControl.cs" />
     <Compile Include="widgets\controls\editors\LineEditor.cs" />
     <Compile Include="widgets\controls\editors\MenuItemStack.cs" />
     <Compile Include="widgets\controls\editors\TextEditor.cs" />
-    <Compile Include="widgets\controls\FocusControl.cs" />
     <Compile Include="widgets\controls\Label.cs" />
     <Compile Include="widgets\controls\Listbox.cs" />
     <Compile Include="widgets\controls\Listbox_draw.cs" />
@@ -73,11 +74,11 @@
     <Compile Include="widgets\controls\formatting\TextJustification.cs" />
     <Compile Include="widgets\controls\formatting\TextParsing.cs" />
     <Compile Include="widgets\Widget.cs" />
+    <Compile Include="widgets\windows\baseclasses\Window.cs" />
     <Compile Include="widgets\windows\Dialog.cs" />
     <Compile Include="widgets\windows\Form.cs" />
     <Compile Include="widgets\windows\Form_draw.cs" />
     <Compile Include="widgets\windows\MessageBox.cs" />
-    <Compile Include="widgets\windows\Window.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

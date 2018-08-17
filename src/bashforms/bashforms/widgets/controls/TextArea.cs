@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using bashforms.widgets.controls.baseclasses;
 using bashforms.widgets.controls.editors;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 

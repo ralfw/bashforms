@@ -1,7 +1,7 @@
 ﻿using System;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace bashforms.widgets.controls
+namespace bashforms.widgets.controls.baseclasses
 {
     public abstract class FocusControl : Control
     {
@@ -30,7 +30,7 @@ namespace bashforms.widgets.controls
         }
 
         
-        public bool HasFocus {
+        public virtual bool HasFocus {
             get => _hasFocus;
             set {
                 if (value && !this.CanHaveFocus) throw new InvalidOperationException("Control cannot accept focus!");

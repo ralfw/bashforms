@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using bashforms.data;
+using bashforms.widgets.controls.baseclasses;
 using bashforms.widgets.controls.editors;
 
 namespace bashforms.widgets.controls

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using bashforms.widgets.windows;
+using bashforms.widgets.windows.baseclasses;
 
 namespace bashforms.engine
 {

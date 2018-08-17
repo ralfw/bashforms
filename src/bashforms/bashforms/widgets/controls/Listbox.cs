@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using bashforms.data.eventargs;
+using bashforms.widgets.controls.baseclasses;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
@@ -36,11 +37,11 @@ namespace bashforms.widgets.controls
         protected int[] _columns;
         
         
-        public Action<Widget, EventArgs> OnPressed = (w, a) => { };
+        public Action<Listbox, EventArgs> OnPressed = (w, a) => { };
 
         
         public Listbox(int left, int top, int width, int height, IEnumerable<string> itemTexts) : this(left, top, width, height) {
-            var items = itemTexts.Select(t => new Item(t));
+            var items = itemTexts != null ? itemTexts.Select(t => new Item(t)) : new Item[0];
             this.AddRange(items);
             if (_items.Count > 0) _currentItemIndex = 0;
         }

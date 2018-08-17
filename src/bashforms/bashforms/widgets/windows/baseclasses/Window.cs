@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using bashforms.data;
 using bashforms.widgets.controls;
+using bashforms.widgets.controls.baseclasses;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
-namespace bashforms.widgets.windows
+namespace bashforms.widgets.windows.baseclasses
 {
     public class Window : Widget
     {
@@ -129,9 +128,9 @@ namespace bashforms.widgets.windows
             foreach (var widget in this.Children) {
                 if (widget != focus) Draw_widget(widget);
             }
-            // draw focus last so it always comes out on top of all other widgets
+            // only now draw focus so it always comes out on top of all other widgets
             if (focus != null) Draw_widget(focus);
-            // oh, no, draw menu last and on top of all others; maybe the real focus is there
+            // but draw menu last on top of all others; maybe the real focus is there
             if (_menu != null) Draw_widget(_menu);
             
             return canvas;

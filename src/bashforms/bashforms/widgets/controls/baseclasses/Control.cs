@@ -1,4 +1,4 @@
-﻿namespace bashforms.widgets.controls
+﻿namespace bashforms.widgets.controls.baseclasses
 {
     public abstract class Control : Widget
     {
