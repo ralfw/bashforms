@@ -7,7 +7,7 @@ using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.controls
 {
-    public class Combobox : FocusControl
+    public class Combobox : CursorControl
     {
         private readonly TextLine _textline;
         private readonly Listbox _listbox;
@@ -98,5 +98,8 @@ namespace bashforms.widgets.controls
 
             return canvas;
         }
+
+
+        public override (int x, int y) CursorPosition => _textline.HasFocus ? _textline.CursorPosition : (-1, -1);
     }
 }
