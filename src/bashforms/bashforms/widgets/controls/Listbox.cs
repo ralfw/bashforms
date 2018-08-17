@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using bashforms.data.eventargs;
@@ -68,22 +69,22 @@ namespace bashforms.widgets.controls
         public Item Add(string itemText) {
             var item = new Item(itemText);
             _items.Add(item);
-            if (_currentItemIndex < 0) _currentItemIndex = 0;
-            this.OnUpdated(this, new EventArgs());
             return item;
         }
+        public void Add(Item item) => this.Insert(_items.Count, item);
+        public void AddRange(IEnumerable<Item> items) => this.InsertRange(_items.Count, items);
 
-        public void Add(Item item) {
+        public void Insert(int index, Item item) {
             if (_items.Contains(item)) throw new InvalidOperationException("All items in Listbox must be unique!");
-            _items.Add(item);
+            _items.Insert(index, item);
             if (_currentItemIndex < 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
         }
 
-        public void AddRange(IEnumerable<Item> items) {
+        public void InsertRange(int index, IEnumerable<Item> items) {
             foreach (var item in items) {
                 if (_items.Contains(item)) throw new InvalidOperationException("All items in Listbox must be unique!");
-                _items.Add(item);
+                _items.Insert(index++,item);
             }
             if (_currentItemIndex < 0) _currentItemIndex = 0;
             this.OnUpdated(this, new EventArgs());
