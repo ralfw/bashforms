@@ -57,15 +57,12 @@ namespace bashforms.widgets.windows
             }
         }
         
-        public static void ShowInfo(string message, string title = "") {
-            Show(message, (Results.Ok, "OK"), title == "" ? "Info" : title);
-        }
-        public static bool AskForYes(string message, string title = "") {
-            return Show(message, (Results.Yes, "Yes"), (Results.No, "No"), title) == Results.Yes;
-        }
-        public static bool AskForOk(string message, string title = "") {
-            return Show(message, (Results.Ok, "Ok"), (Results.Cancel, "Cancel"), title) == Results.Ok;
-        }
+        public static void ShowInfo(string message, string title = "")
+            => Show(message, title == "" ? "Info" : title);
+        public static bool AskForYes(string message, string title = "")
+            => Show(message, (Results.No, "No"), (Results.Yes, "Yes"), title) == Results.Yes;
+        public static bool AskForOk(string message, string title = "")
+            => Show(message, (Results.Cancel, "Cancel"), (Results.Ok, "Ok"), title) == Results.Ok;
         
         
         private static Label Create_message_label(string message) {
@@ -98,6 +95,7 @@ namespace bashforms.widgets.windows
             if (totalOptionsWidth > dlg.Size.width - 2) {
                 var delta = totalOptionsWidth - dlg.Size.width + 4;
                 dlg.Resize(dlg.Size.width + delta, dlg.Size.height);
+                dlg.MoveTo(dlg.Position.left - delta / 2, dlg.Position.top);
 
                 var lblMessage = dlg["lblMessage"];
                 lblMessage.MoveTo((dlg.Size.width - lblMessage.Size.width)/2, lblMessage.Position.top);
