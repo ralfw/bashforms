@@ -120,8 +120,22 @@ namespace bashforms.widgets.controls
             this.OnUpdated(this, new EventArgs());
         }
 
+
+        public void AddSelection(int index) {
+            if (index >= _items.Count) return;
+            _selectedItemIndexes.Add(index);
+            this.OnUpdated(this, new EventArgs());
+        }
+
         
-        public int CurrentItemIndex => _currentItemIndex;
+        public int CurrentItemIndex {
+            get => _currentItemIndex;
+            set {
+                if (value >= _items.Count) return;
+                _currentItemIndex = value;
+                this.OnUpdated(this, new EventArgs());
+            }
+        }
 
 
         public int[] Columns {

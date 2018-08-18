@@ -54,8 +54,11 @@ namespace bashforms.widgets.windows.dialogs
             _left = (Console.WindowWidth - _width) / 2;
 
             _title = title == "" ? "Select file or folder" : title;
+            
+            this.AddChild(new Label(2,2,"Path: "));
+            this.AddChild(new Label(8,2,_width-8, path){Name = "lblPath"});
 
-            _lbFilesystem = new FilesystemListbox(2, 2, _width - 4, _height - 4){SelectionMode = Listbox.SelectionModes.SingleSelection};
+            _lbFilesystem = new FilesystemListbox(2, 3, _width - 4, _height - 6){SelectionMode = Listbox.SelectionModes.SingleSelection};
             _lbFilesystem.OnExpandRequested += Handle_expand_request;
             _lbFilesystem.OnCollapseRequested += Handle_collapse_request;
             this.AddChild(_lbFilesystem);
@@ -87,6 +90,7 @@ namespace bashforms.widgets.windows.dialogs
             get => _path;
             set {
                 Fill(value);
+                this.Child<Label>("lblPath").Text = value;
                 this.OnChanged(this,new EventArgs());
             }
         }
@@ -101,26 +105,59 @@ namespace bashforms.widgets.windows.dialogs
         }
 
 
-        private void Handle_expand_request(int listboxItemIndex)
-        {
+        private void Handle_expand_request(int listboxItemIndex) {
             var currentIndentationLevel = Get_indendation_level(_lbFilesystem.Items[listboxItemIndex].Text);
-            Expand((string)_lbFilesystem.Items[listboxItemIndex].Attachment, listboxItemIndex+1, currentIndentationLevel+1);
-        }
-
-        private void Handle_collapse_request(int listboxItemIndex) {
-            var currentIndentationLevel = Get_indendation_level(_lbFilesystem.Items[listboxItemIndex].Text);
-            Collapse(listboxItemIndex+1, currentIndentationLevel+1);
+            var nItemsAdded = Expand((string)_lbFilesystem.Items[listboxItemIndex].Attachment, listboxItemIndex+1, currentIndentationLevel+1);
+            Adjust_selections_after_expansion(listboxItemIndex + 1, nItemsAdded);
+            
+            
+            void Adjust_selections_after_expansion(int indexesAffectedFrom, int numberOfChanges) {
+                var currentSelections = _lbFilesystem.SelectedItemIndexes;
+                _lbFilesystem.ClearSelections();
+                foreach (var s in currentSelections) {
+                    if (s >= indexesAffectedFrom)
+                        _lbFilesystem.AddSelection(s+numberOfChanges);
+                    else
+                        _lbFilesystem.AddSelection(s);
+                }
+            }
         }
 
         
+        private void Handle_collapse_request(int listboxItemIndex) {
+            var currentIndentationLevel = Get_indendation_level(_lbFilesystem.Items[listboxItemIndex].Text);
+            var nItemsRemoved = Collapse(listboxItemIndex+1, currentIndentationLevel+1);
+            Adjust_selections_after_collapse(listboxItemIndex + 1, -nItemsRemoved);
+            
+            
+            void Adjust_selections_after_collapse(int indexesAffectedFrom, int numberOfChanges) {
+                var currentSelections = _lbFilesystem.SelectedItemIndexes;
+                _lbFilesystem.ClearSelections();
+            
+                var lastCollapsedIndex = indexesAffectedFrom + numberOfChanges - 1;
+                foreach (var s in currentSelections) {
+                    if (s > lastCollapsedIndex)
+                        _lbFilesystem.AddSelection(s+numberOfChanges);
+                    else if (s < indexesAffectedFrom)
+                        _lbFilesystem.AddSelection(s);
+                }
+            }
+        }
+
+
         private void Fill(string path) {
             _path = path;
             _lbFilesystem.Clear();
             Expand(_path, 0, 0);
         }
 
-        private void Expand(string path, int insertAtIndex, int indentationLevel) {
-            if (!Directory.Exists(path)) return;
+        
+        private int Get_indendation_level(string text) => (text.Length - text.TrimStart().Length) / 2;
+
+        
+        private int Expand(string path, int insertAtIndex, int indentationLevel) {
+            if (!Directory.Exists(path)) return 0;
+            var numberOfItemsAdded = 0;
 
             var indendation = "".PadLeft(indentationLevel * 2, ' ');
             
@@ -128,23 +165,27 @@ namespace bashforms.widgets.windows.dialogs
             var folderpaths = Directory.GetDirectories(path);
             foreach (var folderpath in folderpaths) {
                 _lbFilesystem.Insert(insertAtIndex++, new Listbox.Item($"{indendation}>{System.IO.Path.GetFileName(folderpath)}"){Attachment = folderpath});
+                numberOfItemsAdded++;
             }
 
             // display files
             var filepaths = Directory.GetFiles(path);
             foreach (var filepath in filepaths) {
                 _lbFilesystem.Insert(insertAtIndex++, new Listbox.Item($"{indendation} {System.IO.Path.GetFileName(filepath)}"){Attachment = filepath});
+                numberOfItemsAdded++;
             }
+
+            return numberOfItemsAdded;
         }
 
-        private void Collapse(int removeAtIndex, int indentationLevelToBeRemoved) {
-            while (removeAtIndex < _lbFilesystem.Items.Length)
-            {
+        private int Collapse(int removeAtIndex, int indentationLevelToBeRemoved) {
+            var numberOfItemsRemoved = 0;
+            while (removeAtIndex < _lbFilesystem.Items.Length) {
                 if (Get_indendation_level(_lbFilesystem.Items[removeAtIndex].Text) < indentationLevelToBeRemoved) break;
                 _lbFilesystem.RemoveAt(removeAtIndex);
+                numberOfItemsRemoved++;
             }
+            return numberOfItemsRemoved;
         }
-
-        private int Get_indendation_level(string text) => (text.Length - text.TrimStart().Length) / 2;
     }
 }
