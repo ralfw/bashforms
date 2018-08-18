@@ -13,12 +13,6 @@ using EventArgs = bashforms.data.eventargs.EventArgs;
 
 namespace bashforms.widgets.windows.dialogs
 {
-    /*
-     * Dialog does selection management itself.
-     * It renders the entries with "+" and "√" itself.
-     * Directories carry info about opened items.
-     * Closing dirs is difficult.
-     */
     public class FilesystemDialog : Dialog<string[]>
     {
         private class FilesystemListbox : Listbox {
@@ -40,6 +34,13 @@ namespace bashforms.widgets.windows.dialogs
 
             public event Action<int> OnExpandRequested;
             public event Action<int> OnCollapseRequested;
+        }
+
+        
+        private class FilesystemAttachment {
+            public string Path;
+            public bool IsDirectory;
+            public bool IsExpanded;
         }
         
         
@@ -69,7 +70,7 @@ namespace bashforms.widgets.windows.dialogs
 
             this.AddChild(new Button(buttonLeft, _height - 2, BUTTON_WIDTH, "Select") {
                 OnPressed = (s, e) => {
-                    base.Result = _lbFilesystem.SelectedItemIndexes.Select(i => (string)_lbFilesystem.Items[i].Attachment)
+                    base.Result = _lbFilesystem.SelectedItemIndexes.Select(i => ((FilesystemAttachment)_lbFilesystem.Items[i].Attachment).Path)
                                                                    .ToArray();
                     BashForms.Close();
                 }
@@ -105,10 +106,16 @@ namespace bashforms.widgets.windows.dialogs
         }
 
 
-        private void Handle_expand_request(int listboxItemIndex) {
+        private void Handle_expand_request(int listboxItemIndex)
+        {
+            var attachment = (FilesystemAttachment) _lbFilesystem.Items[listboxItemIndex].Attachment;
+            if (!attachment.IsDirectory) return;
+            if (attachment.IsExpanded) return;
+            
             var currentIndentationLevel = Get_indendation_level(_lbFilesystem.Items[listboxItemIndex].Text);
-            var nItemsAdded = Expand((string)_lbFilesystem.Items[listboxItemIndex].Attachment, listboxItemIndex+1, currentIndentationLevel+1);
+            var nItemsAdded = Expand(attachment.Path, listboxItemIndex+1, currentIndentationLevel+1);
             Adjust_selections_after_expansion(listboxItemIndex + 1, nItemsAdded);
+            attachment.IsExpanded = true;
             
             
             void Adjust_selections_after_expansion(int indexesAffectedFrom, int numberOfChanges) {
@@ -125,9 +132,14 @@ namespace bashforms.widgets.windows.dialogs
 
         
         private void Handle_collapse_request(int listboxItemIndex) {
+            var attachment = (FilesystemAttachment) _lbFilesystem.Items[listboxItemIndex].Attachment;
+            if (!attachment.IsDirectory) return;
+            if (!attachment.IsExpanded) return;
+            
             var currentIndentationLevel = Get_indendation_level(_lbFilesystem.Items[listboxItemIndex].Text);
             var nItemsRemoved = Collapse(listboxItemIndex+1, currentIndentationLevel+1);
             Adjust_selections_after_collapse(listboxItemIndex + 1, -nItemsRemoved);
+            attachment.IsExpanded = false;
             
             
             void Adjust_selections_after_collapse(int indexesAffectedFrom, int numberOfChanges) {
@@ -151,12 +163,13 @@ namespace bashforms.widgets.windows.dialogs
             Expand(_path, 0, 0);
         }
 
+
+        private bool IsDirectory(int index) => ((FilesystemAttachment) _lbFilesystem.Items[index].Attachment).IsDirectory;
         
         private int Get_indendation_level(string text) => (text.Length - text.TrimStart().Length) / 2;
 
         
         private int Expand(string path, int insertAtIndex, int indentationLevel) {
-            if (!Directory.Exists(path)) return 0;
             var numberOfItemsAdded = 0;
 
             var indendation = "".PadLeft(indentationLevel * 2, ' ');
@@ -164,14 +177,18 @@ namespace bashforms.widgets.windows.dialogs
             // display subfolders
             var folderpaths = Directory.GetDirectories(path);
             foreach (var folderpath in folderpaths) {
-                _lbFilesystem.Insert(insertAtIndex++, new Listbox.Item($"{indendation}>{System.IO.Path.GetFileName(folderpath)}"){Attachment = folderpath});
+                _lbFilesystem.Insert(insertAtIndex++, new Listbox.Item($"{indendation}>{System.IO.Path.GetFileName(folderpath)}") {
+                    Attachment = new FilesystemAttachment(){Path = folderpath, IsDirectory = true}
+                });
                 numberOfItemsAdded++;
             }
 
             // display files
             var filepaths = Directory.GetFiles(path);
             foreach (var filepath in filepaths) {
-                _lbFilesystem.Insert(insertAtIndex++, new Listbox.Item($"{indendation} {System.IO.Path.GetFileName(filepath)}"){Attachment = filepath});
+                _lbFilesystem.Insert(insertAtIndex++, new Listbox.Item($"{indendation} {System.IO.Path.GetFileName(filepath)}") {
+                    Attachment = new FilesystemAttachment(){Path = filepath}
+                });
                 numberOfItemsAdded++;
             }
 
