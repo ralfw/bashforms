@@ -71,7 +71,7 @@ namespace bashforms_tests
             };
             
             frm.AddChild(new Label(2,3,40) {
-                Text = "* Press F2 to enter menu.\n* Use left/right arrow to move between menu item.\n* Use ENTER to select menu item/enter next menu level.\n* Use ESC to back up menu level.\n\n* Use (shift-)TAB to move between controls.",
+                Text = "* Press F2 to enter menu.\n* Use left/right arrow to move between menu item.\n* Use ENTER to select menu item/enter next menu level.\n* Use ESC to back up menu level.\n\n* Use (shift-)TAB to move between controls.\n\n* Use F5 to refresh screen.",
                 CanBeMultiline = true,
                 ForegroundColor = ConsoleColor.DarkGray
             });
