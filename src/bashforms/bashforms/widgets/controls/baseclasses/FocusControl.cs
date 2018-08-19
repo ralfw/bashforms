@@ -17,7 +17,7 @@ namespace bashforms.widgets.controls.baseclasses
         }
         
         public int TabIndex { get; set; }
-        public bool CanHaveFocus => this.TabIndex >= 0;
+        public bool CanHaveFocus => this.TabIndex >= 0 && this._visible;
 
         
         public ConsoleColor FocusBackgroundColor {

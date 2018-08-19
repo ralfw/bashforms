@@ -12,6 +12,7 @@ namespace bashforms.widgets
         protected int _height;
         protected ConsoleColor _backgroundColor;
         protected ConsoleColor _foregroundColor;
+        protected bool _visible;
 
         public Action<Widget, EventArgs> OnUpdated = (w, a) => { };
 
@@ -24,6 +25,7 @@ namespace bashforms.widgets
 
             _backgroundColor = Console.BackgroundColor;
             _foregroundColor = Console.ForegroundColor;
+            _visible = true;
         } 
        
         public (int left, int top) Position => (_left, _top);
@@ -53,7 +55,11 @@ namespace bashforms.widgets
             get => _foregroundColor;
             set { _foregroundColor = value; OnUpdated(this,new EventArgs()); }
         }
-        
+
+        public bool Visible {
+            get => _visible;
+            set { _visible = value; OnUpdated(this, new EventArgs());} 
+        }
         
         public object Attachment { get; set; }
         

@@ -19,7 +19,7 @@ namespace bashforms.widgets.controls
         public Option(int left, int top, int width, string text) : base(left, top, width, 1) {
             _text = text;
             _selected = false;
-            _focusBackgroundColor = ConsoleColor.Blue;
+            _focusBackgroundColor = ConsoleColor.DarkMagenta;
             _focusForegroundColor = ConsoleColor.White;
         }
         

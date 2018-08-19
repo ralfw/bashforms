@@ -71,6 +71,8 @@ namespace bashforms.widgets.controls
             get => _limitTextToListItems;
             set {
                 _limitTextToListItems = value;
+                _focusBackgroundColor = _limitTextToListItems ? ConsoleColor.DarkMagenta : ConsoleColor.Blue;
+                _textline.FocusBackgroundColor = _focusBackgroundColor;
                 // clear text field if it does not match any list item
                 if (_limitTextToListItems && _listbox.Items.All(item => item.Text != _textline.Text)) {
                     _textline.Text = _listbox.Items[0].Text;

@@ -115,8 +115,8 @@ namespace bashforms.widgets.windows.baseclasses
             get {
                 var focus = Find_focus();
                 if (!(focus is CursorControl)) return (-1, -1);
-                return (focus.Position.left + ((CursorControl)focus).CursorPosition.x, 
-                        focus.Position.top + ((CursorControl)focus).CursorPosition.y);
+                return (this._left + focus.Position.left + ((CursorControl)focus).CursorPosition.x, 
+                        this._top + focus.Position.top + ((CursorControl)focus).CursorPosition.y);
             }
         }
         
@@ -137,6 +137,7 @@ namespace bashforms.widgets.windows.baseclasses
 
 
             void Draw_widget(Widget w) {
+                if (!w.Visible) return;
                 var widgetCanvas = w.Draw();
                 canvas.Merge(w.Position.left, w.Position.top, widgetCanvas);
             }

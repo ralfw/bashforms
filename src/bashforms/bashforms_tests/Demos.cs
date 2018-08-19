@@ -256,12 +256,17 @@ namespace bashforms_tests
         {
             var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Filesystem Dialog"};
             frm.AddChild(new Label(2,2,"Path to open dialog on: "));
-            frm.AddChild(new TextLine(25,2,20) { Text = "../..", Name = "txtPath"});
+            frm.AddChild(new TextLine(26,2,20) { Text = "../..", Name = "txtPath"});
+            frm.AddChild(new Option(26, 3, 20, "Directories only"){Name = "optDirsOnly"});
+            frm.AddChild(new Option(26, 4, 20, "Allow new name"){Name = "optNewFileOrFoldername"});
             frm.AddChild(new Listbox(50,2,20,20){Name = "lbSelected", TabIndex = -1, BackgroundColor = ConsoleColor.DarkGray});
             
-            frm.AddChild(new Button(25,3,10,"Open...") {
+            frm.AddChild(new Button(26,5,10,"Open...") {
                 OnPressed = (s, e) => {
-                    var fsdlg = new FilesystemDialog(frm.Child<TextLine>("txtPath").Text);
+                    var fsdlg = new FilesystemDialog(frm.Child<TextLine>("txtPath").Text) {
+                        ListDirectoriesOnly = frm.Child<Option>("optDirsOnly").Selected,
+                        AllowNewFileOrFoldername = frm.Child<Option>("optNewFileOrFoldername").Selected
+                    };
                     var selection = BashForms.OpenModal(fsdlg);
                     
                     frm.Child<Listbox>("lbSelected").Clear();
@@ -269,7 +274,7 @@ namespace bashforms_tests
                 }
             });
             
-            frm.AddChild(new Button(25,5,10,"Close"){ OnPressed = (s,e) => BashForms.Close()});
+            frm.AddChild(new Button(26,7,10,"Close"){ OnPressed = (s,e) => BashForms.Close()});
             
             BashForms.Open(frm);
         }

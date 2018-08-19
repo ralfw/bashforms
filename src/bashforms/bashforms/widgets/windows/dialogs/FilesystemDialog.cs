@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Permissions;
-using bashforms.data.eventargs;
+using System.Security.Cryptography;
 using bashforms.widgets.controls;
 using EventArgs = bashforms.data.eventargs.EventArgs;
 
@@ -15,12 +10,21 @@ namespace bashforms.widgets.windows.dialogs
 {
     public class FilesystemDialog : Dialog<string[]>
     {
-        private class FilesystemListbox : Listbox {
-            public FilesystemListbox(int left, int top, int width, int height, IEnumerable<string> itemTexts) : base(left, top, width, height, itemTexts) {}
-            public FilesystemListbox(int left, int top, int width, int height) : base(left, top, width, height) {}
+        private class FilesystemListbox : Listbox
+        {
+            public FilesystemListbox(int left, int top, int width, int height, IEnumerable<string> itemTexts) : base(
+                left, top, width, height, itemTexts)
+            {
+            }
 
-            public override bool HandleKey(ConsoleKeyInfo key) {
-                switch (key.Key) {
+            public FilesystemListbox(int left, int top, int width, int height) : base(left, top, width, height)
+            {
+            }
+
+            public override bool HandleKey(ConsoleKeyInfo key)
+            {
+                switch (key.Key)
+                {
                     case ConsoleKey.RightArrow:
                         this.OnExpandRequested(this.CurrentItemIndex);
                         return true;
@@ -36,47 +40,66 @@ namespace bashforms.widgets.windows.dialogs
             public event Action<int> OnCollapseRequested;
         }
 
-        
-        private class FilesystemAttachment {
+
+        private class FilesystemAttachment
+        {
             public string Path;
             public bool IsDirectory;
             public bool IsExpanded;
         }
-        
-        
+
+
         private string _path;
         private readonly FilesystemListbox _lbFilesystem;
-        
-        
-        public FilesystemDialog(string path = "", string title = "") : base(0, 0, 1, 1) {
+        private bool _listDirectoriesOnly;
+
+
+        public FilesystemDialog(string path = "", string title = "") : base(0, 0, 1, 1)
+        {
             _width = Console.WindowWidth / 2;
-            _height = (int)(Console.WindowHeight * 0.8);
+            _height = (int) (Console.WindowHeight * 0.8);
             _top = (Console.WindowHeight - _height) / 2;
             _left = (Console.WindowWidth - _width) / 2;
 
             _title = title == "" ? "Select file or folder" : title;
-            
-            this.AddChild(new Label(2,2,"Path: "));
-            this.AddChild(new Label(8,2,_width-8, path){Name = "lblPath"});
+            _listDirectoriesOnly = false;
 
-            _lbFilesystem = new FilesystemListbox(2, 3, _width - 4, _height - 6){SelectionMode = Listbox.SelectionModes.SingleSelection};
+            this.AddChild(new Label(2, 2, "Path: ") {BackgroundColor = ConsoleColor.DarkGray});
+            this.AddChild(
+                new Label(8, 2, _width - 10, path) {Name = "lblPath", BackgroundColor = ConsoleColor.DarkGray});
+
+            _lbFilesystem =
+                new FilesystemListbox(2, 3, _width - 4, _height - 8)
+                {
+                    SelectionMode = Listbox.SelectionModes.SingleSelection
+                };
             _lbFilesystem.OnExpandRequested += Handle_expand_request;
             _lbFilesystem.OnCollapseRequested += Handle_collapse_request;
             this.AddChild(_lbFilesystem);
+
+            this.AddChild(new TextLine(2, _height - 4, _width - 4) { 
+                Label = "file or folder name",
+                Name = "txtFileOrFoldername",
+                Visible = false
+            });
 
             const int BUTTON_WIDTH = 10;
             var totalButtonWidth = 2 * BUTTON_WIDTH + 2;
             var buttonLeft = (_width - totalButtonWidth) / 2;
 
-            this.AddChild(new Button(buttonLeft, _height - 2, BUTTON_WIDTH, "Select") {
+            this.AddChild(new Button(buttonLeft, _height - 2, BUTTON_WIDTH, "Select")
+            {
                 OnPressed = (s, e) => {
-                    base.Result = _lbFilesystem.SelectedItemIndexes.Select(i => ((FilesystemAttachment)_lbFilesystem.Items[i].Attachment).Path)
-                                                                   .ToArray();
+                    var selections = _lbFilesystem.SelectedItemIndexes.Select(i => ((FilesystemAttachment) _lbFilesystem.Items[i].Attachment).Path);
+                    if (this.AllowNewFileOrFoldername) selections = selections.Concat(new[] {this.Child<TextLine>("txtFileOrFoldername").Text});
+                    base.Result = selections.ToArray();
                     BashForms.Close();
                 }
             });
-            this.AddChild(new Button(buttonLeft + BUTTON_WIDTH + 2, _height - 2, BUTTON_WIDTH, "Cancel") {
-                OnPressed = (s, e) => {
+            this.AddChild(new Button(buttonLeft + BUTTON_WIDTH + 2, _height - 2, BUTTON_WIDTH, "Cancel")
+            {
+                OnPressed = (s, e) =>
+                {
                     base.Result = new string[0];
                     BashForms.Close();
                 }
@@ -89,15 +112,36 @@ namespace bashforms.widgets.windows.dialogs
         public string Path
         {
             get => _path;
-            set {
+            set
+            {
                 Fill(value);
                 this.Child<Label>("lblPath").Text = value;
-                this.OnChanged(this,new EventArgs());
+                this.OnChanged(this, new EventArgs());
             }
         }
 
-        
-        public Listbox.SelectionModes SelectionMode {
+
+        public bool ListDirectoriesOnly
+        {
+            get => _listDirectoriesOnly;
+            set
+            {
+                _listDirectoriesOnly = value;
+                Fill(_path);
+                this.OnChanged(this, new EventArgs());
+            }
+        }
+
+        public bool AllowNewFileOrFoldername {
+            get => this.Child<TextLine>("txtFileOrFoldername").Visible;
+            set {
+                this.Child<TextLine>("txtFileOrFoldername").Visible = value;
+                OnUpdated(this, new EventArgs());
+            }
+        }
+
+
+    public Listbox.SelectionModes SelectionMode {
             get => _lbFilesystem.SelectionMode;
             set {
                 _lbFilesystem.SelectionMode = value; 
@@ -183,6 +227,8 @@ namespace bashforms.widgets.windows.dialogs
                 numberOfItemsAdded++;
             }
 
+            if (_listDirectoriesOnly) return numberOfItemsAdded;
+            
             // display files
             var filepaths = Directory.GetFiles(path);
             foreach (var filepath in filepaths) {
