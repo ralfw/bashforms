@@ -1,38 +1,51 @@
-﻿namespace bashforms_tests.todo_scenario
+﻿using System;
+using System.Runtime.InteropServices.ComTypes;
+using bashforms;
+using bashforms.data;
+using bashforms.widgets.controls;
+using bashforms.widgets.windows;
+using bashforms_tests.todo_scenario.adapters;
+
+namespace bashforms_tests.todo_scenario
 {
-    /*
-     * Manage a list of to-do items.
-     *
-     * Functionality:
-     * - List all to-do items.
-     * - Filter to-do items according to a search pattern.
-     * - Delete single item.
-     * - Add new item.
-     * - Edit item.
-     *
-     * To-do item data:
-     * - Subject
-     * - Description
-     * - Due date/time
-     * - Priority
-     * - Tags
-     *
-     * A list of tags is displayed for easy filtering. It's updated whenever an item is stored/deleted.
-     *
-     * A list of filtered items is displayed. Initially all items are shown.
-     *
-     * To edit an item a new dialog is opened.
-     *
-     * To-do item persistence:
-     * The items are stored as JSON files in a local repository folder.
-     * They are all kept in memory; changes are written thru to the file system.
-     * 
-     */
     public class ToDoApp
     {
-        public void Run()
-        {
+        public static void Enterypoint() {
+            var ui = new ConsolePortal();
+            var repo = new TaskRepository();
+            var app = new ToDoApp(ui, repo);
             
+            app.Run();
+        }
+        
+        
+        private readonly ConsolePortal _ui;
+        private readonly TaskRepository _repo;
+        
+        internal ToDoApp(ConsolePortal ui, TaskRepository repo) {
+            _ui = ui;
+            _repo = repo;
+        }
+        
+        
+        public void Run(){ 
+            var rh = new RequestHandler(_repo);
+
+            _ui.OnQueryRequest += query => {
+                var queryResult = rh.Query(query);
+                _ui.Display(queryResult);
+            };
+
+            _ui.OnNewTaskRequest += () => {
+                if (_ui.AskUserForNewTask(out var newTask)) {
+                    newTask = rh.StoreNewTask(newTask);
+                    _ui.DisplayUpdate(newTask);
+                }
+            };
+
+            var tasks = rh.Query("");
+            _ui.Display(tasks);
+            _ui.Show();
         }
     }
 }

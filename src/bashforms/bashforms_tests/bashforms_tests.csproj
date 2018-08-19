@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +49,12 @@
     <Compile Include="TextEditor_tests.cs" />
     <Compile Include="TextFormatting_tests.cs" />
     <Compile Include="TextParsing_tests.cs" />
+    <Compile Include="todo_scenario\adapters\ConsolePortal.cs" />
+    <Compile Include="todo_scenario\adapters\views\MainWindow.cs" />
+    <Compile Include="todo_scenario\adapters\views\TaskDialog.cs" />
+    <Compile Include="todo_scenario\adapters\TaskRepository.cs" />
+    <Compile Include="todo_scenario\data\Task.cs" />
+    <Compile Include="todo_scenario\RequestHandler.cs" />
     <Compile Include="todo_scenario\ToDoApp.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Mime;
 using bashforms;
 using bashforms.data;
 using bashforms.widgets.controls;
 using bashforms.widgets.windows;
 using bashforms.widgets.windows.dialogs;
-using NUnit.Framework;
-using NUnit.Framework.Internal;
+using bashforms_tests.todo_scenario;
 
 namespace bashforms_tests
 {
-    public class Demos
+    public static class Demos
     {
         public static void Main(string[] args) {
-            Choose_a_demo();
+            //Choose_a_demo();
+            ToDoApp.Enterypoint();
         }
 
+        
         static void Choose_a_demo() {
             var frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "Choose a demo"};
             var mnusw = frm.MenuBar.Menu.AddItem("Single widgets");
@@ -65,7 +65,7 @@ namespace bashforms_tests
                         break;
                     
                     case "mnuToDo":
-                        Test_todo_scenario();
+                        ToDoApp.Enterypoint();
                         break;
                 }
             };
@@ -277,78 +277,6 @@ namespace bashforms_tests
             frm.AddChild(new Button(26,7,10,"Close"){ OnPressed = (s,e) => BashForms.Close()});
             
             BashForms.Open(frm);
-        }
-        
-        
-        
-        static void Test_todo_scenario()
-        {
-            var frmEdit = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo Item"};
-            frmEdit.AddChild(new TextLine(2,2,40){Label = "title", Name = "txtTitle"});
-            frmEdit.AddChild(new TextArea(2,4,40,10) {Label = "description", Name = "txtDescription"});
-            frmEdit.AddChild(new TextLine(2,15,8){Label = "due date", Name = "txtDueDate"});
-
-            frmEdit.AddChild(new Label(44,2,"importance:"));
-            frmEdit.AddChild(new Listbox(44,3,10,3, new[]{"Top!", "Very high", "High", "Moderate", "Low", "Very low"})
-            {
-                SelectionMode = Listbox.SelectionModes.SingleSelection
-            });
-            
-            frmEdit.AddChild(new Button(2,17,10,"Save") { OnPressed = (w, e) =>
-            {
-                MessageBox.Show($"Saving: {frmEdit.Child<TextLine>("txtTitle").Text}");
-            }});
-            frmEdit.AddChild(new Button(14,17,10, "Cancel"){OnPressed = (w, e) =>
-            {
-                if (MessageBox.Show($"Depth: {BashForms.Current.Depth} - Close?", 
-                                    (MessageBox.Results.Yes, "YES"), (MessageBox.Results.No, "no")) == MessageBox.Results.Yes)
-                    BashForms.Close();
-            }});
-            
-
-            
-            var frmOverview = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDo"};
-            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Edit")).Submenu.AddItems(new[] {
-                new MenuItem("Change", "mnuChange"){Shortcut = 'c'}, 
-                new MenuItem("Add", "mnuAdd") { Shortcut = '+'},
-                new MenuItem("Delete", "mnuDel"){Shortcut = '-'}
-            });
-            frmOverview.MenuBar.Menu.AddItem(new MenuItem("Close", "mnuClose"){Shortcut='x'});
-            frmOverview.MenuBar.OnSelected += (item, e) => {
-                switch (item.Name) {
-                    case "mnuChange":
-                        MessageBox.Show("Change item...");
-                        break;
-                    case "mnuAdd":
-                        MessageBox.Show("Add new item...");
-                        break;
-                    case "mnuDel":
-                        if (MessageBox.AskForYes("Delete current item?"))
-                            MessageBox.Show("Item deleted!");
-                        break;
-                    case "mnuClose":
-                        BashForms.Close();
-                        break;
-                }
-            };
-            
-            var listBox = new Listbox(2, 3, frmOverview.Size.width - 4, frmOverview.Size.height - 5) {
-                FocusBackgroundColor = ConsoleColor.Black
-            };
-            listBox.Columns = new[] {6, listBox.Size.width-2};
-
-            listBox.Add("123\tsome description").Attachment = "12";
-            listBox.Add("abcdefxyz\tanother description which is somewhat longer to extend across the line").Attachment = "ab";
-            listBox.Add("hello, world!\tyet another description").Attachment = "hw";
-
-            listBox.OnPressed = (w, e) => {
-                MessageBox.Show($"Selected item: {listBox.Items[listBox.CurrentItemIndex].Attachment}");
-            };
-            
-            frmOverview.AddChild(listBox);
-            
-            
-            BashForms.Open(frmOverview);
         }
     }
 }
