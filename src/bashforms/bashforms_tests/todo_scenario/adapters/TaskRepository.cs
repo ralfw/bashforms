@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Web.Script.Serialization;
 
 namespace bashforms_tests.todo_scenario.adapters
@@ -10,10 +13,12 @@ namespace bashforms_tests.todo_scenario.adapters
         private readonly string _path;
         private readonly JavaScriptSerializer _json;
         
+        
         public TaskRepository() : this("tasks") {}
         internal TaskRepository(string path) {
             _path = path;
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            if (!Directory.Exists(path)) 
+                Directory.CreateDirectory(path);
             _json = new JavaScriptSerializer();
         }
         
@@ -39,9 +44,11 @@ namespace bashforms_tests.todo_scenario.adapters
         public data.Task[] Tasks {
             get {
                 var taskFilepaths = Directory.GetFiles(_path, "*.txt");
-                return taskFilepaths.Select(Load).OrderBy(t => t.CreatedAt).ToArray();
+                return LoadAll(taskFilepaths).ToArray();
 
-
+                
+                IEnumerable<data.Task> LoadAll(string[] paths) => paths.Select(Load).OrderBy(t => t.CreatedAt);
+                
                 data.Task Load(string filepath) {
                     var jsonTask = File.ReadAllText(filepath);
                     var task = _json.Deserialize<data.Task>(jsonTask);

@@ -12,8 +12,7 @@ namespace bashforms_tests
     public static class Demos
     {
         public static void Main(string[] args) {
-            //Choose_a_demo();
-            ToDoApp.Enterypoint();
+            Choose_a_demo();
         }
 
         

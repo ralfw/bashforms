@@ -22,47 +22,50 @@ namespace bashforms_tests.todo_scenario
         
         private readonly ConsolePortal _ui;
         private readonly TaskRepository _repo;
-        
-        internal ToDoApp(ConsolePortal ui, TaskRepository repo) {
+
+        private ToDoApp(ConsolePortal ui, TaskRepository repo) {
             _ui = ui;
             _repo = repo;
         }
-        
-        
-        public void Run(){ 
+
+
+        private void Run(){ 
             var queries = new QueryProcessor(_repo);
-
-            _ui.OnQueryTasksRequest += query => {
-                var queryResult = queries.Query(query);
-                _ui.Display(queryResult);
-            };
-
-            _ui.OnEditTaskRequest += taskId => {
-                var task = _repo.Tasks.First(t => t.Id == taskId);
-                if (_ui.AllowUserToEditTask(ref task)) {
-                    _repo.Save(task);
-                    _ui.DisplayUpdate(task);
-                }
-            };
-            
-            _ui.OnNewTaskRequest += () => {
-                if (_ui.AskUserForNewTask(out var newTask)) {
-                    var taskId = _repo.Save(newTask);
-                    newTask.Id = taskId;
-                    _ui.DisplayUpdate(newTask);
-                }
-            };
-
-            _ui.OnDeleteTaskRequest += taskId => {
-                _repo.Delete(taskId);
-                var queryResult = queries.Requery();
-                _ui.Display(queryResult);
-            };
-
+            Set_up_request_handling_processes();
             
             var tasks = queries.Query("");
             _ui.Display(tasks);
             _ui.Show();
+
+
+            void Set_up_request_handling_processes() {
+                _ui.OnQueryTasksRequest += query => {
+                    var queryResult = queries.Query(query);
+                    _ui.Display(queryResult);
+                };
+
+                _ui.OnEditTaskRequest += taskId => {
+                    var task = _repo.Tasks.First(t => t.Id == taskId);
+                    if (_ui.AllowUserToEditTask(ref task)) {
+                        _repo.Save(task);
+                        _ui.DisplayUpdate(task);
+                    }
+                };
+            
+                _ui.OnNewTaskRequest += () => {
+                    if (_ui.AskUserForNewTask(out var newTask)) {
+                        var taskId = _repo.Save(newTask);
+                        newTask.Id = taskId;
+                        _ui.DisplayUpdate(newTask);
+                    }
+                };
+
+                _ui.OnDeleteTaskRequest += taskId => {
+                    _repo.Delete(taskId);
+                    var queryResult = queries.Requery();
+                    _ui.Display(queryResult);
+                };
+            }
         }
     }
 }

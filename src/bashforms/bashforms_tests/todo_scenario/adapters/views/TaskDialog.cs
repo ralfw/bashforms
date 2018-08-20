@@ -51,26 +51,30 @@ namespace bashforms_tests.todo_scenario.adapters.views
 
         public Task EditNew() => Edit(null);
         public Task Edit(Task task) {
-            if (task == null) {
-                task = new Task();
-                _dlg.Title = "Edit new task";
-            }
-            
-            _txtSubject.Text = task.Subject;
-            _txtDescription.Text = task.Description;
-            _txtDueDate.Text = task.DueAt.Year == DateTime.MaxValue.Year ? "" : task.DueAt.ToString("d");
-            _cboPriority.Text = task.Priority == TaskPriorities.No ? "" : task.Priority.ToString();
-            _txtTags.Text = String.Join(",", task.Tags);
+            if (task == null) { task = new Task(); _dlg.Title = "Edit new task"; }
 
-            if (!BashForms.OpenModal(_dlg)) return null;
-
-            task.Subject = _txtSubject.Text;
-            task.Description = _txtDescription.Text;
-            task.DueAt = _txtDueDate.Text != "" ? DateTime.Parse(_txtDueDate.Text) : DateTime.MaxValue;
-            if (!Enum.TryParse(_cboPriority.Text, true, out task.Priority)) task.Priority = TaskPriorities.No;
-            task.Tags = _txtTags.Text.Split(new[] {',', ';', '#',' '}, StringSplitOptions.RemoveEmptyEntries);
-
+            Bind();
+            if (!BashForms.OpenModal(_dlg)) 
+                return null;
+            Retrieve();
             return task;
+
+
+            void Bind() {
+                _txtSubject.Text = task.Subject;
+                _txtDescription.Text = task.Description;
+                _txtDueDate.Text = task.DueAt.Date == DateTime.MaxValue.Date ? "" : task.DueAt.ToString("d");
+                _cboPriority.Text = task.Priority == TaskPriorities.No ? "" : task.Priority.ToString();
+                _txtTags.Text = String.Join(",", task.Tags);
+            }
+
+            void Retrieve() {
+                task.Subject = _txtSubject.Text;
+                task.Description = _txtDescription.Text;
+                task.DueAt = _txtDueDate.Text != "" ? DateTime.Parse(_txtDueDate.Text) : DateTime.MaxValue;
+                if (!Enum.TryParse(_cboPriority.Text, true, out task.Priority)) task.Priority = TaskPriorities.No;
+                task.Tags = _txtTags.Text.Split(new[] {',', ';', '#',' '}, StringSplitOptions.RemoveEmptyEntries);
+            }
         }
     }
 }

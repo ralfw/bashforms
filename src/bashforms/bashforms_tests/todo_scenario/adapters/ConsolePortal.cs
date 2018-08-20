@@ -27,18 +27,12 @@ namespace bashforms_tests.todo_scenario.adapters
         public event Action<string> OnDeleteTaskRequest;
         
         
-        public void Show() {
-            _win.Show();
-        }
+        public void Show() => _win.Show();
         
         
-        public void Display(data.Task[] tasks) {
-            _win.Display(tasks);
-        }
+        public void Display(data.Task[] tasks) => _win.Display(tasks);
+        public void DisplayUpdate(data.Task task) => _win.DisplayUpdate(task);
 
-        public void DisplayUpdate(data.Task task) {
-            _win.DisplayUpdate(task);
-        }
 
         public bool AskUserForNewTask(out data.Task newTask) {
             newTask = _dlg.EditNew();

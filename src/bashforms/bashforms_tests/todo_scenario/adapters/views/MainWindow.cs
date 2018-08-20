@@ -13,9 +13,9 @@ namespace bashforms_tests.todo_scenario.adapters.views
     {
         private readonly Form _frm;
         private readonly Listbox _lstTasks;
-
-        public MainWindow()
-        {
+        private readonly TextLine _txtQuery;
+        
+        public MainWindow() {
             _frm = new Form(0, 0, Console.WindowWidth, Console.WindowHeight) {Title = "ToDoBeDoBeDo Task Management"};
             
             _frm.MenuBar.Menu.AddItem(new MenuItem("File")).Submenu.AddItem(new MenuItem("Close", "mnuClose"){Shortcut = 'x'});
@@ -24,10 +24,12 @@ namespace bashforms_tests.todo_scenario.adapters.views
                 new MenuItem("Add", "mnuAdd") { Shortcut = '+'},
                 new MenuItem("Delete", "mnuDel"){Shortcut = '-'}
             });
+
+            var mnuFilterOverdue = new MenuItem("Filter for overdue", "mnuFilterOverdue");
+            var mnuFilterDue = new MenuItem("Filter for due", "mnuFilterDue");
+            var mnuFilterASAP = new MenuItem("Filter for ASAP", "mnuFilterASAP");
             _frm.MenuBar.Menu.AddItem(new MenuItem("View")).Submenu.AddItems(new[] {
-                new MenuItem("Only overdue", "mnuOnlyOverdue"),
-                new MenuItem("Only due", "mnuOnlyDue"),
-                new MenuItem("Only ASAP", "mnuOnlyASAP"), 
+                mnuFilterOverdue, mnuFilterDue, mnuFilterASAP
             });
             
             _frm.MenuBar.OnSelected += (item, e) => {
@@ -41,6 +43,14 @@ namespace bashforms_tests.todo_scenario.adapters.views
                             OnDeleteTaskRequest((string)_lstTasks.CurrentItem.Attachment);
                         _frm.MenuBar.HasFocus = false;
                         break;
+                    
+                    case "mnuFilterOverdue":
+                    case "mnuFilterDue":
+                    case "mnuFilterASAP":
+                        item.Checked = !item.Checked;
+                        OnQueryTasksRequest(Build_query());
+                        break;
+                    
                     case "mnuClose":
                         BashForms.Close();
                         _frm.MenuBar.HasFocus = false;
@@ -70,14 +80,23 @@ namespace bashforms_tests.todo_scenario.adapters.views
             };
             _frm.AddChild(_lstTasks);
             
-            var txtQuery = new TextLine(2, _lstTasks.Position.top + _lstTasks.Size.height + 1, 45) {
+            _txtQuery = new TextLine(2, _lstTasks.Position.top + _lstTasks.Size.height + 1, 45) {
                 Label = "query: words or #tags separated by spaces"
             };
-            _frm.AddChild(txtQuery);
+            _frm.AddChild(_txtQuery);
             
-            _frm.AddChild(new Button(txtQuery.Position.left + txtQuery.Size.width + 2, txtQuery.Position.top, 10, "Filter") { OnPressed = (s, e) => {
-                OnQueryTasksRequest(txtQuery.Text);
+            _frm.AddChild(new Button(_txtQuery.Position.left + _txtQuery.Size.width + 2, _txtQuery.Position.top, 10, "Filter") { OnPressed = (s, e) => {
+                OnQueryTasksRequest(Build_query());
             }});
+
+
+            string Build_query() {
+                var query = _txtQuery.Text;
+                if (mnuFilterOverdue.Checked) query += " !overdue";
+                if (mnuFilterDue.Checked) query += " !due";
+                if (mnuFilterASAP.Checked) query += " !asap";
+                return query;
+            }
         }
 
 
@@ -92,40 +111,56 @@ namespace bashforms_tests.todo_scenario.adapters.views
         
         public void Display(Task[] tasks) {
             var currentTaskId = (string)_lstTasks.CurrentItem?.Attachment;
-            
-            _lstTasks.Clear();
-            foreach (var t in tasks) {
-                var item = _lstTasks.Add(Format_task_info(t));
-                Embelish_item(item, t);
+
+            Display_items();
+            Set_current_item();
+
+
+            void Display_items() {
+                _lstTasks.Clear();
+                foreach (var t in tasks) {
+                    var item = _lstTasks.Add(Format_task_info(t));
+                    Embelish_item(item, t);
+                }
             }
 
-            if (_lstTasks.Items.Length == 0) return;
-            if (currentTaskId == null) {
-                _lstTasks.CurrentItemIndex = 0;
-            }
-            else {
-                var taskEntry = Locate_task_entry(currentTaskId);
-                if (taskEntry.item == null)
+            void Set_current_item() {
+                if (_lstTasks.Items.Length == 0) return;
+                if (currentTaskId == null) {
                     _lstTasks.CurrentItemIndex = 0;
-                else
-                    _lstTasks.CurrentItemIndex = taskEntry.index;
+                }
+                else {
+                    var taskEntry = Locate_task_entry(currentTaskId);
+                    if (taskEntry.item == null)
+                        _lstTasks.CurrentItemIndex = 0;
+                    else
+                        _lstTasks.CurrentItemIndex = taskEntry.index;
+                }
             }
         }
 
+        
         public void DisplayUpdate(Task task) {
             var taskEntry = Locate_task_entry(task.Id);
-            if (taskEntry.item == null) {
-                taskEntry.item = _lstTasks.Add(Format_task_info(task));
-                _lstTasks.CurrentItemIndex = _lstTasks.Items.Length - 1;
-            }
-            else {
+            if (!Try_update_existing())
+                Add_new();
+            Embelish_item(taskEntry.item, task);
+
+
+            bool Try_update_existing() {
+                if (taskEntry.item == null) return false;
                 var currentItemIndex = _lstTasks.CurrentItemIndex;
                 _lstTasks.RemoveAt(taskEntry.index);
                 taskEntry.item = new Listbox.Item(Format_task_info(task));
                 _lstTasks.Insert(taskEntry.index, taskEntry.item);
                 _lstTasks.CurrentItemIndex = currentItemIndex;
+                return true;
             }
-            Embelish_item(taskEntry.item, task);
+
+            void Add_new() {
+                taskEntry.item = _lstTasks.Add(Format_task_info(task));
+                _lstTasks.CurrentItemIndex = _lstTasks.Items.Length - 1;
+            }
         }
 
 
@@ -147,7 +182,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
 
         
         static string Format_task_info(Task task) {
-            var dueAt = task.DueAt.Year == DateTime.MaxValue.Year ? "" : task.DueAt.ToString("d");
+            var dueAt = task.DueAt.Date == DateTime.MaxValue.Date ? "" : task.DueAt.ToString("d");
             var prio = task.Priority == TaskPriorities.No ? "" : task.Priority.ToString();
             return $"{task.Subject}\t{task.Description}\t{dueAt}\t{prio}";
         }
