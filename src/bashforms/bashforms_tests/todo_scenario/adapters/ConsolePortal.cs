@@ -14,15 +14,17 @@ namespace bashforms_tests.todo_scenario.adapters
             _win = new MainWindow();
             _dlg = new TaskDialog();
 
-            _win.OnQueryRequest += query => OnQueryRequest(query);
+            _win.OnQueryTasksRequest += query => OnQueryTasksRequest(query);
+            _win.OnEditTaskRequest += taskId => OnEditTaskRequest(taskId);
             _win.OnNewTaskRequest += () => OnNewTaskRequest();
-            _win.OnDeleteRequest += taskId => OnDeleteRequest(taskId);
+            _win.OnDeleteTaskRequest += taskId => OnDeleteTaskRequest(taskId);
         }
         
         
-        public event Action<string> OnQueryRequest;
+        public event Action<string> OnQueryTasksRequest;
+        public event Action<string> OnEditTaskRequest;
         public event Action OnNewTaskRequest;
-        public event Action<string> OnDeleteRequest;
+        public event Action<string> OnDeleteTaskRequest;
         
         
         public void Show() {
@@ -41,6 +43,11 @@ namespace bashforms_tests.todo_scenario.adapters
         public bool AskUserForNewTask(out data.Task newTask) {
             newTask = _dlg.EditNew();
             return newTask != null;
+        }
+
+        public bool AllowUserToEditTask(ref data.Task task) {
+            task = _dlg.Edit(task);
+            return task != null;
         }
     }
 }

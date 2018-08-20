@@ -64,7 +64,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
 
             if (!BashForms.OpenModal(_dlg)) return null;
 
-            task.Subject = _txtDescription.Text;
+            task.Subject = _txtSubject.Text;
             task.Description = _txtDescription.Text;
             task.DueAt = _txtDueDate.Text != "" ? DateTime.Parse(_txtDueDate.Text) : DateTime.MaxValue;
             if (!Enum.TryParse(_cboPriority.Text, true, out task.Priority)) task.Priority = TaskPriorities.No;

@@ -5,13 +5,13 @@ using bashforms_tests.todo_scenario.data;
 
 namespace bashforms_tests.todo_scenario
 {
-    public class RequestHandler
+    public class QueryProcessor
     {
         private readonly TaskRepository _repo;
         private string _latestQuery;
 
         
-        public RequestHandler(TaskRepository repo) {
+        public QueryProcessor(TaskRepository repo) {
             _repo = repo;
             _latestQuery = "";
         }
@@ -26,17 +26,6 @@ namespace bashforms_tests.todo_scenario
         public Task[] Requery() => Query(_latestQuery);
         
         
-        public Task StoreNewTask(Task newTask) {
-            _repo.Save(newTask);
-            return newTask;
-        }
-        
-
-        public void DeleteTask(string taskId) {
-            _repo.Delete(taskId);
-        }
-
-
         bool Matches_query(Task task, string query) {
             return task.Subject.IndexOf(query) >= 0 || task.Description.IndexOf(query) >= 0;
         }

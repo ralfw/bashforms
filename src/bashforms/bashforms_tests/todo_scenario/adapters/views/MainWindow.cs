@@ -38,7 +38,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
                         break;
                     case "mnuDel":
                         if (_lstTasks.CurrentItemIndex >= 0 && MessageBox.AskForYes("Delete current item?"))
-                            OnDeleteRequest((string)_lstTasks.CurrentItem.Attachment);
+                            OnDeleteTaskRequest((string)_lstTasks.CurrentItem.Attachment);
                         break;
                     case "mnuClose":
                         BashForms.Close();
@@ -63,7 +63,8 @@ namespace bashforms_tests.todo_scenario.adapters.views
             };
 
             _lstTasks.OnPressed = (w, e) => {
-                MessageBox.Show($"Selected item: {_lstTasks.Items[_lstTasks.CurrentItemIndex].Attachment}");
+                if (_lstTasks.CurrentItemIndex >= 0)
+                    OnEditTaskRequest((string)_lstTasks.CurrentItem.Attachment);
             };
             _frm.AddChild(_lstTasks);
             
@@ -71,14 +72,15 @@ namespace bashforms_tests.todo_scenario.adapters.views
             _frm.AddChild(_txtQuery);
             
             _frm.AddChild(new Button(_txtQuery.Position.left + _txtQuery.Size.width + 2, _txtQuery.Position.top, 10, "Filter") { OnPressed = (s, e) => {
-                OnQueryRequest(_txtQuery.Text);
+                OnQueryTasksRequest(_txtQuery.Text);
             }});
         }
 
 
-        public Action<string> OnQueryRequest;
+        public Action<string> OnQueryTasksRequest;
         public Action OnNewTaskRequest;
-        public Action<string> OnDeleteRequest;
+        public Action<string> OnEditTaskRequest;
+        public Action<string> OnDeleteTaskRequest;
         
 
         public void Show() => BashForms.Open(_frm);
