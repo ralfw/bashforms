@@ -58,7 +58,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
             
             _txtSubject.Text = task.Subject;
             _txtDescription.Text = task.Description;
-            _txtDueDate.Text = task.DueAt == DateTime.MaxValue ? "" : task.DueAt.ToString("d");
+            _txtDueDate.Text = task.DueAt.Year == DateTime.MaxValue.Year ? "" : task.DueAt.ToString("d");
             _cboPriority.Text = task.Priority == TaskPriorities.No ? "" : task.Priority.ToString();
             _txtTags.Text = String.Join(",", task.Tags);
 

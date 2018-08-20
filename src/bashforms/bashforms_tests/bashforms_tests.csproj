@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Json_tests.cs" />
     <Compile Include="MenuItemStack_tests.cs" />
     <Compile Include="Demos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -44,7 +44,10 @@ namespace bashforms_tests.todo_scenario.adapters
 
                 data.Task Load(string filepath) {
                     var jsonTask = File.ReadAllText(filepath);
-                    return _json.Deserialize<data.Task>(jsonTask);
+                    var task = _json.Deserialize<data.Task>(jsonTask);
+                    task.DueAt = task.DueAt.ToLocalTime();
+                    task.CreatedAt = task.CreatedAt.ToLocalTime();
+                    return task;
                 }
             }
         }

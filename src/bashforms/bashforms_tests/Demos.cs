@@ -165,6 +165,9 @@ namespace bashforms_tests
                                                 "Bifur", "Bofur", "Bombur",
                                                 "Thorin"
             });
+            lb.Items[0].BackgroundColor = ConsoleColor.DarkYellow;
+            lb.Items[1].ForegroundColor = ConsoleColor.Red;
+            
             lb.OnPressed += (s, e) => MessageBox.ShowInfo("Dwarf selected: " + lb.Items[lb.CurrentItemIndex].Text);
             frm.AddChild(lb);
             

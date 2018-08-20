@@ -9,8 +9,7 @@ namespace bashforms.widgets.controls
     {
         public override Canvas Draw() {
             var canvas = Create_canvas();
-            var formattedItems = Format_items();
-            Render_items(canvas, formattedItems);
+            Render_items(canvas, _items.ToArray());
             return canvas;
         }
         
@@ -22,32 +21,29 @@ namespace bashforms.widgets.controls
             return canvas;
         }
 
-        
-        string[] Format_items() {
-            var formattedItems = _items.Select(item => item.Text).ToArray();
-            if (_columns?.Length > 0) {
-                var table = formattedItems.Select(l => l.Split('\t')).ToArray();
-                for (var c = 0; c < _columns.Length; c++)
-                for (var r = 0; r < table.Length; r++) {
-                    var row = table[r];
-                    if (c >= row.Length) continue;
 
-                    var cellText = row[c].Substring(0,Math.Min(row[c].Length, _columns[c]));
-                    cellText = cellText.PadRight(_columns[c], ' ');
-                    row[c] = cellText;
-                }
-                formattedItems = table.Select(row => string.Join("|", row)).ToArray();
+        string Format_item(Item item) {
+            if (_columns == null || _columns.Length == 0) return item.Text;
+            
+            var row = item.Text.Split('\t').ToArray();
+            for (var c = 0; c < _columns.Length; c++) {
+                if (c >= row.Length) continue;
+
+                var cellText = row[c].Substring(0, Math.Min(row[c].Length, _columns[c]));
+                cellText = cellText.PadRight(_columns[c], ' ');
+                row[c] = cellText;
             }
-            return formattedItems;
+            return string.Join("|", row);
         }
 
         
-        void Render_items(Canvas canvas, string[] formattedItems) {
+        void Render_items(Canvas canvas, Item[] items) {
             for (var row = 0; row < _height; row++) {
                 var i = _firstItemToDisplayIndex + row;
                 if (i >= _items.Count) break;
                 
-                canvas.Write(_selectionMode == SelectionModes.NoSelections ? 0 : 1,row, formattedItems[i]);
+                canvas.Write(_selectionMode == SelectionModes.NoSelections?0:1, row, Format_item(items[i]));
+                canvas.Colorize(0, row, _width, 1, items[i].BackgroundColor, items[i].ForegroundColor);
 
                 if (_selectedItemIndexes.Contains(i)) {
                     canvas.Write(0, row, "√");
@@ -55,7 +51,7 @@ namespace bashforms.widgets.controls
                 }
 
                 if (this.HasFocus && i == _currentItemIndex)
-                    canvas.Colorize(0,row,_width,1, ConsoleColor.Gray, ConsoleColor.Black);
+                    canvas.Colorize(0, row, _width,1, ConsoleColor.Gray, ConsoleColor.Black);
             }
         }
     }

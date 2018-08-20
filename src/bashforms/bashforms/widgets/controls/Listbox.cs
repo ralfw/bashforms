@@ -16,11 +16,16 @@ namespace bashforms.widgets.controls
         public class Item {
             public Item(string text) {
                 Text = text;
+                BackgroundColor = ConsoleColor.Black;
+                ForegroundColor = ConsoleColor.White;
             }
             
             public string Text { get; }
             
             public object Attachment { get; set; }
+            
+            public ConsoleColor BackgroundColor { get; set; }
+            public ConsoleColor ForegroundColor { get; set; }
         }
 
         public enum SelectionModes {

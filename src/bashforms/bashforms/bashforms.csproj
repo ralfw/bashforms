@@ -41,8 +41,7 @@
     <Compile Include="adapters\Display.cs" />
     <Compile Include="BashForms.cs" />
     <Compile Include="data\Canvas.cs" />
-    <Compile Include="data\eventargs\EventArgs.cs" />
-    <Compile Include="data\MenuItem.cs" />
+    <Compile Include="data\EventArgs.cs" />
     <Compile Include="engine\BashFormsEngine.cs" />
     <Compile Include="engine\Rendering.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

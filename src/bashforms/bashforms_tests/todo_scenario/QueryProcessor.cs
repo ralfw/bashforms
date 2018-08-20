@@ -20,14 +20,26 @@ namespace bashforms_tests.todo_scenario
         public data.Task[] Query(string query) {
             _latestQuery = query;
             var tasks = _repo.Tasks;
-            return tasks.Where(t => Matches_query(t, query)).ToArray();
+            var pquery = Preprocess(query);
+            return tasks.Where(t => Matches_query(t, pquery)).ToArray();
         }
 
         public Task[] Requery() => Query(_latestQuery);
+
+
+        (string[] words, string[] tags) Preprocess(string query) {
+            var parts = query.Split(new[] {' ', ',', ';'}, StringSplitOptions.RemoveEmptyEntries);
+            return (parts.Where(p => !p.StartsWith("#")).ToArray(),
+                    parts.Where(p => p.StartsWith("#")).Select(p => p.Substring(1)).ToArray());
+        }
         
         
-        bool Matches_query(Task task, string query) {
-            return task.Subject.IndexOf(query) >= 0 || task.Description.IndexOf(query) >= 0;
+        bool Matches_query(Task task, (string[] words, string[] tags) pquery) {
+            if (pquery.words.Length == 0 && pquery.tags.Length == 0) return true;
+            
+            if (pquery.words.Any(w => task.Subject.IndexOf(w, StringComparison.InvariantCultureIgnoreCase) >= 0)) return true;
+            if (pquery.words.Any(w => task.Description.IndexOf(w, StringComparison.InvariantCultureIgnoreCase) >= 0)) return true;
+            return pquery.tags.Any(t => task.Tags.Contains(t));
         }
     }
 }
