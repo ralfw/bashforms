@@ -43,6 +43,13 @@ namespace bashforms_tests.todo_scenario
                 }
             };
 
+            _ui.OnDeleteRequest += taskId => {
+                rh.DeleteTask(taskId);
+                var queryResult = rh.Requery();
+                _ui.Display(queryResult);
+            };
+
+            
             var tasks = rh.Query("");
             _ui.Display(tasks);
             _ui.Show();

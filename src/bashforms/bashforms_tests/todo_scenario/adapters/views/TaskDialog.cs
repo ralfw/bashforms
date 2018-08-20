@@ -23,7 +23,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
             _txtSubject = new TextLine(2, 2, _dlg.Size.width - 4) {Label = "subject"};
             _dlg.AddChild(_txtSubject);
 
-            _txtDescription = new TextArea(2,4, _txtSubject.Size.width / 2, _dlg.Size.height - 4){Label = "description"};
+            _txtDescription = new TextArea(2,4, _txtSubject.Size.width / 2, _dlg.Size.height - 7){Label = "description"};
             _dlg.AddChild(_txtDescription);
             
             _txtDueDate = new TextLine(_txtDescription.Position.left+_txtDescription.Size.width + 2, 4, 10){Label = "due date"};
@@ -36,7 +36,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
             _txtTags = new TextLine(_cboPriority.Position.left, _cboPriority.Position.top+2,_cboPriority.Size.width){Label = "tags"};
             _dlg.AddChild(_txtTags);
 
-            var btnSave = new Button(2, _txtDescription.Position.top + _txtDescription.Size.height + 2, 10, "Save") { OnPressed = (w, e) => {
+            var btnSave = new Button(2, _txtDescription.Position.top + _txtDescription.Size.height + 1, 10, "Save") { OnPressed = (w, e) => {
                 _dlg.Result = true;
                 BashForms.Close();
             }};
@@ -58,7 +58,7 @@ namespace bashforms_tests.todo_scenario.adapters.views
             
             _txtSubject.Text = task.Subject;
             _txtDescription.Text = task.Description;
-            _txtDueDate.Text = task.DueAt.ToString("g");
+            _txtDueDate.Text = task.DueAt == DateTime.MaxValue ? "" : task.DueAt.ToString("d");
             _cboPriority.Text = task.Priority == TaskPriorities.No ? "" : task.Priority.ToString();
             _txtTags.Text = String.Join(",", task.Tags);
 

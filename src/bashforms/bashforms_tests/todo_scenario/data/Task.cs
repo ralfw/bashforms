@@ -12,11 +12,11 @@ namespace bashforms_tests.todo_scenario.data
     
     public class Task {
         public string Id;
-        public string Subject;
-        public string Description;
-        public DateTime DueAt;
-        public TaskPriorities Priority;
-        public string[] Tags;
+        public string Subject = "";
+        public string Description = "";
+        public DateTime DueAt = DateTime.MaxValue;
+        public TaskPriorities Priority = TaskPriorities.No;
+        public string[] Tags = new string[0];
         public DateTime CreatedAt = DateTime.Now;
     }
 }

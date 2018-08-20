@@ -74,6 +74,11 @@ namespace bashforms.widgets.controls
         public void Add(Item item) => this.Insert(_items.Count, item);
         public void AddRange(IEnumerable<Item> items) => this.InsertRange(_items.Count, items);
 
+        public Item Insert(int index, string itemText) {
+            var item = new Item(itemText);
+            _items.Insert(index, item);
+            return item;
+        }
         public void Insert(int index, Item item) {
             if (_items.Contains(item)) throw new InvalidOperationException("All items in Listbox must be unique!");
             _items.Insert(index, item);
@@ -136,6 +141,8 @@ namespace bashforms.widgets.controls
                 this.OnUpdated(this, new EventArgs());
             }
         }
+
+        public Item CurrentItem => _currentItemIndex >= 0 ? _items[_currentItemIndex] : null;
 
 
         public int[] Columns {
