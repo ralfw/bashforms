@@ -7,7 +7,7 @@ namespace bashforms.widgets.windows
     {
         protected string _title;
         private bool _hasBorder;
-        
+
         public Form(int left, int top, int width, int height) : base(left,top,width,height) {
             _title = "";
             _hasBorder = true;

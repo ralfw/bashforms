@@ -20,6 +20,13 @@ namespace bashforms.widgets.windows
         }
         
         
+        public static void ShowInfo(string message, string title = "")
+            => Show(message, title == "" ? "Info" : title);
+        public static bool AskForYes(string message, string title = "")
+            => Show(message, (Results.No, "No"), (Results.Yes, "Yes"), title) == Results.Yes;
+        public static bool AskForOk(string message, string title = "")
+            => Show(message, (Results.Cancel, "Cancel"), (Results.Ok, "Ok"), title) == Results.Ok;
+        
         public static void Show(string message, string title = "") {
             Show(message, (Results.Ok, "OK"), title);
         }
@@ -38,6 +45,7 @@ namespace bashforms.widgets.windows
         {
             return Show(message, option0, option1, (Results.None, ""), title);
         }
+
         public static Results Show(
                 string message,
                 (Results result, string text) option0,
@@ -59,12 +67,7 @@ namespace bashforms.widgets.windows
             }
         }
         
-        public static void ShowInfo(string message, string title = "")
-            => Show(message, title == "" ? "Info" : title);
-        public static bool AskForYes(string message, string title = "")
-            => Show(message, (Results.No, "No"), (Results.Yes, "Yes"), title) == Results.Yes;
-        public static bool AskForOk(string message, string title = "")
-            => Show(message, (Results.Cancel, "Cancel"), (Results.Ok, "Ok"), title) == Results.Ok;
+
         
         
         private static Label Create_message_label(string message) {
