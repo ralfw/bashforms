@@ -66,6 +66,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="paket.references" />
+    <Content Include="tasks\0673f08e-d700-413e-abf9-81001a56cc11.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tasks\55b51134-8e4b-41ce-bfec-e54630ad5313.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tasks\a2b4c7f7-05b6-4955-9d2f-bcea26689807.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tasks\bf4e1445-578f-4649-a166-378aba7b9416.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tasks\fd76efba-b89a-424e-976c-79ed1fbc3bbb.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Choose>
