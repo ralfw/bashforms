@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>bashforms</id>
+    <version>1.0.0.2</version>
+    <authors>Ralf Westphal</authors>
+    <owners>ralfw</owners>
+    <licenseUrl>https://github.com/ralfw/bashforms/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/ralfw/bashforms</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Graphical user interfaces in your bash window made easy for .NET applications</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2018 by Ralf Westphal</copyright>
+    <tags></tags>
+  </metadata>
+</package>

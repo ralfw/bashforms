@@ -1,0 +1,16 @@
+#!/bin/bash
+
+rm bashforms*.nupkg
+rm -r package
+mkdir -p package/lib/net47
+
+cp bashforms.nuspec package
+cp ../bin/bashforms.* package/lib/net47
+
+mono lib/nuget.exe pack package
+
+source environment
+nuget push bashforms.*.nupkg $nugetApiKey -Source https://www.nuget.org/api/v2/package
+
+rm -r package
+rm bashforms*.nupkg
