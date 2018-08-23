@@ -8,11 +8,16 @@ namespace bashforms.engine
 {
     class Rendering
     {
+        private readonly Display _display;
+        
+        public Rendering(Display display) { _display = display; }
+        
+        
         public void Render(Window[] windows) {
             if (windows.Length == 0) return;
             
             var canvas = windows.Aggregate(new Canvas(), Render);
-            Display.Show(canvas, windows.Last().CursorPosition);
+            _display.Show(canvas, windows.Last().CursorPosition);
         }
 
         

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using bashforms.adapters;
 using bashforms.widgets.windows;
 using bashforms.widgets.windows.baseclasses;
 
@@ -12,7 +13,8 @@ namespace bashforms.engine
         private readonly Rendering _renderer;
 
         public BashFormsEngine() {
-            _renderer = new Rendering();   
+            var display = new Display();
+            _renderer = new Rendering(display);   
         }
         
         

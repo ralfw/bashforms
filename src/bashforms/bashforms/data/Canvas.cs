@@ -9,6 +9,15 @@ namespace bashforms.data
             public char Symbol = ' ';
             public ConsoleColor BackgroundColor = Console.BackgroundColor;
             public ConsoleColor ForegroundColor = Console.ForegroundColor;
+
+            public override bool Equals(object obj) => Equals(obj as Point);
+            public bool Equals(Point that) => that != null &&
+                                              this.Symbol == that.Symbol && 
+                                              this.BackgroundColor == that.BackgroundColor &&
+                                              this.ForegroundColor == that.ForegroundColor;
+            
+            public static bool operator == (Point a, Point b) => (object)a == (object)b || ((object)a != null && a.Equals(b));
+            public static bool operator !=(Point a, Point b) => !(a == b);
         }
         
         
@@ -76,6 +85,5 @@ namespace bashforms.data
         
         public int Width => _canvas.GetLength(1);
         public int Height => _canvas.GetLength(0);
-
     }
 }
