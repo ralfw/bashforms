@@ -13,4 +13,4 @@ source environment
 nuget push bashforms.*.nupkg $nugetApiKey -Source https://www.nuget.org/api/v2/package
 
 rm -r package
-rm bashforms*.nupkg
+# rm bashforms*.nupkg

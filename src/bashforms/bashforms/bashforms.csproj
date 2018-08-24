@@ -56,18 +56,34 @@
     <Compile Include="widgets\controls\editors\TextEditor.cs" />
     <Compile Include="widgets\controls\Label.cs" />
     <Compile Include="widgets\controls\Listbox.cs" />
-    <Compile Include="widgets\controls\Listbox_draw.cs" />
-    <Compile Include="widgets\controls\Listbox_handleKey.cs" />
+    <Compile Include="widgets\controls\Listbox_draw.cs">
+      <DependentUpon>Listbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="widgets\controls\Listbox_handleKey.cs">
+      <DependentUpon>Listbox.cs</DependentUpon>
+    </Compile>
     <Compile Include="widgets\controls\MenuBar.cs" />
-    <Compile Include="widgets\controls\MenuBar_draw.cs" />
-    <Compile Include="widgets\controls\MenuBar_handleKey.cs" />
+    <Compile Include="widgets\controls\MenuBar_draw.cs">
+      <DependentUpon>MenuBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="widgets\controls\MenuBar_handleKey.cs">
+      <DependentUpon>MenuBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="widgets\controls\OptionGroups.cs" />
     <Compile Include="widgets\controls\TextArea.cs" />
-    <Compile Include="widgets\controls\TextArea_draw.cs" />
-    <Compile Include="widgets\controls\TextArea_handleKey.cs" />
+    <Compile Include="widgets\controls\TextArea_draw.cs">
+      <DependentUpon>TextArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="widgets\controls\TextArea_handleKey.cs">
+      <DependentUpon>TextArea.cs</DependentUpon>
+    </Compile>
     <Compile Include="widgets\controls\TextLine.cs" />
-    <Compile Include="widgets\controls\TextLine_draw.cs" />
-    <Compile Include="widgets\controls\TextLine_handleKey.cs" />
+    <Compile Include="widgets\controls\TextLine_draw.cs">
+      <DependentUpon>TextLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="widgets\controls\TextLine_handleKey.cs">
+      <DependentUpon>TextLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="widgets\controls\formatting\LineFormatting.cs" />
     <Compile Include="widgets\controls\formatting\TextFormatting.cs" />
     <Compile Include="widgets\controls\formatting\TextJustification.cs" />

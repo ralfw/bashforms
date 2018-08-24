@@ -19,6 +19,12 @@ namespace bashforms
         }
 
         
+        public static void OpenModal(Window dialog) {
+            if (__engine == null) __engine = new BashFormsEngine();
+            __engine.Push(dialog);
+            __engine.RunModal();
+        }
+        
         public static TResult OpenModal<TResult>(Dialog<TResult> dialog) {
             if (__engine == null) __engine = new BashFormsEngine();
             __engine.Push(dialog);

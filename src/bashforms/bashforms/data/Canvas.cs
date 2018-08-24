@@ -18,6 +18,8 @@ namespace bashforms.data
             
             public static bool operator == (Point a, Point b) => (object)a == (object)b || ((object)a != null && a.Equals(b));
             public static bool operator !=(Point a, Point b) => !(a == b);
+
+            public override int GetHashCode() => base.GetHashCode();
         }
         
         
