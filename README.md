@@ -209,6 +209,8 @@ Now the whole window stack will be torn down as soon as the details window is cl
 `OpenModal()` is always synchronous because it starts a keyboard loop of its own. This is also why message boxes work; they are modal dialogs.
 
 ## What now?
+You like the idea of bashforms? Then clone the repository and play around with the demos in `bashforms_tests.csproj`. They provide at least one example for how to use each widget. And in the 
+
 bashforms is a work in progress. I created it to help me in developer trainings where GUI skills are rare.
 
 The widgets created so far are working pretty nicely. But there is lots of room for improvement.
