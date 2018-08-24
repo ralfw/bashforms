@@ -184,7 +184,8 @@ namespace bashforms_tests.todo_scenario.adapters.views
         static string Format_task_info(Task task) {
             var dueAt = task.DueAt.Date == DateTime.MaxValue.Date ? "" : task.DueAt.ToString("d");
             var prio = task.Priority == TaskPriorities.No ? "" : task.Priority.ToString();
-            return $"{task.Subject}\t{task.Description}\t{dueAt}\t{prio}";
+            var description = task.Description.Replace("\n", " ");
+            return $"{task.Subject}\t{description}\t{dueAt}\t{prio}";
         }
     }
 }
