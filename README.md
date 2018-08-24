@@ -10,7 +10,7 @@ With bashforms the "graphical" user interfaces of the 1990s are back. You get di
 
 Widgets - that's what text editors, menus etc. are called - can be layed out in two dimensions. Windows - forms, dialogs - are stacked on top of each other. The above images show examples for both.
 
-Check out the following animation to get an impression of how you navigate such a text based GUI (tbGUI). The full video can be found on [Youtube](https://youtu.be/RwkCy-YrVJQ).
+Check out the following animation to get an impression of how you navigate such a text based GUI (tbGUI). The full video can be found on [YouTube](https://youtu.be/RwkCy-YrVJQ).
 
 [![](doc/images/fig3animated.gif)]()
 
@@ -67,7 +67,7 @@ Some widgets are not intended for immediate consumption in tbGUIs. They are base
 * `Widget{}`: the mother of all widgets defines just a couple of common traits for all widgets.
 * `Window{}`: the mother of all *windows*, i.e. rectangular areas on screen to be containers for *controls*.
 * `Control{}`: the mother of all widgets to be displayed inside a window.
-* `FocusControl{}`: a control which can receive input from the user, e.g. `Listbox{}`or `TextLine{}`. In each window there can be several focus controls of which only one has the focus at any given time.
+* `FocusControl{}`: a control which can receive input from the user, e.g. `Listbox{}`or `TextLine{}`. In each window there can be several focus controls of which only one has the focus at any given time. The user moves between focus controls with `TAB` and `Shift-TAB`.
 * `CursorControl{}`: a control which shows a cursor while it has the focus, e.g. `TextLine{}`.
 
 User interfaces are created by adding control widgets derived from these base classes to window widgets. As an example a replica of the above message box:
@@ -128,16 +128,98 @@ info.AddChild(new Button(2,3, 6, "OK") {
 });
 ```
 
-Only the topmost window can be closed at any time. Windows are strictly layered on top of each other:
+Only the topmost window can be closed at any time. Windows are strictly layered on top of each other. Check out this example: A window is shown which contais a button to open another window, which sports a button to open yet another window:
 
 ```
-bsp für stack
+var details = new Form(12,10,20,5){Title = "Overview"};
+details.AddChild(new Button(2,1, 7, "Close") {
+    OnPressed = (s,e) => { BashForms.Close(); }
+});
+
+var overview = new Form(8,7,20,4){Title = "Overview"};
+overview.AddChild(new Button(2,1, 12, "Details...") {
+    OnPressed = (s,e) => { BashForms.Open(details); }
+});
+overview.AddChild(new Button(2,2, 12, "Close") {
+    OnPressed = (s,e) => { BashForms.Close(); }
+});
+
+var main = new Form(4,4,20,4){Title = "Main"};
+main.AddChild(new Button(2,1, 14, "Overview...") {
+    OnPressed = (s,e) => { BashForms.Open(overview); }
+});
+main.AddChild(new Button(2,2, 14, "Close") {
+    OnPressed = (s,e) => { BashForms.Close(); }
+});
+
+BashForms.Open(main);
 ```
 
-Once the window stack is empty the keyboard loop is terminated and the first `BashForms.Open()` call returns.
+![](doc/images/fig9animated.gif)
 
+This is the succession of statements to open the windows. Each puts a window on the engine's window stack:
 
+```
+BashForms.Open(main);
+...
+BashForms.Open(overview); // in OnPressed handler
+...
+BashForms.Open(details); // in OnPressed handler
+```
 
+Then whenever `BashForms.Close()` is called the topmost window is popped off the window stack.
+
+Once the window stack is empty the keyboard loop is terminated and the initial `BashForms.Open()` call returns.
+
+Please note: The first call to `Open()` "freezes" further processing after its location in the code; it is synchronous with regard to the keyboard loop. But additional calls will not "freeze" processing! Since a keyboard loop is already running they will immediately return.
+
+That's the reason for two buttons in the first two windows in the previous example. The `OnPressed` handlers for opening the windows return right away and the new window is rendered.
+
+If you want the current window to close as soon as the new window closes an `OpenModal()` call would be needed:
+
+```
+var details = new Form(12,10,20,5){Title = "Overview"};
+details.AddChild(new Button(2,1, 7, "Close") {
+    OnPressed = (s,e) => { BashForms.Close(); }
+});
+
+var overview = new Form(8,7,20,4){Title = "Overview"};
+overview.AddChild(new Button(2,1, 12, "Details...") {
+    OnPressed = (s, e) => {
+        BashForms.OpenModal(details); 
+        BashForms.Close();
+    }
+});
+
+var main = new Form(4,4,20,4){Title = "Main"};
+main.AddChild(new Button(2,1, 14, "Overview...") {
+    OnPressed = (s, e) => {
+        BashForms.OpenModal(overview); 
+        BashForms.Close();
+    }
+});
+
+BashForms.Open(main);
+```
+
+![](doc/images/figAanimated.gif)
+
+Now the whole window stack will be torn down as soon as the details window is closed: the `OpenModal()` it was opened by finishes and the following `Close()` is executed etc.
+
+`OpenModal()` is always synchronous because it starts a keyboard loop of its own. This is also why message boxes work; they are modal dialogs.
+
+## What now?
+bashforms is a work in progress. I created it to help me in developer trainings where GUI skills are rare.
+
+The widgets created so far are working pretty nicely. But there is lots of room for improvement.
+
+Use bashforms as it is and have fun. Please let me know how it's working on Windows. Unfortunately, as it seems, the experience on Windows still is different than on Mac. But I don't know the reason. Maybe you can help? bashforms is using just the standard .NET `Console{}` features.
+
+But even though bashforms is usable as is I'd like to carry it further. I'm thinking about a small DSL to make it easier to "design" a tbGUI.
+
+And then I'd like to make it usable in conjunction with other platforms/languages, eg. C++, Java, Ruby. I'm envisoning a precompiled bashforms client to talk to out-proc backends using some JSON protocol.
+
+Stay tuned!
 
 
 
