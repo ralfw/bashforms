@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bashforms_tests", "bashform
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bashforms.core", "bashforms.core\bashforms.core.csproj", "{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bashforms.core.tests", "bashforms.core.tests\bashforms.core.tests.csproj", "{0EC3E701-1215-4A0B-9E7E-B75829ACC545}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnet", "dotnet", "{89E167D5-FBFF-4184-9CE8-E47882FE4FFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnetcore", "dotnetcore", "{A4D06737-D42B-4069-8972-FFCFD5425D92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,15 @@ Global
 		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC3E701-1215-4A0B-9E7E-B75829ACC545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC3E701-1215-4A0B-9E7E-B75829ACC545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC3E701-1215-4A0B-9E7E-B75829ACC545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC3E701-1215-4A0B-9E7E-B75829ACC545}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B69077DC-45EA-4AEC-B01F-7DEFEB0738B3} = {89E167D5-FBFF-4184-9CE8-E47882FE4FFB}
+		{20DD02DF-B712-48E2-8D47-39D6B053A1AB} = {89E167D5-FBFF-4184-9CE8-E47882FE4FFB}
+		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E} = {A4D06737-D42B-4069-8972-FFCFD5425D92}
+		{0EC3E701-1215-4A0B-9E7E-B75829ACC545} = {A4D06737-D42B-4069-8972-FFCFD5425D92}
 	EndGlobalSection
 EndGlobal
