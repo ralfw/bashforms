@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bashforms", "bashforms\bash
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bashforms_tests", "bashforms_tests\bashforms_tests.csproj", "{20DD02DF-B712-48E2-8D47-39D6B053A1AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bashforms.core", "bashforms.core\bashforms.core.csproj", "{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{20DD02DF-B712-48E2-8D47-39D6B053A1AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20DD02DF-B712-48E2-8D47-39D6B053A1AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20DD02DF-B712-48E2-8D47-39D6B053A1AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FBCC30F-3C39-4415-B337-3AAA5CDAC31E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
